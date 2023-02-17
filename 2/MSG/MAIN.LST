@@ -1,0 +1,84 @@
+Turbo Assembler	 Version 4.1	    02/16/23 21:24:41	    Page 1
+main.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     org 100h
+      5
+      6	0100  BB 0C80		     Start:  mov bx, 80	* 20 * 2
+      7	0103  BA 012Br			     mov dx, offset lb0
+      8
+      9	0106  E8 0005			     call Msg
+     10
+     11	0109  BB 4C00			     mov bx, 4C00h
+     12	010C  CD 21			     int 21h
+     13
+     14	010E			     Msg     proc
+     15
+     16	010E  BF B800			     mov di, 0B800h
+     17	0111  8E C7			     mov es, di
+     18
+     19	0113  8B FB			     mov di, bx			 ; bx is pointer to vm
+     20
+     21	0115  8B DA			     mov bx, dx			 ; dx is shit
+     22	0117  43			     inc bx
+     23
+     24	0118  8B 0F			     mov cx, [bx]		 ; num of chars
+     25	011A  32 ED			     xor ch, ch
+     26	011C  49			     dec cx
+     27
+     28	011D  43		     ??Next: inc bx
+     29
+     30	011E  8B 17			     mov dx, [bx]
+     31	0120  B6 CE			     mov dh, 0CEh
+     32
+     33	0122  26: 89 15			     mov es:[di], dx
+     34
+     35	0125  83 C7 02			     add di, 2
+     36
+     37	0128  E2 F3			     loop ??Next
+     38
+     39	012A  C3			     ret
+     40	012B				     endp
+     41
+     42	012B  06 06 70 69 7A 64	61   lb0     db	6, 6, 'pizda'
+     43
+     44				     end     Start
+Turbo Assembler	 Version 4.1	    02/16/23 21:24:41	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/16/23"
+??FILENAME			  Text	 "main	  "
+??NEXT				  Near	 DGROUP:011D
+??TIME				  Text	 "21:24:41"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MAIN
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+LB0				  Byte	 DGROUP:012B
+MSG				  Near	 DGROUP:010E
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0132 Word	  Public  CODE
+

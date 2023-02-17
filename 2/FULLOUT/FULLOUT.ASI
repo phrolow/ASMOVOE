@@ -1,0 +1,33 @@
+;===============================================;
+; Uses: ax, bx					;
+; Destroys: dx, cx, es, di				;
+; Returns:					;
+; Expects: num in ax, start of label in bx	;
+;===============================================;
+
+Fullout proc
+        
+        mov dx, ax              ; accumulate
+
+        call Hexout
+
+        mov ax, dx
+
+        mov bx, di
+        add bx, 5 * 2           ; indent for 5 chars
+
+        call Binout
+
+        mov ax, dx
+
+        mov bx, di
+        add bx, 5 * 2           ; indent for 5 chars
+
+        call Decout
+
+        ret
+        endp
+
+        include HEXOUT/hexout.asi
+        include BINOUT/binout.asi
+        include DECOUT/decout.asi

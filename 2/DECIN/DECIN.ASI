@@ -1,0 +1,40 @@
+;=======================================;
+; Uses: 				;
+; Destroys: ax, bx, cx, dx		;
+; Output: ax				;
+; Expects:				;
+;=======================================;
+
+Decin	proc
+
+	mov ah, 0Ah
+	int 21h			; input
+
+	inc dx			; num of read
+	mov bx, dx		; dx sucks
+
+	mov cx, [bx]		; loop with <num of chars> steps
+	xor ch, ch
+
+	xor ax, ax		; storage for out num
+
+@@Next:	inc bx			; got ptr
+
+	mov dx, word ptr 10
+	mul dx			; ax *= 10
+
+	mov dx, [bx]
+	sub dl, '0'
+	xor dh, dh
+	
+	add ax, dx		; add next numeral
+	loop @@Next
+
+	mov bx, 0B800h
+	mov es, bx
+	mov bx, 80 * 24 * 2	; we want clear input line
+
+	mov cx, 80
+
+	ret
+	endp

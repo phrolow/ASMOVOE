@@ -1,0 +1,225 @@
+Turbo Assembler	 Version 4.1	    02/17/23 01:49:50	    Page 1
+main.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     locals @@
+      5
+      6				     org 100h
+      7
+      8	0100  B8 00E4		     Start:  mov ax, 228
+      9	0103  BB 064E			     mov bx, (80 * 10 +	7) * 2
+     10
+     11	0106  E8 0005			     call Fullout
+     12
+     13	0109  B8 4C00			     mov ax, 4C00h
+     14	010C  CD 21			     int 21h
+     15
+     16					     include fullout.asi
+1    17	010E			     Fullout proc
+1    18
+1    19	010E  8B D0			     mov dx, ax		     ; accumulate
+1    20
+1    21	0110  E8 0015			     call Hexout
+1    22
+1    23	0113  8B C2			     mov ax, dx
+1    24
+1    25	0115  8B DF			     mov bx, di
+1    26	0117  83 C3 0A			     add bx, 5 * 2
+1    27
+1    28	011A  E8 0047			     call Binout
+1    29
+1    30	011D  8B C2			     mov ax, dx
+1    31
+1    32	011F  8B DF			     mov bx, di
+1    33	0121  83 C3 0A			     add bx, 5 * 2
+1    34
+1    35	0124  E8 0061			     call Decout
+1    36
+1    37	0127  C3			     ret
+1    38	0128				     endp
+1    39
+1    40					     include hexout.asi
+2    41				     ;===============================================;
+2    42				     ; Uses: ax, bx				     ;
+2    43				     ; Destroys: cx, es, di			     ;
+2    44				     ; Returns:					     ;
+2    45				     ; Expects:	num in ax, start of label in bx	     ;
+2    46				     ;===============================================;
+2    47
+2    48	0128			     Hexout  proc
+2    49
+2    50	0128  BF B800			     mov di, 0B800h
+2    51	012B  8E C7			     mov es, di
+2    52	012D  8B FB			     mov di, bx		     ; set vm to line begin (dx)
+2    53
+2    54	012F  B9 0004			     mov cx, word ptr 4	     ; we output 4 chars
+2    55
+2    56	0132  BB 000F		     ??Next: mov bx, 0Fh	     ; bit mask
+2    57
+Turbo Assembler	 Version 4.1	    02/17/23 01:49:50	    Page 2
+main.asm
+
+
+
+2    58	0135  FE C9			     dec cl
+2    59
+2    60	0137  D3 E3			     shl bx, cl
+2    61	0139  D3 E3			     shl bx, cl
+2    62	013B  D3 E3			     shl bx, cl
+2    63	013D  D3 E3			     shl bx, cl
+2    64
+2    65	013F  23 D8			     and bx, ax
+2    66
+2    67	0141  D3 EB			     shr bx, cl
+2    68	0143  D3 EB			     shr bx, cl
+2    69	0145  D3 EB			     shr bx, cl
+2    70	0147  D3 EB			     shr bx, cl
+2    71
+2    72	0149  FE C1			     inc cl		     ; getting the letter
+2    73
+2    74	014B  83 FB 0A			     cmp bx, 0Ah	     ; is char decimal
+2    75	014E  72 06			     jb	??Dec
+2    76
+2    77	0150  83 C3 37			     add bx, 'A' - 10d	     ; if char not decimal
+2    78
+2    79	0153  EB 04 90			     jmp ??Out
+2    80
+2    81	0156  83 C3 30		     ??Dec:  add bx, '0'	     ; if char is decimal
+2    82
+2    83	0159  B7 CE		     ??Out:  mov bh, 0CEh	     ; background
+2    84
+2    85	015B  26: 89 1D			     mov es:[di], bx	     ; output
+2    86
+2    87	015E  83 C7 02			     add di, 2
+2    88
+2    89	0161  E2 CF			     loop ??Next
+2    90
+2    91	0163  C3			     ret
+2    92	0164				     endp
+1    93					     include binout.asi
+2    94				     ;===============================================;
+2    95				     ; Uses: ax, bx				     ;
+2    96				     ; Destroys: cx, es, di			     ;
+2    97				     ; Returns:					     ;
+2    98				     ; Expects:	num in ax, start of label in bx	     ;
+2    99				     ;===============================================;
+2   100
+2   101	0164			     Binout  proc
+2   102
+2   103	0164  BF B800			     mov di, word ptr 0b800h
+2   104	0167  8E C7			     mov es, di		     ; prepare vm
+2   105
+2   106	0169  8B FB			     mov di, bx		     ; prepare ptr to vm, bx is	arg of line beginning
+2   107
+2   108	016B  B9 0010			     mov cx, word ptr 10h    ; length of output
+2   109
+2   110	016E  BB 8000		     @@Next: mov bx, word ptr 8000h  ; bx is current bit
+2   111
+2   112	0171  FE C9			     dec cl
+2   113	0173  D3 EB			     shr bx, cl		     ; set current bit
+2   114
+Turbo Assembler	 Version 4.1	    02/17/23 01:49:50	    Page 3
+main.asm
+
+
+
+2   115	0175  23 D8			     and bx, ax		     ; get current bit of ax
+2   116
+2   117	0177  FE C1			     inc cl		     ; bit to num (0 or	1)
+2   118	0179  D3 C3			     rol bx, cl
+2   119
+2   120	017B  81 C3 CE30		     add bx, 0ce30h	     ; num to char with	bg
+2   121
+2   122	017F  26: 89 1D			     mov es:[di], word ptr bx
+2   123
+2   124	0182  83 C7 02			     add di, 2		     ; because there are words in vm
+2   125	0185  E2 E7			     loop @@Next
+2   126
+2   127	0187  C3			     ret
+2   128	0188				     endp
+1   129					     include decout.asi
+2   130				     ;===============================================;
+2   131				     ; Uses: ax, bx				     ;
+2   132				     ; Destroys: dx, es, di			     ;
+2   133				     ; Returns:					     ;
+2   134				     ; Expects:	num in ax, start of label in bx	     ;
+2   135				     ;===============================================;
+2   136
+2   137	0188			     Decout  proc
+2   138
+2   139	0188  BF B800			     mov di, 0B800h
+2   140	018B  8E C7			     mov es, di
+2   141	018D  BF 0008			     mov di, 2 * 4	     ; to vm + 5 chars for our num
+2   142
+2   143	0190  03 FB			     add di, bx		     ; bx is start of line
+2   144
+2   145	0192  BA CE30			     mov dx, 0CE30h	     ; initial zeros
+2   146
+2   147	0195  26: 89 17			     mov es:[bx+0], dx
+2   148	0198  26: 89 57	02		     mov es:[bx+2], dx
+2   149	019C  26: 89 57	04		     mov es:[bx+4], dx
+2   150	01A0  26: 89 57	06		     mov es:[bx+6], dx
+2   151	01A4  26: 89 57	08		     mov es:[bx+8], dx
+2   152
+2   153	01A8  33 D2		     @@out:  xor dx, dx		     ; prepare dx for div
+2   154
+2   155	01AA  BB 000A			     mov bx, 10d
+2   156	01AD  F7 F3			     div bx		     ; we wanna	mod
+2   157
+2   158	01AF  83 C2 30			     add dx, '0'	     ; num to char
+2   159
+2   160	01B2  26: 88 15			     mov es:[di], dl
+2   161	01B5  83 EF 02			     sub di, 2		     ; prev word in vm
+2   162
+2   163	01B8  3D 0000			     cmp ax, 0		     ; if ax ==	0 why must we continue
+2   164	01BB  75 EB			     jne @@out
+2   165
+2   166	01BD  C3			     ret
+2   167	01BE				     endp
+    168
+    169				     end     Start
+Turbo Assembler	 Version 4.1	    02/17/23 01:49:50	    Page 4
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/17/23"
+??DEC				  Near	 DGROUP:0156
+??FILENAME			  Text	 "main	  "
+??NEXT				  Near	 DGROUP:0132
+??OUT				  Near	 DGROUP:0159
+??TIME				  Text	 "01:49:50"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@@NEXT				  Near	 DGROUP:016E
+@@OUT				  Near	 DGROUP:01A8
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MAIN
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+BINOUT				  Near	 DGROUP:0164
+DECOUT				  Near	 DGROUP:0188
+FULLOUT				  Near	 DGROUP:010E
+HEXOUT				  Near	 DGROUP:0128
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  01BE Word	  Public  CODE
+

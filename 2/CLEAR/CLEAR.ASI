@@ -1,0 +1,24 @@
+;=======================================;
+; Uses:					;
+; Destroys: cx, bx			;
+; Returns:				;
+; Expects:				;
+;=======================================;
+
+Clear	proc
+
+	mov bx, 0b800h
+	mov es, bx
+
+	xor bx, bx
+
+	mov cx, 80 * 24					; we clear all without last line
+
+@@Next:	mov es:[bx], word ptr 0
+
+	add bx, 2
+
+	loop @@Next
+	
+	ret
+	endp

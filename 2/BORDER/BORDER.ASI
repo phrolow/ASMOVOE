@@ -1,0 +1,85 @@
+;===================================;
+; Uses: ax, bx						;
+; Destroys: cx, dx, di, es			;
+; Returns:							;
+; Expects: ax - rb, bx - lt			;
+;===================================;
+
+Border	proc
+
+	mov di, 0B800h
+	mov es, di			; vm
+
+	sub ax, bx
+
+	mov cx, 80 * 2
+
+	xor dx, dx			; prepare to div
+	div cx				; got height and width of out border
+
+	mov cx, ax			; vertical
+
+	mov di, bx			; lt
+
+@@NextLR:	
+	mov es:[di], 00FB3h		; border char
+
+	add di, dx			; to right side
+
+	mov es:[di], 00FB3h
+
+	sub di, dx
+	add di, 80 * 2			; to left side, down to one px
+
+	loop @@NextLR
+
+
+
+	mov cx, dx			; horizontal
+	sub cx, 2			; we won't fill corners
+	
+	mov di, bx
+
+
+
+	mov es:[di], 0FDAh	; lt corner
+
+	REPT 80 * 2
+	add di, ax
+	ENDM				; to bottom side
+
+	mov es:[di], 0FC0h	; lb corner
+
+	mov di, bx
+	add di, 2			; start from next px
+
+@@NextTB:
+	mov es:[di], 00FC4h;
+
+	REPT 80 * 2
+	add di, ax
+	ENDM				; to bottom side
+
+	mov es:[di], 00FC4h
+
+	REPT 80 * 2
+	sub di, ax
+	ENDM				; to top side
+
+	add di, 2
+	sub cx, 2
+
+	cmp cx, 0
+	je @@EndFill
+	jmp @@NextTB
+
+@@EndFill:	mov es:[di], 00FBFh	; rt corner
+
+	REPT 80 * 2
+	add di, ax
+	ENDM				; to bottom side
+
+	mov es:[di], 00FD9h	; rb corner
+
+	ret
+	endp

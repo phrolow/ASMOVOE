@@ -1,0 +1,84 @@
+Turbo Assembler	 Version 4.1	    02/15/23 19:47:26	    Page 1
+main.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     org 100h
+      5
+      6	0100  E8 0005		     Start:  call Decin
+      7
+      8	0103  B8 4C00			     mov ax, 4c00h
+      9	0106  CD 21			     int 21h
+     10
+     11					     include decin.asi
+1    12	0108			     Decin   proc
+1    13
+1    14	0108  BA 012Ar			     mov dx, offset buf	     ; ptr to buf
+1    15
+1    16	010B  B4 0A			     mov ah, 0Ah
+1    17	010D  CD 21			     int 21h		     ; input
+1    18
+1    19	010F  42			     inc dx		     ; num of read
+1    20	0110  8B DA			     mov bx, dx		     ; dx sucks
+1    21
+1    22	0112  8B 0F			     mov cx, [bx]	     ; loop with <num of chars>	steps
+1    23	0114  32 ED			     xor ch, ch
+1    24
+1    25	0116  33 C0			     xor ax, ax		     ; storage for out num
+1    26
+1    27	0118  43		     ??Next: inc bx		     ; got ptr
+1    28
+1    29	0119  BA 000A			     mov dx, word ptr 10
+1    30	011C  F7 E2			     mul dx		     ; ax *= 10
+1    31
+1    32	011E  8B 17			     mov dx, [bx]
+1    33	0120  80 EA 30			     sub dl, '0'
+1    34	0123  32 F6			     xor dh, dh
+1    35
+1    36	0125  03 C2			     add ax, dx		     ; add next	numeral
+1    37	0127  E2 EF			     loop ??Next
+1    38
+1    39	0129  C3			     ret
+1    40	012A				     endp
+1    41
+1    42	012A  06 00 07*(00)	     buf     db	6, 0, 6-1+2 dup	(0)
+     43
+     44				     end     Start
+Turbo Assembler	 Version 4.1	    02/15/23 19:47:26	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/15/23"
+??FILENAME			  Text	 "main	  "
+??NEXT				  Near	 DGROUP:0118
+??TIME				  Text	 "19:47:26"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MAIN
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+BUF				  Byte	 DGROUP:012A
+DECIN				  Near	 DGROUP:0108
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0133 Word	  Public  CODE
+

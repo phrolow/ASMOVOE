@@ -1,0 +1,39 @@
+;===============================================;
+; Uses: ax, bx					;
+; Destroys: dx, es, di				;
+; Returns:					;
+; Expects: num in ax, start of label in bx	;
+;===============================================;
+
+Decout	proc
+
+	mov di, 0B800h
+	mov es, di
+	mov di, 2 * 4		; to vm + 5 chars for our num
+	
+	add di, bx		; bx is start of line
+
+	mov dx, word ptr 030h		; initial zeros
+	mov dh, 7Ah				; bg
+
+	mov es:[bx+0], dx
+	mov es:[bx+2], dx
+	mov es:[bx+4], dx
+	mov es:[bx+6], dx
+	mov es:[bx+8], dx
+
+@@out:	xor dx, dx		; prepare dx for div
+
+	mov bx, 10d
+	div bx			; we wanna mod
+
+	add dx, '0'		; num to char
+
+	mov es:[di], dl
+	sub di, 2		; prev word in vm
+
+	cmp ax, 0		; if ax == 0 why must we continue
+	jne @@out
+
+	ret
+	endp

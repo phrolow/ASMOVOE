@@ -1,0 +1,107 @@
+Turbo Assembler	 Version 4.1	    02/15/23 00:14:48	    Page 1
+main.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     org 100h
+      5
+      6	0100  B8 F00D		     Start:  mov ax, 0F00Dh
+      7	0103  BB 07D0			     mov bx, 80	* 25
+      8
+      9	0106  E8 0005			     call hexout
+     10
+     11	0109  B8 4C00			     mov ax, 4c00h
+     12	010C  CD 21			     int 21h
+     13
+     14					     include hexout.asi
+1    15	010E			     Hexout  proc
+1    16
+1    17	010E  BF B800			     mov di, 0B800h
+1    18	0111  8E C7			     mov es, di
+1    19	0113  8B FB			     mov di, bx		     ; set vm to line begin (dx)
+1    20
+1    21	0115  B9 0004			     mov cx, word ptr 4	     ; we output 4 chars
+1    22
+1    23	0118  BB 000F		     ??Next: mov bx, 0Fh	     ; bit mask
+1    24
+1    25	011B  FE C9			     dec cl
+1    26
+1    27	011D  D3 E3			     shl bx, cl
+1    28	011F  D3 E3			     shl bx, cl
+1    29	0121  D3 E3			     shl bx, cl
+1    30	0123  D3 E3			     shl bx, cl
+1    31
+1    32	0125  23 D8			     and bx, ax
+1    33
+1    34	0127  D3 EB			     shr bx, cl
+1    35	0129  D3 EB			     shr bx, cl
+1    36	012B  D3 EB			     shr bx, cl
+1    37	012D  D3 EB			     shr bx, cl
+1    38
+1    39	012F  FE C1			     inc cl		     ; getting the letter
+1    40
+1    41	0131  83 FB 0A			     cmp bx, 0Ah	     ; is char decimal
+1    42	0134  72 06			     jb	??Dec
+1    43
+1    44	0136  83 C3 37			     add bx, 'A' - 10d	     ; if char not decimal
+1    45
+1    46	0139  EB 04 90			     jmp ??Out
+1    47
+1    48	013C  83 C3 30		     ??Dec:  add bx, '0'	     ; if char is decimal
+1    49
+1    50	013F  B7 CE		     ??Out:  mov bh, 0CEh	     ; background
+1    51
+1    52	0141  26: 89 1D			     mov es:[di], bx	     ; output
+1    53
+1    54	0144  83 C7 02			     add di, 2
+1    55
+1    56	0147  E2 CF			     loop ??Next
+1    57
+Turbo Assembler	 Version 4.1	    02/15/23 00:14:48	    Page 2
+main.asm
+
+
+
+1    58	0149  C3			     ret
+1    59	014A				     endp
+     60
+     61				     end     Start
+Turbo Assembler	 Version 4.1	    02/15/23 00:14:48	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/15/23"
+??DEC				  Near	 DGROUP:013C
+??FILENAME			  Text	 "main	  "
+??NEXT				  Near	 DGROUP:0118
+??OUT				  Near	 DGROUP:013F
+??TIME				  Text	 "00:14:47"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MAIN
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+HEXOUT				  Near	 DGROUP:010E
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  014A Word	  Public  CODE
+

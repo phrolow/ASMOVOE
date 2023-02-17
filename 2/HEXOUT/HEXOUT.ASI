@@ -1,0 +1,52 @@
+;===============================================;
+; Uses: ax, bx					;
+; Destroys: cx, es, di				;
+; Returns:					;
+; Expects: num in ax, start of label in bx	;
+;===============================================;
+
+Hexout	proc
+
+	mov di, 0B800h
+	mov es, di
+	mov di, bx		; set vm to line begin (dx)
+
+	mov cx, word ptr 4	; we output 4 chars
+
+@@Next:	mov bx, 0Fh		; bit mask
+
+	dec cl
+	
+	shl bx, cl
+	shl bx, cl
+	shl bx, cl
+	shl bx, cl
+	
+	and bx, ax
+
+	shr bx, cl
+	shr bx, cl
+	shr bx, cl
+	shr bx, cl
+
+	inc cl			; getting the letter
+	
+	cmp bx, 0Ah		; is char decimal
+	jb @@Dec
+	
+	add bx, 'A' - 10d	; if char not decimal
+	
+	jmp @@Out
+
+@@Dec:	add bx, '0'		; if char is decimal
+
+@@Out:	mov bh, 4Bh
+	
+	mov es:[di], bx		; output
+	
+	add di, 2
+
+	loop @@Next
+	
+	ret
+	endp

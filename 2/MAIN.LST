@@ -1,0 +1,1225 @@
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 1
+main.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     locals @@
+      5
+      6				     org 100h
+      7
+      8	0100  E8 05C9		     Start:  call Clear
+      9
+     10	0103  B8 0C74				     mov ax, (80 * 19 +	74) * 2
+     11	0106  BB 03CA				     mov bx, (80 * 6  +	 5) * 2
+     12
+     13	0109  E8 0061				     call Border
+     14
+     15	010C  BA 07E4r				     mov dx, offset lsum
+     16	010F  BB 051E				     mov bx, (80 * 8 + 15) * 2
+     17
+     18	0112  E8 06A9				     call Msg
+     19
+     20	0115  BA 07EAr				     mov dx, offset lsub
+     21	0118  BB 06FE				     mov bx, (80 * 11 +	15) * 2
+     22
+     23	011B  E8 06A0				     call Msg
+     24
+     25	011E  BA 07F0r				     mov dx, offset lmul
+     26	0121  BB 08DE				     mov bx, (80 * 14 +	15) * 2
+     27
+     28	0124  E8 0697				     call Msg
+     29
+     30	0127  BA 07F6r				     mov dx, offset ldiv
+     31	012A  BB 0ABE				     mov bx, (80 * 17 +	15) * 2
+     32
+     33	012D  E8 068E				     call Msg
+     34
+     35	0130  BA 07DBr				     mov dx, offset buf
+     36
+     37	0133  E8 05AB				     call Decin
+     38
+     39	0136  8B E8				     mov bp, ax
+     40
+     41	0138  BA 07DBr				     mov dx, offset buf
+     42
+     43	013B  E8 05A3				     call Decin
+     44
+     45	013E  8B F0				     mov si, ax
+     46
+     47	0140  03 C5				     add ax, bp
+     48
+     49	0142  BB 053C				     mov bx, (80 * 8 + 30) * 2
+     50
+     51	0145  E8 05C3				     call Fullout
+     52
+     53	0148  8B C5				     mov ax, bp
+     54	014A  2B C6				     sub ax, si
+     55
+     56	014C  BB 071C				     mov bx, (80 * 11 +	30) * 2
+     57
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 2
+main.asm
+
+
+
+     58	014F  E8 05B9				     call Fullout
+     59
+     60	0152  8B C5				     mov ax, bp
+     61	0154  F7 E6				     mul si
+     62
+     63	0156  BB 08FC				     mov bx, (80 * 14 +	30) * 2
+     64
+     65	0159  E8 05AF				     call Fullout
+     66
+     67	015C  33 D2				     xor dx, dx
+     68	015E  8B C5				     mov ax, bp
+     69	0160  F7 F6				     div si
+     70
+     71	0162  BB 0ADC				     mov bx, (80 * 17 +	30) * 2
+     72
+     73	0165  E8 05A3				     call Fullout
+     74
+     75	0168  B8 4C00				     mov ax, 4C00h
+     76	016B  CD 21				     int 21h
+     77
+     78						     include BORDER/border.asi
+1    79				     ;===================================;
+1    80				     ; Uses: ax, bx					     ;
+1    81				     ; Destroys: cx, dx, di, es			     ;
+1    82				     ; Returns:							     ;
+1    83				     ; Expects:	ax - rb, bx - lt		     ;
+1    84				     ;===================================;
+1    85
+1    86	016D			     Border  proc
+1    87
+1    88	016D  BF B800			     mov di, 0B800h
+1    89	0170  8E C7			     mov es, di			     ; vm
+1    90
+1    91	0172  2B C3			     sub ax, bx
+1    92
+1    93	0174  B9 00A0			     mov cx, 80	* 2
+1    94
+1    95	0177  33 D2			     xor dx, dx			     ; prepare to div
+1    96	0179  F7 F1			     div cx			     ; got height and width of out border
+1    97
+1    98	017B  8B C8			     mov cx, ax			     ; vertical
+1    99
+1   100	017D  8B FB			     mov di, bx			     ; lt
+1   101
+1   102	017F			     @@NextLR:
+1   103	017F  26: C7 05	0FB3		     mov es:[di], 00FB3h	     ; border char
+1   104
+1   105	0184  03 FA			     add di, dx			     ; to right	side
+1   106
+1   107	0186  26: C7 05	0FB3		     mov es:[di], 00FB3h
+1   108
+1   109	018B  2B FA			     sub di, dx
+1   110	018D  81 C7 00A0		     add di, 80	* 2		     ; to left side, down to one px
+1   111
+1   112	0191  E2 EC			     loop @@NextLR
+1   113
+1   114
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 3
+main.asm
+
+
+
+1   115
+1   116	0193  8B CA			     mov cx, dx			     ; horizontal
+1   117	0195  83 E9 02			     sub cx, 2			     ; we won't	fill corners
+1   118
+1   119	0198  8B FB			     mov di, bx
+1   120
+1   121
+1   122
+1   123	019A  26: C7 05	0FDA		     mov es:[di], 0FDAh	     ; lt corner
+1   124
+1   125					     REPT 80 * 2
+1   126					     add di, ax
+1   127					     ENDM			     ; to bottom side
+2   128	019F  03 F8			     add di, ax
+2   129	01A1  03 F8			     add di, ax
+2   130	01A3  03 F8			     add di, ax
+2   131	01A5  03 F8			     add di, ax
+2   132	01A7  03 F8			     add di, ax
+2   133	01A9  03 F8			     add di, ax
+2   134	01AB  03 F8			     add di, ax
+2   135	01AD  03 F8			     add di, ax
+2   136	01AF  03 F8			     add di, ax
+2   137	01B1  03 F8			     add di, ax
+2   138	01B3  03 F8			     add di, ax
+2   139	01B5  03 F8			     add di, ax
+2   140	01B7  03 F8			     add di, ax
+2   141	01B9  03 F8			     add di, ax
+2   142	01BB  03 F8			     add di, ax
+2   143	01BD  03 F8			     add di, ax
+2   144	01BF  03 F8			     add di, ax
+2   145	01C1  03 F8			     add di, ax
+2   146	01C3  03 F8			     add di, ax
+2   147	01C5  03 F8			     add di, ax
+2   148	01C7  03 F8			     add di, ax
+2   149	01C9  03 F8			     add di, ax
+2   150	01CB  03 F8			     add di, ax
+2   151	01CD  03 F8			     add di, ax
+2   152	01CF  03 F8			     add di, ax
+2   153	01D1  03 F8			     add di, ax
+2   154	01D3  03 F8			     add di, ax
+2   155	01D5  03 F8			     add di, ax
+2   156	01D7  03 F8			     add di, ax
+2   157	01D9  03 F8			     add di, ax
+2   158	01DB  03 F8			     add di, ax
+2   159	01DD  03 F8			     add di, ax
+2   160	01DF  03 F8			     add di, ax
+2   161	01E1  03 F8			     add di, ax
+2   162	01E3  03 F8			     add di, ax
+2   163	01E5  03 F8			     add di, ax
+2   164	01E7  03 F8			     add di, ax
+2   165	01E9  03 F8			     add di, ax
+2   166	01EB  03 F8			     add di, ax
+2   167	01ED  03 F8			     add di, ax
+2   168	01EF  03 F8			     add di, ax
+2   169	01F1  03 F8			     add di, ax
+2   170	01F3  03 F8			     add di, ax
+2   171	01F5  03 F8			     add di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 4
+main.asm
+
+
+
+2   172	01F7  03 F8			     add di, ax
+2   173	01F9  03 F8			     add di, ax
+2   174	01FB  03 F8			     add di, ax
+2   175	01FD  03 F8			     add di, ax
+2   176	01FF  03 F8			     add di, ax
+2   177	0201  03 F8			     add di, ax
+2   178	0203  03 F8			     add di, ax
+2   179	0205  03 F8			     add di, ax
+2   180	0207  03 F8			     add di, ax
+2   181	0209  03 F8			     add di, ax
+2   182	020B  03 F8			     add di, ax
+2   183	020D  03 F8			     add di, ax
+2   184	020F  03 F8			     add di, ax
+2   185	0211  03 F8			     add di, ax
+2   186	0213  03 F8			     add di, ax
+2   187	0215  03 F8			     add di, ax
+2   188	0217  03 F8			     add di, ax
+2   189	0219  03 F8			     add di, ax
+2   190	021B  03 F8			     add di, ax
+2   191	021D  03 F8			     add di, ax
+2   192	021F  03 F8			     add di, ax
+2   193	0221  03 F8			     add di, ax
+2   194	0223  03 F8			     add di, ax
+2   195	0225  03 F8			     add di, ax
+2   196	0227  03 F8			     add di, ax
+2   197	0229  03 F8			     add di, ax
+2   198	022B  03 F8			     add di, ax
+2   199	022D  03 F8			     add di, ax
+2   200	022F  03 F8			     add di, ax
+2   201	0231  03 F8			     add di, ax
+2   202	0233  03 F8			     add di, ax
+2   203	0235  03 F8			     add di, ax
+2   204	0237  03 F8			     add di, ax
+2   205	0239  03 F8			     add di, ax
+2   206	023B  03 F8			     add di, ax
+2   207	023D  03 F8			     add di, ax
+2   208	023F  03 F8			     add di, ax
+2   209	0241  03 F8			     add di, ax
+2   210	0243  03 F8			     add di, ax
+2   211	0245  03 F8			     add di, ax
+2   212	0247  03 F8			     add di, ax
+2   213	0249  03 F8			     add di, ax
+2   214	024B  03 F8			     add di, ax
+2   215	024D  03 F8			     add di, ax
+2   216	024F  03 F8			     add di, ax
+2   217	0251  03 F8			     add di, ax
+2   218	0253  03 F8			     add di, ax
+2   219	0255  03 F8			     add di, ax
+2   220	0257  03 F8			     add di, ax
+2   221	0259  03 F8			     add di, ax
+2   222	025B  03 F8			     add di, ax
+2   223	025D  03 F8			     add di, ax
+2   224	025F  03 F8			     add di, ax
+2   225	0261  03 F8			     add di, ax
+2   226	0263  03 F8			     add di, ax
+2   227	0265  03 F8			     add di, ax
+2   228	0267  03 F8			     add di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 5
+main.asm
+
+
+
+2   229	0269  03 F8			     add di, ax
+2   230	026B  03 F8			     add di, ax
+2   231	026D  03 F8			     add di, ax
+2   232	026F  03 F8			     add di, ax
+2   233	0271  03 F8			     add di, ax
+2   234	0273  03 F8			     add di, ax
+2   235	0275  03 F8			     add di, ax
+2   236	0277  03 F8			     add di, ax
+2   237	0279  03 F8			     add di, ax
+2   238	027B  03 F8			     add di, ax
+2   239	027D  03 F8			     add di, ax
+2   240	027F  03 F8			     add di, ax
+2   241	0281  03 F8			     add di, ax
+2   242	0283  03 F8			     add di, ax
+2   243	0285  03 F8			     add di, ax
+2   244	0287  03 F8			     add di, ax
+2   245	0289  03 F8			     add di, ax
+2   246	028B  03 F8			     add di, ax
+2   247	028D  03 F8			     add di, ax
+2   248	028F  03 F8			     add di, ax
+2   249	0291  03 F8			     add di, ax
+2   250	0293  03 F8			     add di, ax
+2   251	0295  03 F8			     add di, ax
+2   252	0297  03 F8			     add di, ax
+2   253	0299  03 F8			     add di, ax
+2   254	029B  03 F8			     add di, ax
+2   255	029D  03 F8			     add di, ax
+2   256	029F  03 F8			     add di, ax
+2   257	02A1  03 F8			     add di, ax
+2   258	02A3  03 F8			     add di, ax
+2   259	02A5  03 F8			     add di, ax
+2   260	02A7  03 F8			     add di, ax
+2   261	02A9  03 F8			     add di, ax
+2   262	02AB  03 F8			     add di, ax
+2   263	02AD  03 F8			     add di, ax
+2   264	02AF  03 F8			     add di, ax
+2   265	02B1  03 F8			     add di, ax
+2   266	02B3  03 F8			     add di, ax
+2   267	02B5  03 F8			     add di, ax
+2   268	02B7  03 F8			     add di, ax
+2   269	02B9  03 F8			     add di, ax
+2   270	02BB  03 F8			     add di, ax
+2   271	02BD  03 F8			     add di, ax
+2   272	02BF  03 F8			     add di, ax
+2   273	02C1  03 F8			     add di, ax
+2   274	02C3  03 F8			     add di, ax
+2   275	02C5  03 F8			     add di, ax
+2   276	02C7  03 F8			     add di, ax
+2   277	02C9  03 F8			     add di, ax
+2   278	02CB  03 F8			     add di, ax
+2   279	02CD  03 F8			     add di, ax
+2   280	02CF  03 F8			     add di, ax
+2   281	02D1  03 F8			     add di, ax
+2   282	02D3  03 F8			     add di, ax
+2   283	02D5  03 F8			     add di, ax
+2   284	02D7  03 F8			     add di, ax
+2   285	02D9  03 F8			     add di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 6
+main.asm
+
+
+
+2   286	02DB  03 F8			     add di, ax
+2   287	02DD  03 F8			     add di, ax
+1   288
+1   289	02DF  26: C7 05	0FC0		     mov es:[di], 0FC0h	     ; lb corner
+1   290
+1   291	02E4  8B FB			     mov di, bx
+1   292	02E6  83 C7 02			     add di, 2			     ; start from next px
+1   293
+1   294	02E9			     @@NextTB:
+1   295	02E9  26: C7 05	0FC4		     mov es:[di], 00FC4h;
+1   296
+1   297					     REPT 80 * 2
+1   298					     add di, ax
+1   299					     ENDM			     ; to bottom side
+2   300	02EE  03 F8			     add di, ax
+2   301	02F0  03 F8			     add di, ax
+2   302	02F2  03 F8			     add di, ax
+2   303	02F4  03 F8			     add di, ax
+2   304	02F6  03 F8			     add di, ax
+2   305	02F8  03 F8			     add di, ax
+2   306	02FA  03 F8			     add di, ax
+2   307	02FC  03 F8			     add di, ax
+2   308	02FE  03 F8			     add di, ax
+2   309	0300  03 F8			     add di, ax
+2   310	0302  03 F8			     add di, ax
+2   311	0304  03 F8			     add di, ax
+2   312	0306  03 F8			     add di, ax
+2   313	0308  03 F8			     add di, ax
+2   314	030A  03 F8			     add di, ax
+2   315	030C  03 F8			     add di, ax
+2   316	030E  03 F8			     add di, ax
+2   317	0310  03 F8			     add di, ax
+2   318	0312  03 F8			     add di, ax
+2   319	0314  03 F8			     add di, ax
+2   320	0316  03 F8			     add di, ax
+2   321	0318  03 F8			     add di, ax
+2   322	031A  03 F8			     add di, ax
+2   323	031C  03 F8			     add di, ax
+2   324	031E  03 F8			     add di, ax
+2   325	0320  03 F8			     add di, ax
+2   326	0322  03 F8			     add di, ax
+2   327	0324  03 F8			     add di, ax
+2   328	0326  03 F8			     add di, ax
+2   329	0328  03 F8			     add di, ax
+2   330	032A  03 F8			     add di, ax
+2   331	032C  03 F8			     add di, ax
+2   332	032E  03 F8			     add di, ax
+2   333	0330  03 F8			     add di, ax
+2   334	0332  03 F8			     add di, ax
+2   335	0334  03 F8			     add di, ax
+2   336	0336  03 F8			     add di, ax
+2   337	0338  03 F8			     add di, ax
+2   338	033A  03 F8			     add di, ax
+2   339	033C  03 F8			     add di, ax
+2   340	033E  03 F8			     add di, ax
+2   341	0340  03 F8			     add di, ax
+2   342	0342  03 F8			     add di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 7
+main.asm
+
+
+
+2   343	0344  03 F8			     add di, ax
+2   344	0346  03 F8			     add di, ax
+2   345	0348  03 F8			     add di, ax
+2   346	034A  03 F8			     add di, ax
+2   347	034C  03 F8			     add di, ax
+2   348	034E  03 F8			     add di, ax
+2   349	0350  03 F8			     add di, ax
+2   350	0352  03 F8			     add di, ax
+2   351	0354  03 F8			     add di, ax
+2   352	0356  03 F8			     add di, ax
+2   353	0358  03 F8			     add di, ax
+2   354	035A  03 F8			     add di, ax
+2   355	035C  03 F8			     add di, ax
+2   356	035E  03 F8			     add di, ax
+2   357	0360  03 F8			     add di, ax
+2   358	0362  03 F8			     add di, ax
+2   359	0364  03 F8			     add di, ax
+2   360	0366  03 F8			     add di, ax
+2   361	0368  03 F8			     add di, ax
+2   362	036A  03 F8			     add di, ax
+2   363	036C  03 F8			     add di, ax
+2   364	036E  03 F8			     add di, ax
+2   365	0370  03 F8			     add di, ax
+2   366	0372  03 F8			     add di, ax
+2   367	0374  03 F8			     add di, ax
+2   368	0376  03 F8			     add di, ax
+2   369	0378  03 F8			     add di, ax
+2   370	037A  03 F8			     add di, ax
+2   371	037C  03 F8			     add di, ax
+2   372	037E  03 F8			     add di, ax
+2   373	0380  03 F8			     add di, ax
+2   374	0382  03 F8			     add di, ax
+2   375	0384  03 F8			     add di, ax
+2   376	0386  03 F8			     add di, ax
+2   377	0388  03 F8			     add di, ax
+2   378	038A  03 F8			     add di, ax
+2   379	038C  03 F8			     add di, ax
+2   380	038E  03 F8			     add di, ax
+2   381	0390  03 F8			     add di, ax
+2   382	0392  03 F8			     add di, ax
+2   383	0394  03 F8			     add di, ax
+2   384	0396  03 F8			     add di, ax
+2   385	0398  03 F8			     add di, ax
+2   386	039A  03 F8			     add di, ax
+2   387	039C  03 F8			     add di, ax
+2   388	039E  03 F8			     add di, ax
+2   389	03A0  03 F8			     add di, ax
+2   390	03A2  03 F8			     add di, ax
+2   391	03A4  03 F8			     add di, ax
+2   392	03A6  03 F8			     add di, ax
+2   393	03A8  03 F8			     add di, ax
+2   394	03AA  03 F8			     add di, ax
+2   395	03AC  03 F8			     add di, ax
+2   396	03AE  03 F8			     add di, ax
+2   397	03B0  03 F8			     add di, ax
+2   398	03B2  03 F8			     add di, ax
+2   399	03B4  03 F8			     add di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 8
+main.asm
+
+
+
+2   400	03B6  03 F8			     add di, ax
+2   401	03B8  03 F8			     add di, ax
+2   402	03BA  03 F8			     add di, ax
+2   403	03BC  03 F8			     add di, ax
+2   404	03BE  03 F8			     add di, ax
+2   405	03C0  03 F8			     add di, ax
+2   406	03C2  03 F8			     add di, ax
+2   407	03C4  03 F8			     add di, ax
+2   408	03C6  03 F8			     add di, ax
+2   409	03C8  03 F8			     add di, ax
+2   410	03CA  03 F8			     add di, ax
+2   411	03CC  03 F8			     add di, ax
+2   412	03CE  03 F8			     add di, ax
+2   413	03D0  03 F8			     add di, ax
+2   414	03D2  03 F8			     add di, ax
+2   415	03D4  03 F8			     add di, ax
+2   416	03D6  03 F8			     add di, ax
+2   417	03D8  03 F8			     add di, ax
+2   418	03DA  03 F8			     add di, ax
+2   419	03DC  03 F8			     add di, ax
+2   420	03DE  03 F8			     add di, ax
+2   421	03E0  03 F8			     add di, ax
+2   422	03E2  03 F8			     add di, ax
+2   423	03E4  03 F8			     add di, ax
+2   424	03E6  03 F8			     add di, ax
+2   425	03E8  03 F8			     add di, ax
+2   426	03EA  03 F8			     add di, ax
+2   427	03EC  03 F8			     add di, ax
+2   428	03EE  03 F8			     add di, ax
+2   429	03F0  03 F8			     add di, ax
+2   430	03F2  03 F8			     add di, ax
+2   431	03F4  03 F8			     add di, ax
+2   432	03F6  03 F8			     add di, ax
+2   433	03F8  03 F8			     add di, ax
+2   434	03FA  03 F8			     add di, ax
+2   435	03FC  03 F8			     add di, ax
+2   436	03FE  03 F8			     add di, ax
+2   437	0400  03 F8			     add di, ax
+2   438	0402  03 F8			     add di, ax
+2   439	0404  03 F8			     add di, ax
+2   440	0406  03 F8			     add di, ax
+2   441	0408  03 F8			     add di, ax
+2   442	040A  03 F8			     add di, ax
+2   443	040C  03 F8			     add di, ax
+2   444	040E  03 F8			     add di, ax
+2   445	0410  03 F8			     add di, ax
+2   446	0412  03 F8			     add di, ax
+2   447	0414  03 F8			     add di, ax
+2   448	0416  03 F8			     add di, ax
+2   449	0418  03 F8			     add di, ax
+2   450	041A  03 F8			     add di, ax
+2   451	041C  03 F8			     add di, ax
+2   452	041E  03 F8			     add di, ax
+2   453	0420  03 F8			     add di, ax
+2   454	0422  03 F8			     add di, ax
+2   455	0424  03 F8			     add di, ax
+2   456	0426  03 F8			     add di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 9
+main.asm
+
+
+
+2   457	0428  03 F8			     add di, ax
+2   458	042A  03 F8			     add di, ax
+2   459	042C  03 F8			     add di, ax
+1   460
+1   461	042E  26: C7 05	0FC4		     mov es:[di], 00FC4h
+1   462
+1   463					     REPT 80 * 2
+1   464					     sub di, ax
+1   465					     ENDM			     ; to top side
+2   466	0433  2B F8			     sub di, ax
+2   467	0435  2B F8			     sub di, ax
+2   468	0437  2B F8			     sub di, ax
+2   469	0439  2B F8			     sub di, ax
+2   470	043B  2B F8			     sub di, ax
+2   471	043D  2B F8			     sub di, ax
+2   472	043F  2B F8			     sub di, ax
+2   473	0441  2B F8			     sub di, ax
+2   474	0443  2B F8			     sub di, ax
+2   475	0445  2B F8			     sub di, ax
+2   476	0447  2B F8			     sub di, ax
+2   477	0449  2B F8			     sub di, ax
+2   478	044B  2B F8			     sub di, ax
+2   479	044D  2B F8			     sub di, ax
+2   480	044F  2B F8			     sub di, ax
+2   481	0451  2B F8			     sub di, ax
+2   482	0453  2B F8			     sub di, ax
+2   483	0455  2B F8			     sub di, ax
+2   484	0457  2B F8			     sub di, ax
+2   485	0459  2B F8			     sub di, ax
+2   486	045B  2B F8			     sub di, ax
+2   487	045D  2B F8			     sub di, ax
+2   488	045F  2B F8			     sub di, ax
+2   489	0461  2B F8			     sub di, ax
+2   490	0463  2B F8			     sub di, ax
+2   491	0465  2B F8			     sub di, ax
+2   492	0467  2B F8			     sub di, ax
+2   493	0469  2B F8			     sub di, ax
+2   494	046B  2B F8			     sub di, ax
+2   495	046D  2B F8			     sub di, ax
+2   496	046F  2B F8			     sub di, ax
+2   497	0471  2B F8			     sub di, ax
+2   498	0473  2B F8			     sub di, ax
+2   499	0475  2B F8			     sub di, ax
+2   500	0477  2B F8			     sub di, ax
+2   501	0479  2B F8			     sub di, ax
+2   502	047B  2B F8			     sub di, ax
+2   503	047D  2B F8			     sub di, ax
+2   504	047F  2B F8			     sub di, ax
+2   505	0481  2B F8			     sub di, ax
+2   506	0483  2B F8			     sub di, ax
+2   507	0485  2B F8			     sub di, ax
+2   508	0487  2B F8			     sub di, ax
+2   509	0489  2B F8			     sub di, ax
+2   510	048B  2B F8			     sub di, ax
+2   511	048D  2B F8			     sub di, ax
+2   512	048F  2B F8			     sub di, ax
+2   513	0491  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 10
+main.asm
+
+
+
+2   514	0493  2B F8			     sub di, ax
+2   515	0495  2B F8			     sub di, ax
+2   516	0497  2B F8			     sub di, ax
+2   517	0499  2B F8			     sub di, ax
+2   518	049B  2B F8			     sub di, ax
+2   519	049D  2B F8			     sub di, ax
+2   520	049F  2B F8			     sub di, ax
+2   521	04A1  2B F8			     sub di, ax
+2   522	04A3  2B F8			     sub di, ax
+2   523	04A5  2B F8			     sub di, ax
+2   524	04A7  2B F8			     sub di, ax
+2   525	04A9  2B F8			     sub di, ax
+2   526	04AB  2B F8			     sub di, ax
+2   527	04AD  2B F8			     sub di, ax
+2   528	04AF  2B F8			     sub di, ax
+2   529	04B1  2B F8			     sub di, ax
+2   530	04B3  2B F8			     sub di, ax
+2   531	04B5  2B F8			     sub di, ax
+2   532	04B7  2B F8			     sub di, ax
+2   533	04B9  2B F8			     sub di, ax
+2   534	04BB  2B F8			     sub di, ax
+2   535	04BD  2B F8			     sub di, ax
+2   536	04BF  2B F8			     sub di, ax
+2   537	04C1  2B F8			     sub di, ax
+2   538	04C3  2B F8			     sub di, ax
+2   539	04C5  2B F8			     sub di, ax
+2   540	04C7  2B F8			     sub di, ax
+2   541	04C9  2B F8			     sub di, ax
+2   542	04CB  2B F8			     sub di, ax
+2   543	04CD  2B F8			     sub di, ax
+2   544	04CF  2B F8			     sub di, ax
+2   545	04D1  2B F8			     sub di, ax
+2   546	04D3  2B F8			     sub di, ax
+2   547	04D5  2B F8			     sub di, ax
+2   548	04D7  2B F8			     sub di, ax
+2   549	04D9  2B F8			     sub di, ax
+2   550	04DB  2B F8			     sub di, ax
+2   551	04DD  2B F8			     sub di, ax
+2   552	04DF  2B F8			     sub di, ax
+2   553	04E1  2B F8			     sub di, ax
+2   554	04E3  2B F8			     sub di, ax
+2   555	04E5  2B F8			     sub di, ax
+2   556	04E7  2B F8			     sub di, ax
+2   557	04E9  2B F8			     sub di, ax
+2   558	04EB  2B F8			     sub di, ax
+2   559	04ED  2B F8			     sub di, ax
+2   560	04EF  2B F8			     sub di, ax
+2   561	04F1  2B F8			     sub di, ax
+2   562	04F3  2B F8			     sub di, ax
+2   563	04F5  2B F8			     sub di, ax
+2   564	04F7  2B F8			     sub di, ax
+2   565	04F9  2B F8			     sub di, ax
+2   566	04FB  2B F8			     sub di, ax
+2   567	04FD  2B F8			     sub di, ax
+2   568	04FF  2B F8			     sub di, ax
+2   569	0501  2B F8			     sub di, ax
+2   570	0503  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 11
+main.asm
+
+
+
+2   571	0505  2B F8			     sub di, ax
+2   572	0507  2B F8			     sub di, ax
+2   573	0509  2B F8			     sub di, ax
+2   574	050B  2B F8			     sub di, ax
+2   575	050D  2B F8			     sub di, ax
+2   576	050F  2B F8			     sub di, ax
+2   577	0511  2B F8			     sub di, ax
+2   578	0513  2B F8			     sub di, ax
+2   579	0515  2B F8			     sub di, ax
+2   580	0517  2B F8			     sub di, ax
+2   581	0519  2B F8			     sub di, ax
+2   582	051B  2B F8			     sub di, ax
+2   583	051D  2B F8			     sub di, ax
+2   584	051F  2B F8			     sub di, ax
+2   585	0521  2B F8			     sub di, ax
+2   586	0523  2B F8			     sub di, ax
+2   587	0525  2B F8			     sub di, ax
+2   588	0527  2B F8			     sub di, ax
+2   589	0529  2B F8			     sub di, ax
+2   590	052B  2B F8			     sub di, ax
+2   591	052D  2B F8			     sub di, ax
+2   592	052F  2B F8			     sub di, ax
+2   593	0531  2B F8			     sub di, ax
+2   594	0533  2B F8			     sub di, ax
+2   595	0535  2B F8			     sub di, ax
+2   596	0537  2B F8			     sub di, ax
+2   597	0539  2B F8			     sub di, ax
+2   598	053B  2B F8			     sub di, ax
+2   599	053D  2B F8			     sub di, ax
+2   600	053F  2B F8			     sub di, ax
+2   601	0541  2B F8			     sub di, ax
+2   602	0543  2B F8			     sub di, ax
+2   603	0545  2B F8			     sub di, ax
+2   604	0547  2B F8			     sub di, ax
+2   605	0549  2B F8			     sub di, ax
+2   606	054B  2B F8			     sub di, ax
+2   607	054D  2B F8			     sub di, ax
+2   608	054F  2B F8			     sub di, ax
+2   609	0551  2B F8			     sub di, ax
+2   610	0553  2B F8			     sub di, ax
+2   611	0555  2B F8			     sub di, ax
+2   612	0557  2B F8			     sub di, ax
+2   613	0559  2B F8			     sub di, ax
+2   614	055B  2B F8			     sub di, ax
+2   615	055D  2B F8			     sub di, ax
+2   616	055F  2B F8			     sub di, ax
+2   617	0561  2B F8			     sub di, ax
+2   618	0563  2B F8			     sub di, ax
+2   619	0565  2B F8			     sub di, ax
+2   620	0567  2B F8			     sub di, ax
+2   621	0569  2B F8			     sub di, ax
+2   622	056B  2B F8			     sub di, ax
+2   623	056D  2B F8			     sub di, ax
+2   624	056F  2B F8			     sub di, ax
+2   625	0571  2B F8			     sub di, ax
+1   626
+1   627	0573  83 C7 02			     add di, 2
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 12
+main.asm
+
+
+
+1   628	0576  83 E9 02			     sub cx, 2
+1   629
+1   630	0579  83 F9 00			     cmp cx, 0
+1   631	057C  74 03			     je	@@EndFill
+1   632	057E  E9 FD68			     jmp @@NextTB
+1   633
+1   634	0581  26: C7 05	0FBF	     @@EndFill:	     mov es:[di], 00FBFh     ; rt corner
+1   635
+1   636					     REPT 80 * 2
+1   637					     add di, ax
+1   638					     ENDM			     ; to bottom side
+2   639	0586  03 F8			     add di, ax
+2   640	0588  03 F8			     add di, ax
+2   641	058A  03 F8			     add di, ax
+2   642	058C  03 F8			     add di, ax
+2   643	058E  03 F8			     add di, ax
+2   644	0590  03 F8			     add di, ax
+2   645	0592  03 F8			     add di, ax
+2   646	0594  03 F8			     add di, ax
+2   647	0596  03 F8			     add di, ax
+2   648	0598  03 F8			     add di, ax
+2   649	059A  03 F8			     add di, ax
+2   650	059C  03 F8			     add di, ax
+2   651	059E  03 F8			     add di, ax
+2   652	05A0  03 F8			     add di, ax
+2   653	05A2  03 F8			     add di, ax
+2   654	05A4  03 F8			     add di, ax
+2   655	05A6  03 F8			     add di, ax
+2   656	05A8  03 F8			     add di, ax
+2   657	05AA  03 F8			     add di, ax
+2   658	05AC  03 F8			     add di, ax
+2   659	05AE  03 F8			     add di, ax
+2   660	05B0  03 F8			     add di, ax
+2   661	05B2  03 F8			     add di, ax
+2   662	05B4  03 F8			     add di, ax
+2   663	05B6  03 F8			     add di, ax
+2   664	05B8  03 F8			     add di, ax
+2   665	05BA  03 F8			     add di, ax
+2   666	05BC  03 F8			     add di, ax
+2   667	05BE  03 F8			     add di, ax
+2   668	05C0  03 F8			     add di, ax
+2   669	05C2  03 F8			     add di, ax
+2   670	05C4  03 F8			     add di, ax
+2   671	05C6  03 F8			     add di, ax
+2   672	05C8  03 F8			     add di, ax
+2   673	05CA  03 F8			     add di, ax
+2   674	05CC  03 F8			     add di, ax
+2   675	05CE  03 F8			     add di, ax
+2   676	05D0  03 F8			     add di, ax
+2   677	05D2  03 F8			     add di, ax
+2   678	05D4  03 F8			     add di, ax
+2   679	05D6  03 F8			     add di, ax
+2   680	05D8  03 F8			     add di, ax
+2   681	05DA  03 F8			     add di, ax
+2   682	05DC  03 F8			     add di, ax
+2   683	05DE  03 F8			     add di, ax
+2   684	05E0  03 F8			     add di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 13
+main.asm
+
+
+
+2   685	05E2  03 F8			     add di, ax
+2   686	05E4  03 F8			     add di, ax
+2   687	05E6  03 F8			     add di, ax
+2   688	05E8  03 F8			     add di, ax
+2   689	05EA  03 F8			     add di, ax
+2   690	05EC  03 F8			     add di, ax
+2   691	05EE  03 F8			     add di, ax
+2   692	05F0  03 F8			     add di, ax
+2   693	05F2  03 F8			     add di, ax
+2   694	05F4  03 F8			     add di, ax
+2   695	05F6  03 F8			     add di, ax
+2   696	05F8  03 F8			     add di, ax
+2   697	05FA  03 F8			     add di, ax
+2   698	05FC  03 F8			     add di, ax
+2   699	05FE  03 F8			     add di, ax
+2   700	0600  03 F8			     add di, ax
+2   701	0602  03 F8			     add di, ax
+2   702	0604  03 F8			     add di, ax
+2   703	0606  03 F8			     add di, ax
+2   704	0608  03 F8			     add di, ax
+2   705	060A  03 F8			     add di, ax
+2   706	060C  03 F8			     add di, ax
+2   707	060E  03 F8			     add di, ax
+2   708	0610  03 F8			     add di, ax
+2   709	0612  03 F8			     add di, ax
+2   710	0614  03 F8			     add di, ax
+2   711	0616  03 F8			     add di, ax
+2   712	0618  03 F8			     add di, ax
+2   713	061A  03 F8			     add di, ax
+2   714	061C  03 F8			     add di, ax
+2   715	061E  03 F8			     add di, ax
+2   716	0620  03 F8			     add di, ax
+2   717	0622  03 F8			     add di, ax
+2   718	0624  03 F8			     add di, ax
+2   719	0626  03 F8			     add di, ax
+2   720	0628  03 F8			     add di, ax
+2   721	062A  03 F8			     add di, ax
+2   722	062C  03 F8			     add di, ax
+2   723	062E  03 F8			     add di, ax
+2   724	0630  03 F8			     add di, ax
+2   725	0632  03 F8			     add di, ax
+2   726	0634  03 F8			     add di, ax
+2   727	0636  03 F8			     add di, ax
+2   728	0638  03 F8			     add di, ax
+2   729	063A  03 F8			     add di, ax
+2   730	063C  03 F8			     add di, ax
+2   731	063E  03 F8			     add di, ax
+2   732	0640  03 F8			     add di, ax
+2   733	0642  03 F8			     add di, ax
+2   734	0644  03 F8			     add di, ax
+2   735	0646  03 F8			     add di, ax
+2   736	0648  03 F8			     add di, ax
+2   737	064A  03 F8			     add di, ax
+2   738	064C  03 F8			     add di, ax
+2   739	064E  03 F8			     add di, ax
+2   740	0650  03 F8			     add di, ax
+2   741	0652  03 F8			     add di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 14
+main.asm
+
+
+
+2   742	0654  03 F8			     add di, ax
+2   743	0656  03 F8			     add di, ax
+2   744	0658  03 F8			     add di, ax
+2   745	065A  03 F8			     add di, ax
+2   746	065C  03 F8			     add di, ax
+2   747	065E  03 F8			     add di, ax
+2   748	0660  03 F8			     add di, ax
+2   749	0662  03 F8			     add di, ax
+2   750	0664  03 F8			     add di, ax
+2   751	0666  03 F8			     add di, ax
+2   752	0668  03 F8			     add di, ax
+2   753	066A  03 F8			     add di, ax
+2   754	066C  03 F8			     add di, ax
+2   755	066E  03 F8			     add di, ax
+2   756	0670  03 F8			     add di, ax
+2   757	0672  03 F8			     add di, ax
+2   758	0674  03 F8			     add di, ax
+2   759	0676  03 F8			     add di, ax
+2   760	0678  03 F8			     add di, ax
+2   761	067A  03 F8			     add di, ax
+2   762	067C  03 F8			     add di, ax
+2   763	067E  03 F8			     add di, ax
+2   764	0680  03 F8			     add di, ax
+2   765	0682  03 F8			     add di, ax
+2   766	0684  03 F8			     add di, ax
+2   767	0686  03 F8			     add di, ax
+2   768	0688  03 F8			     add di, ax
+2   769	068A  03 F8			     add di, ax
+2   770	068C  03 F8			     add di, ax
+2   771	068E  03 F8			     add di, ax
+2   772	0690  03 F8			     add di, ax
+2   773	0692  03 F8			     add di, ax
+2   774	0694  03 F8			     add di, ax
+2   775	0696  03 F8			     add di, ax
+2   776	0698  03 F8			     add di, ax
+2   777	069A  03 F8			     add di, ax
+2   778	069C  03 F8			     add di, ax
+2   779	069E  03 F8			     add di, ax
+2   780	06A0  03 F8			     add di, ax
+2   781	06A2  03 F8			     add di, ax
+2   782	06A4  03 F8			     add di, ax
+2   783	06A6  03 F8			     add di, ax
+2   784	06A8  03 F8			     add di, ax
+2   785	06AA  03 F8			     add di, ax
+2   786	06AC  03 F8			     add di, ax
+2   787	06AE  03 F8			     add di, ax
+2   788	06B0  03 F8			     add di, ax
+2   789	06B2  03 F8			     add di, ax
+2   790	06B4  03 F8			     add di, ax
+2   791	06B6  03 F8			     add di, ax
+2   792	06B8  03 F8			     add di, ax
+2   793	06BA  03 F8			     add di, ax
+2   794	06BC  03 F8			     add di, ax
+2   795	06BE  03 F8			     add di, ax
+2   796	06C0  03 F8			     add di, ax
+2   797	06C2  03 F8			     add di, ax
+2   798	06C4  03 F8			     add di, ax
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 15
+main.asm
+
+
+
+1   799
+1   800	06C6  26: C7 05	0FD9		     mov es:[di], 00FD9h     ; rb corner
+1   801
+1   802	06CB  C3			     ret
+1   803	06CC				     endp
+    804						     include CLEAR/clear.asi
+1   805				     ;=======================================;
+1   806				     ; Uses:				     ;
+1   807				     ; Destroys: cx, bx			     ;
+1   808				     ; Returns:				     ;
+1   809				     ; Expects:				     ;
+1   810				     ;=======================================;
+1   811
+1   812	06CC			     Clear   proc
+1   813
+1   814	06CC  BB B800			     mov bx, 0b800h
+1   815	06CF  8E C3			     mov es, bx
+1   816
+1   817	06D1  33 DB			     xor bx, bx
+1   818
+1   819	06D3  B9 0780			     mov cx, 80	* 24
+1   820
+1   821	06D6  26: C7 07	0000	     @@Next: mov es:[bx], word ptr 0
+1   822
+1   823	06DB  83 C3 02			     add bx, 2
+1   824
+1   825	06DE  E2 F6			     loop @@Next
+1   826
+1   827	06E0  C3			     ret
+1   828	06E1				     endp
+    829						     include DECIN/decin.asi
+1   830				     ;=======================================;
+1   831				     ; Uses:				     ;
+1   832				     ; Destroys: ax, bx, cx, dx		     ;
+1   833				     ; Output: ax			     ;
+1   834				     ; Expects:				     ;
+1   835				     ;=======================================;
+1   836
+1   837	06E1			     Decin   proc
+1   838
+1   839	06E1  B4 0A			     mov ah, 0Ah
+1   840	06E3  CD 21			     int 21h		     ; input
+1   841
+1   842	06E5  42			     inc dx		     ; num of read
+1   843	06E6  8B DA			     mov bx, dx		     ; dx sucks
+1   844
+1   845	06E8  8B 0F			     mov cx, [bx]	     ; loop with <num of chars>	steps
+1   846	06EA  32 ED			     xor ch, ch
+1   847
+1   848	06EC  33 C0			     xor ax, ax		     ; storage for out num
+1   849
+1   850	06EE  43		     @@Next: inc bx		     ; got ptr
+1   851
+1   852	06EF  BA 000A			     mov dx, word ptr 10
+1   853	06F2  F7 E2			     mul dx		     ; ax *= 10
+1   854
+1   855	06F4  8B 17			     mov dx, [bx]
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 16
+main.asm
+
+
+
+1   856	06F6  80 EA 30			     sub dl, '0'
+1   857	06F9  32 F6			     xor dh, dh
+1   858
+1   859	06FB  03 C2			     add ax, dx		     ; add next	numeral
+1   860	06FD  E2 EF			     loop @@Next
+1   861
+1   862	06FF  BB B800			     mov bx, 0B800h
+1   863	0702  8E C3			     mov es, bx
+1   864	0704  BB 0F00			     mov bx, 80	* 24 * 2     ; we want clear input line
+1   865
+1   866	0707  B9 0050			     mov cx, 80
+1   867
+1   868	070A  C3			     ret
+1   869	070B				     endp
+    870						     include FULLOUT/fullout.asi
+1   871				     ;===============================================;
+1   872				     ; Uses: ax, bx				     ;
+1   873				     ; Destroys: dx, cx, es, di				     ;
+1   874				     ; Returns:					     ;
+1   875				     ; Expects:	num in ax, start of label in bx	     ;
+1   876				     ;===============================================;
+1   877
+1   878	070B			     Fullout proc
+1   879
+1   880	070B  8B D0			     mov dx, ax		     ; accumulate
+1   881
+1   882	070D  E8 0015			     call Hexout
+1   883
+1   884	0710  8B C2			     mov ax, dx
+1   885
+1   886	0712  8B DF			     mov bx, di
+1   887	0714  83 C3 0A			     add bx, 5 * 2
+1   888
+1   889	0717  E8 0047			     call Binout
+1   890
+1   891	071A  8B C2			     mov ax, dx
+1   892
+1   893	071C  8B DF			     mov bx, di
+1   894	071E  83 C3 0A			     add bx, 5 * 2
+1   895
+1   896	0721  E8 0062			     call Decout
+1   897
+1   898	0724  C3			     ret
+1   899	0725				     endp
+1   900
+1   901					     include HEXOUT/hexout.asi
+2   902				     ;===============================================;
+2   903				     ; Uses: ax, bx				     ;
+2   904				     ; Destroys: cx, es, di			     ;
+2   905				     ; Returns:					     ;
+2   906				     ; Expects:	num in ax, start of label in bx	     ;
+2   907				     ;===============================================;
+2   908
+2   909	0725			     Hexout  proc
+2   910
+2   911	0725  BF B800			     mov di, 0B800h
+2   912	0728  8E C7			     mov es, di
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 17
+main.asm
+
+
+
+2   913	072A  8B FB			     mov di, bx		     ; set vm to line begin (dx)
+2   914
+2   915	072C  B9 0004			     mov cx, word ptr 4	     ; we output 4 chars
+2   916
+2   917	072F  BB 000F		     @@Next: mov bx, 0Fh	     ; bit mask
+2   918
+2   919	0732  FE C9			     dec cl
+2   920
+2   921	0734  D3 E3			     shl bx, cl
+2   922	0736  D3 E3			     shl bx, cl
+2   923	0738  D3 E3			     shl bx, cl
+2   924	073A  D3 E3			     shl bx, cl
+2   925
+2   926	073C  23 D8			     and bx, ax
+2   927
+2   928	073E  D3 EB			     shr bx, cl
+2   929	0740  D3 EB			     shr bx, cl
+2   930	0742  D3 EB			     shr bx, cl
+2   931	0744  D3 EB			     shr bx, cl
+2   932
+2   933	0746  FE C1			     inc cl		     ; getting the letter
+2   934
+2   935	0748  83 FB 0A			     cmp bx, 0Ah	     ; is char decimal
+2   936	074B  72 06			     jb	@@Dec
+2   937
+2   938	074D  83 C3 37			     add bx, 'A' - 10d	     ; if char not decimal
+2   939
+2   940	0750  EB 04 90			     jmp @@Out
+2   941
+2   942	0753  83 C3 30		     @@Dec:  add bx, '0'	     ; if char is decimal
+2   943
+2   944	0756  B7 4B		     @@Out:  mov bh, 4Bh
+2   945
+2   946	0758  26: 89 1D			     mov es:[di], bx	     ; output
+2   947
+2   948	075B  83 C7 02			     add di, 2
+2   949
+2   950	075E  E2 CF			     loop @@Next
+2   951
+2   952	0760  C3			     ret
+2   953	0761				     endp
+1   954					     include BINOUT/binout.asi
+2   955				     ;===============================================;
+2   956				     ; Uses: ax, bx				     ;
+2   957				     ; Destroys: cx, es, di			     ;
+2   958				     ; Returns:					     ;
+2   959				     ; Expects:	num in ax, start of label in bx	     ;
+2   960				     ;===============================================;
+2   961
+2   962	0761			     Binout  proc
+2   963
+2   964	0761  BF B800			     mov di, word ptr 0b800h
+2   965	0764  8E C7			     mov es, di		     ; prepare vm
+2   966
+2   967	0766  8B FB			     mov di, bx		     ; prepare ptr to vm, bx is	arg of line beginning
+2   968
+2   969	0768  B9 0010			     mov cx, word ptr 10h    ; length of output
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 18
+main.asm
+
+
+
+2   970
+2   971	076B  BB 8000		     @@Next: mov bx, word ptr 8000h  ; bx is current bit
+2   972
+2   973	076E  FE C9			     dec cl
+2   974	0770  D3 EB			     shr bx, cl		     ; set current bit
+2   975
+2   976	0772  23 D8			     and bx, ax		     ; get current bit of ax
+2   977
+2   978	0774  FE C1			     inc cl		     ; bit to num (0 or	1)
+2   979	0776  D3 C3			     rol bx, cl
+2   980
+2   981	0778  83 C3 30			     add bx, word ptr 030h	     ; num to char with	bg
+2   982	077B  B7 1D			     mov bh, 1Dh
+2   983
+2   984	077D  26: 89 1D			     mov es:[di], word ptr bx
+2   985
+2   986	0780  83 C7 02			     add di, 2		     ; because there are words in vm
+2   987	0783  E2 E6			     loop @@Next
+2   988
+2   989	0785  C3			     ret
+2   990	0786				     endp
+1   991					     include DECOUT/decout.asi
+2   992				     ;===============================================;
+2   993				     ; Uses: ax, bx				     ;
+2   994				     ; Destroys: dx, es, di			     ;
+2   995				     ; Returns:					     ;
+2   996				     ; Expects:	num in ax, start of label in bx	     ;
+2   997				     ;===============================================;
+2   998
+2   999	0786			     Decout  proc
+2  1000
+2  1001	0786  BF B800			     mov di, 0B800h
+2  1002	0789  8E C7			     mov es, di
+2  1003	078B  BF 0008			     mov di, 2 * 4	     ; to vm + 5 chars for our num
+2  1004
+2  1005	078E  03 FB			     add di, bx		     ; bx is start of line
+2  1006
+2  1007	0790  BA 0030			     mov dx, word ptr 030h	     ; initial zeros
+2  1008	0793  B6 7A			     mov dh, 7Ah			     ; bg
+2  1009
+2  1010	0795  26: 89 17			     mov es:[bx+0], dx
+2  1011	0798  26: 89 57	02		     mov es:[bx+2], dx
+2  1012	079C  26: 89 57	04		     mov es:[bx+4], dx
+2  1013	07A0  26: 89 57	06		     mov es:[bx+6], dx
+2  1014	07A4  26: 89 57	08		     mov es:[bx+8], dx
+2  1015
+2  1016	07A8  33 D2		     @@out:  xor dx, dx		     ; prepare dx for div
+2  1017
+2  1018	07AA  BB 000A			     mov bx, 10d
+2  1019	07AD  F7 F3			     div bx		     ; we wanna	mod
+2  1020
+2  1021	07AF  83 C2 30			     add dx, '0'	     ; num to char
+2  1022
+2  1023	07B2  26: 88 15			     mov es:[di], dl
+2  1024	07B5  83 EF 02			     sub di, 2		     ; prev word in vm
+2  1025
+2  1026	07B8  3D 0000			     cmp ax, 0		     ; if ax ==	0 why must we continue
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 19
+main.asm
+
+
+
+2  1027	07BB  75 EB			     jne @@out
+2  1028
+2  1029	07BD  C3			     ret
+2  1030	07BE				     endp
+   1031						     include MSG/msg.asi
+1  1032				     ;===============================================;
+1  1033				     ; Uses: bx, dx				     ;
+1  1034				     ; Destroys: cx, es, di			     ;
+1  1035				     ; Returns:					     ;
+1  1036				     ; Expects:	bx - label start, dx - offset msg    ;
+1  1037				     ;===============================================;
+1  1038
+1  1039
+1  1040	07BE			     Msg     proc
+1  1041
+1  1042	07BE  BF B800			     mov di, 0B800h
+1  1043	07C1  8E C7			     mov es, di
+1  1044
+1  1045	07C3  8B FB			     mov di, bx			 ; bx is pointer to vm
+1  1046
+1  1047	07C5  8B DA			     mov bx, dx			 ; dx is shit
+1  1048	07C7  43			     inc bx
+1  1049
+1  1050	07C8  8B 0F			     mov cx, [bx]		 ; num of chars
+1  1051	07CA  32 ED			     xor ch, ch
+1  1052	07CC  49			     dec cx
+1  1053
+1  1054	07CD  43		     @@Next: inc bx
+1  1055
+1  1056	07CE  8B 17			     mov dx, [bx]
+1  1057	07D0  B6 0F			     mov dh, 0Fh
+1  1058
+1  1059	07D2  26: 89 15			     mov es:[di], dx
+1  1060
+1  1061	07D5  83 C7 02			     add di, 2
+1  1062
+1  1063	07D8  E2 F3			     loop @@Next
+1  1064
+1  1065	07DA  C3			     ret
+1  1066	07DB				     endp
+   1067
+   1068	07DB  06 00 07*(00)	     buf     db	     6,	0, 6-1+2 dup (0)
+   1069	07E4  05 05 53 75 6D 3A	     lsum    db	     5,	5, 'Sum:'
+   1070	07EA  05 05 53 75 62 3A	     lsub db 5,	5, 'Sub:'
+   1071	07F0  05 05 4D 75 6C 3A	     lmul db 5,	5, 'Mul:'
+   1072	07F6  05 05 44 69 76 3A	     ldiv db 5,	5, 'Div:'
+   1073
+   1074				     end     Start
+Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 20
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/17/23"
+??FILENAME			  Text	 "main	  "
+??TIME				  Text	 "15:15:21"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@@DEC				  Near	 DGROUP:0753
+@@ENDFILL			  Near	 DGROUP:0581
+@@NEXT				  Near	 DGROUP:06D6
+@@NEXT				  Near	 DGROUP:06EE
+@@NEXT				  Near	 DGROUP:072F
+@@NEXT				  Near	 DGROUP:076B
+@@NEXT				  Near	 DGROUP:07CD
+@@NEXTLR			  Near	 DGROUP:017F
+@@NEXTTB			  Near	 DGROUP:02E9
+@@OUT				  Near	 DGROUP:0756
+@@OUT				  Near	 DGROUP:07A8
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MAIN
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+BINOUT				  Near	 DGROUP:0761
+BORDER				  Near	 DGROUP:016D
+BUF				  Byte	 DGROUP:07DB
+CLEAR				  Near	 DGROUP:06CC
+DECIN				  Near	 DGROUP:06E1
+DECOUT				  Near	 DGROUP:0786
+FULLOUT				  Near	 DGROUP:070B
+HEXOUT				  Near	 DGROUP:0725
+LDIV				  Byte	 DGROUP:07F6
+LMUL				  Byte	 DGROUP:07F0
+LSUB				  Byte	 DGROUP:07EA
+LSUM				  Byte	 DGROUP:07E4
+MSG				  Near	 DGROUP:07BE
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  07FC Word	  Public  CODE
+

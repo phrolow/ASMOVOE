@@ -1,0 +1,35 @@
+;===============================================;
+; Uses: bx, dx					;
+; Destroys: cx, es, di				;
+; Returns:					;
+; Expects: bx - label start, dx - offset msg	;
+;===============================================;
+
+
+Msg   	proc
+
+        mov di, 0B800h
+        mov es, di
+
+        mov di, bx                  ; bx is pointer to vm
+
+        mov bx, dx                  ; dx is shit
+        inc bx
+
+        mov cx, [bx]                ; num of chars
+	xor ch, ch
+	dec cx
+
+@@Next: inc bx
+
+	mov dx, [bx]
+	mov dh, 0Fh                 ; background
+
+        mov es:[di], dx
+
+        add di, 2
+        
+        loop @@Next
+
+        ret
+        endp

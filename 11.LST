@@ -1,0 +1,70 @@
+Turbo Assembler	 Version 4.1	    02/11/23 23:06:23	    Page 1
+11.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     org 100h
+      5
+      6	0100  BB B800		     Start:  mov bx, 0b800h
+      7	0103  8E C3			     mov es, bx
+      8
+      9	0105  33 DB			     xor bx, bx
+     10	0107  B4 2C			     mov ah, 2ch
+     11	0109  BA 0124r			     mov dx, offset Msg
+     12	010C  8B F2			     mov si, dx
+     13
+     14	010E  8A 04		     Next:   mov al,	  [si]
+     15	0110  26: 89 07			     mov es:[bx], ax
+     16
+     17	0113  83 C3 02			     add bx, 2
+     18	0116  46			     inc si
+     19	0117  FE C4			     inc ah
+     20
+     21	0119  3C 24			     cmp al, 24h
+     22	011B  75 F1			     jne Next
+     23
+     24	011D  33 F6			     xor si, si
+     25
+     26	011F  B8 4C00			     mov ax, 4c00h
+     27	0122  CD 21			     int 21h
+     28
+     29	0124  68 75 69 24	     Msg:    db	'hui$'
+     30
+     31				     end     Start
+Turbo Assembler	 Version 4.1	    02/11/23 23:06:23	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/11/23"
+??FILENAME			  Text	 "11	  "
+??TIME				  Text	 "23:06:23"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 11
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+MSG				  Near	 DGROUP:0124
+NEXT				  Near	 DGROUP:010E
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0128 Word	  Public  CODE
+

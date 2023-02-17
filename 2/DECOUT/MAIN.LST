@@ -1,0 +1,86 @@
+Turbo Assembler	 Version 4.1	    02/15/23 00:17:00	    Page 1
+main.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     org 100h
+      5
+      6	0100  B8 00E4		     Start:  mov ax, 228d
+      7	0103  BB 07D0			     mov bx, 80	* 25
+      8
+      9	0106  E8 0005			     call Decout
+     10
+     11	0109  B8 4C00			     mov ax, 4c00h
+     12	010C  CD 21			     int 21h
+     13
+     14					     include decout.asi
+1    15	010E			     Decout  proc
+1    16
+1    17	010E  BF B800			     mov di, 0B800h
+1    18	0111  8E C7			     mov es, di
+1    19	0113  BF 0008			     mov di, 2 * 4	     ; to vm + 5 chars for our num
+1    20
+1    21	0116  03 FB			     add di, bx		     ; bx is start of line
+1    22
+1    23	0118  BA CE30			     mov dx, 0CE30h	     ; initial zeros
+1    24
+1    25	011B  26: 89 17			     mov es:[bx+0], dx
+1    26	011E  26: 89 57	02		     mov es:[bx+2], dx
+1    27	0122  26: 89 57	04		     mov es:[bx+4], dx
+1    28	0126  26: 89 57	06		     mov es:[bx+6], dx
+1    29	012A  26: 89 57	08		     mov es:[bx+8], dx
+1    30
+1    31	012E  33 D2		     ??out:  xor dx, dx		     ; prepare dx for div
+1    32
+1    33	0130  BB 000A			     mov bx, 10d
+1    34	0133  F7 F3			     div bx		     ; we wanna	mod
+1    35
+1    36	0135  83 C2 30			     add dx, '0'	     ; num to char
+1    37
+1    38	0138  26: 88 15			     mov es:[di], dl
+1    39	013B  83 EF 02			     sub di, 2		     ; prev word in vm
+1    40
+1    41	013E  3D 0000			     cmp ax, 0		     ; if ax ==	0 why must we continue
+1    42	0141  75 EB			     jne ??out
+1    43
+1    44	0143  C3			     ret
+1    45	0144				     endp
+     46
+     47				     end     Start
+Turbo Assembler	 Version 4.1	    02/15/23 00:17:00	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/15/23"
+??FILENAME			  Text	 "main	  "
+??OUT				  Near	 DGROUP:012E
+??TIME				  Text	 "00:17:00"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MAIN
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+DECOUT				  Near	 DGROUP:010E
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0144 Word	  Public  CODE
+

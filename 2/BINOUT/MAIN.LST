@@ -1,0 +1,83 @@
+Turbo Assembler	 Version 4.1	    02/15/23 00:13:23	    Page 1
+main.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     org 100h
+      5
+      6	0100  B8 FFFF		     Start:  mov ax, word ptr 65535d
+      7	0103  BB 07D0			     mov bx, 80	* 25
+      8
+      9	0106  E8 0005			     call Binout
+     10
+     11	0109  B8 4C00			     mov ax, 4c00h
+     12	010C  CD 21			     int 21h
+     13
+     14					     include binout.asi
+1    15	010E			     Binout  proc
+1    16
+1    17	010E  BF B800			     mov di, word ptr 0b800h
+1    18	0111  8E C7			     mov es, di		     ; prepare vm
+1    19
+1    20	0113  8B FB			     mov di, bx		     ; prepare ptr to vm, bx is	arg of line beginning
+1    21
+1    22	0115  B9 0010			     mov cx, word ptr 10h    ; length of output
+1    23
+1    24	0118  BB 8000		     ??Next: mov bx, word ptr 8000h  ; bx is current bit
+1    25
+1    26	011B  FE C9			     dec cl
+1    27	011D  D3 EB			     shr bx, cl		     ; set current bit
+1    28
+1    29	011F  23 D8			     and bx, ax		     ; get current bit of ax
+1    30
+1    31	0121  FE C1			     inc cl		     ; bit to num (0 or	1)
+1    32	0123  D3 C3			     rol bx, cl
+1    33
+1    34	0125  81 C3 CE30		     add bx, 0ce30h	     ; num to char with	bg
+1    35
+1    36	0129  26: 89 1D			     mov es:[di], word ptr bx
+1    37
+1    38	012C  83 C7 02			     add di, 2		     ; because there are words in vm
+1    39	012F  E2 E7			     loop ??Next
+1    40
+1    41	0131  C3			     ret
+1    42	0132				     endp
+     43
+     44				     end     Start
+Turbo Assembler	 Version 4.1	    02/15/23 00:13:23	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/15/23"
+??FILENAME			  Text	 "main	  "
+??NEXT				  Near	 DGROUP:0118
+??TIME				  Text	 "00:13:23"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MAIN
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+BINOUT				  Near	 DGROUP:010E
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0132 Word	  Public  CODE
+

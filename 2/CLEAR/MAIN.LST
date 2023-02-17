@@ -1,0 +1,76 @@
+Turbo Assembler	 Version 4.1	    02/17/23 01:32:16	    Page 1
+main.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     org 100h
+      5
+      6	0100  E8 0000		     Start:  call Clean
+      7
+      8					     include clean.asi
+1     9				     ;=======================================;
+1    10				     ; Uses:				     ;
+1    11				     ; Destroys: cx, bx			     ;
+1    12				     ; Returns:				     ;
+1    13				     ; Expects:				     ;
+1    14				     ;=======================================;
+1    15
+1    16	0103			     Clean   proc
+1    17
+1    18	0103  BB B800			     mov bx, 0b800h
+1    19	0106  8E C3			     mov es, bx
+1    20
+1    21	0108  33 DB			     xor bx, bx
+1    22
+1    23	010A  B9 07D0			     mov cx, 80	* 25
+1    24
+1    25	010D  26: C7 07	0000	     ??Next: mov es:[bx], word ptr 0
+1    26
+1    27	0112  83 C3 02			     add bx, 2
+1    28
+1    29	0115  E2 F6			     loop ??Next
+1    30
+1    31	0117  C3			     ret
+1    32	0118				     endp
+     33
+     34	0118  B8 4C00			     mov ax, 4c00h
+     35	011B  CD 21			     int 21h
+     36
+     37				     end     Start
+Turbo Assembler	 Version 4.1	    02/17/23 01:32:16	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/17/23"
+??FILENAME			  Text	 "main	  "
+??NEXT				  Near	 DGROUP:010D
+??TIME				  Text	 "01:32:16"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MAIN
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+CLEAN				  Near	 DGROUP:0103
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  011D Word	  Public  CODE
+

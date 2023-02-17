@@ -1,0 +1,36 @@
+;===============================================;
+; Uses: ax, bx					;
+; Destroys: cx, es, di				;
+; Returns:					;
+; Expects: num in ax, start of label in bx	;
+;===============================================;
+
+Binout	proc
+	
+	mov di, word ptr 0b800h
+	mov es, di		; prepare vm
+	
+	mov di, bx		; prepare ptr to vm, bx is arg of line beginning
+
+	mov cx, word ptr 10h	; length of output
+
+@@Next:	mov bx, word ptr 8000h	; bx is current bit
+	
+	dec cl
+	shr bx, cl		; set current bit
+
+	and bx, ax		; get current bit of ax
+
+	inc cl			; bit to num (0 or 1)
+	rol bx, cl
+
+	add bx, word ptr 030h		; num to char with bg
+	mov bh, 1Dh
+
+	mov es:[di], word ptr bx
+
+	add di, 2		; because there are words in vm
+	loop @@Next
+
+	ret
+	endp
