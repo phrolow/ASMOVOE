@@ -1,0 +1,156 @@
+Turbo Assembler	 Version 4.1	    02/20/23 08:41:02	    Page 1
+bordre.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     org 100h
+      5
+      6	0100  BE 0177r		     Start:  mov si, offset brd
+      7	0103  B4 71			     mov ah, 071h
+      8	0105  BB B800			     mov bx, 0B800h
+      9	0108  8E C3			     mov es, bx
+     10	010A  BF 0460			     mov di, 80	* 7 * 2
+     11	010D  B2 04			     mov dl, 4
+     12	010F  B6 0B			     mov dh, 11
+     13
+     14	0111  E8 0005			     call Border
+     15
+     16	0114  B8 4C00			     mov ax, 4C00h
+     17	0117  CD 21			     int 21h
+     18
+     19				     ;
+     20				     ; args - ah, di, dl, si
+     21				     ; ah - attribute
+     22				     ; di - start
+     23				     ; dl - width
+     24				     ; si - border source
+     25				     ; dh - height
+     26				     ; destroys	- dohuya
+     27				     ;
+     28
+     29	0119			     Border  proc
+     30	0119  55			     push bp
+     31
+     32	011A  E8 0045			     call String
+     33
+     34	011D  81 C7 00A0		     add di, 80	* 2
+     35
+     36	0121  32 FF			     xor bh, bh		     ; cringe
+     37	0123  8A DA			     mov bl, dl
+     38
+     39	0125  2B FB			     sub di, bx
+     40	0127  2B FB			     sub di, bx
+     41
+     42	0129  8B EA			     mov bp, dx
+     43	012B  81 E5 FF00		     and bp, 0FF00h
+     44	012F  D1 ED D1 ED D1 ED	D1+	     shr bp, 8
+     45	      ED D1 ED D1 ED D1	ED+
+     46	      D1 ED
+     47	013F  83 ED 02			     sub bp, 2
+     48
+     49	0142  E8 001D		     zaloop: call String
+     50
+     51	0145  83 EE 03			     sub si, 3
+     52
+     53	0148  81 C7 00A0		     add di, 80	* 2
+     54
+     55	014C  32 FF			     xor bh, bh		     ; cringe
+     56	014E  8A DA			     mov bl, dl
+     57
+Turbo Assembler	 Version 4.1	    02/20/23 08:41:02	    Page 2
+bordre.asm
+
+
+
+     58	0150  2B FB			     sub di, bx
+     59	0152  2B FB			     sub di, bx
+     60
+     61	0154  4D			     dec bp
+     62
+     63	0155  83 FD 00			     cmp bp, 0
+     64	0158  75 E8			     jne zaloop
+     65
+     66	015A  83 C6 03			     add si, 3
+     67
+     68	015D  E8 0002			     call String
+     69
+     70	0160  5D			     pop bp
+     71	0161  C3			     ret
+     72	0162				     endp
+     73
+     74					     include string.asi
+1    75				     ;
+1    76				     ; args - ah, di, dl
+1    77				     ; ah - attribute
+1    78				     ; di - start
+1    79				     ; dl - length
+1    80				     ; destroys	- si, cx
+1    81				     ;
+1    82
+1    83	0162			     String  proc
+1    84
+1    85	0162  AC			     lodsb
+1    86	0163  AB			     stosw
+1    87
+1    88	0164  AC			     lodsb
+1    89
+1    90	0165  8A CA			     mov cl, dl
+1    91	0167  80 E9 02			     sub cl, 2
+1    92	016A  32 ED			     xor ch, ch
+1    93
+1    94	016C  26: 89 05		     @@Next: mov es:[di], ax
+1    95
+1    96	016F  83 C7 02			     add di, 2
+1    97
+1    98	0172  E2 F8			     loop @@Next
+1    99
+1   100	0174  AC			     lodsb
+1   101	0175  AB			     stosw
+1   102
+1   103	0176  C3			     ret
+1   104	0177				     endp
+    105
+    106	0177  68 75 69 70 69 7A	64+  brd     db	'huipizdaK'
+    107	      61 4B
+    108
+    109				     end     Start
+Turbo Assembler	 Version 4.1	    02/20/23 08:41:02	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/20/23"
+??FILENAME			  Text	 "bordre  "
+??TIME				  Text	 "08:41:02"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@@NEXT				  Near	 DGROUP:016C
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 BORDRE
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+BORDER				  Near	 DGROUP:0119
+BRD				  Byte	 DGROUP:0177
+START				  Near	 DGROUP:0100
+STRING				  Near	 DGROUP:0162
+ZALOOP				  Near	 DGROUP:0142
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0180 Word	  Public  CODE
+

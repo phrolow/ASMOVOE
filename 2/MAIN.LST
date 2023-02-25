@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 1
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 1
 main.asm
 
 
@@ -12,55 +12,55 @@ main.asm
       7
       8	0100  E8 05C9		     Start:  call Clear
       9
-     10	0103  B8 0C74				     mov ax, (80 * 19 +	74) * 2
-     11	0106  BB 03CA				     mov bx, (80 * 6  +	 5) * 2
+     10	0103  B8 0C74				     mov ax, (80 * 19 +	74) * 2	     ; rb
+     11	0106  BB 03CA				     mov bx, (80 * 6  +	 5) * 2	     ; lt
      12
      13	0109  E8 0061				     call Border
      14
      15	010C  BA 07E4r				     mov dx, offset lsum
-     16	010F  BB 051E				     mov bx, (80 * 8 + 15) * 2
+     16	010F  BB 051E				     mov bx, (80 * 8 + 15) * 2	     ; args for	label
      17
      18	0112  E8 06A9				     call Msg
      19
      20	0115  BA 07EAr				     mov dx, offset lsub
-     21	0118  BB 06FE				     mov bx, (80 * 11 +	15) * 2
+     21	0118  BB 06FE				     mov bx, (80 * 11 +	15) * 2	     ; args for	label
      22
      23	011B  E8 06A0				     call Msg
      24
      25	011E  BA 07F0r				     mov dx, offset lmul
-     26	0121  BB 08DE				     mov bx, (80 * 14 +	15) * 2
+     26	0121  BB 08DE				     mov bx, (80 * 14 +	15) * 2	     ; args for	label
      27
      28	0124  E8 0697				     call Msg
      29
      30	0127  BA 07F6r				     mov dx, offset ldiv
-     31	012A  BB 0ABE				     mov bx, (80 * 17 +	15) * 2
+     31	012A  BB 0ABE				     mov bx, (80 * 17 +	15) * 2	     ; args for	label
      32
      33	012D  E8 068E				     call Msg
      34
-     35	0130  BA 07DBr				     mov dx, offset buf
+     35	0130  BA 07DBr				     mov dx, offset buf			     ; arg for input
      36
      37	0133  E8 05AB				     call Decin
      38
-     39	0136  8B E8				     mov bp, ax
+     39	0136  8B E8				     mov bp, ax					     ; accumulate
      40
-     41	0138  BA 07DBr				     mov dx, offset buf
+     41	0138  BA 07DBr				     mov dx, offset buf			     ; arg for input
      42
      43	013B  E8 05A3				     call Decin
      44
-     45	013E  8B F0				     mov si, ax
+     45	013E  8B F0				     mov si, ax					     ; accumulate
      46
-     47	0140  03 C5				     add ax, bp
+     47	0140  03 C5				     add ax, bp					     ; sum
      48
-     49	0142  BB 053C				     mov bx, (80 * 8 + 30) * 2
+     49	0142  BB 053C				     mov bx, (80 * 8 + 30) * 2	     ; fullout start
      50
      51	0145  E8 05C3				     call Fullout
      52
      53	0148  8B C5				     mov ax, bp
-     54	014A  2B C6				     sub ax, si
+     54	014A  2B C6				     sub ax, si					     ; sub
      55
-     56	014C  BB 071C				     mov bx, (80 * 11 +	30) * 2
+     56	014C  BB 071C				     mov bx, (80 * 11 +	30) * 2	     ; fullout start
      57
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 2
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 2
 main.asm
 
 
@@ -68,17 +68,17 @@ main.asm
      58	014F  E8 05B9				     call Fullout
      59
      60	0152  8B C5				     mov ax, bp
-     61	0154  F7 E6				     mul si
+     61	0154  F7 E6				     mul si					     ; mul
      62
-     63	0156  BB 08FC				     mov bx, (80 * 14 +	30) * 2
+     63	0156  BB 08FC				     mov bx, (80 * 14 +	30) * 2	     ; fullout start
      64
      65	0159  E8 05AF				     call Fullout
      66
      67	015C  33 D2				     xor dx, dx
      68	015E  8B C5				     mov ax, bp
-     69	0160  F7 F6				     div si
+     69	0160  F7 F6				     div si					     ; div
      70
-     71	0162  BB 0ADC				     mov bx, (80 * 17 +	30) * 2
+     71	0162  BB 0ADC				     mov bx, (80 * 17 +	30) * 2	     ; fullout start
      72
      73	0165  E8 05A3				     call Fullout
      74
@@ -122,7 +122,7 @@ main.asm
 1   112	0191  E2 EC			     loop @@NextLR
 1   113
 1   114
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 3
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 3
 main.asm
 
 
@@ -184,7 +184,7 @@ main.asm
 2   169	01F1  03 F8			     add di, ax
 2   170	01F3  03 F8			     add di, ax
 2   171	01F5  03 F8			     add di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 4
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 4
 main.asm
 
 
@@ -246,7 +246,7 @@ main.asm
 2   226	0263  03 F8			     add di, ax
 2   227	0265  03 F8			     add di, ax
 2   228	0267  03 F8			     add di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 5
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 5
 main.asm
 
 
@@ -308,7 +308,7 @@ main.asm
 2   283	02D5  03 F8			     add di, ax
 2   284	02D7  03 F8			     add di, ax
 2   285	02D9  03 F8			     add di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 6
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 6
 main.asm
 
 
@@ -370,7 +370,7 @@ main.asm
 2   340	033E  03 F8			     add di, ax
 2   341	0340  03 F8			     add di, ax
 2   342	0342  03 F8			     add di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 7
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 7
 main.asm
 
 
@@ -432,7 +432,7 @@ main.asm
 2   397	03B0  03 F8			     add di, ax
 2   398	03B2  03 F8			     add di, ax
 2   399	03B4  03 F8			     add di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 8
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 8
 main.asm
 
 
@@ -494,7 +494,7 @@ main.asm
 2   454	0422  03 F8			     add di, ax
 2   455	0424  03 F8			     add di, ax
 2   456	0426  03 F8			     add di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 9
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 9
 main.asm
 
 
@@ -556,7 +556,7 @@ main.asm
 2   511	048D  2B F8			     sub di, ax
 2   512	048F  2B F8			     sub di, ax
 2   513	0491  2B F8			     sub di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 10
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 10
 main.asm
 
 
@@ -618,7 +618,7 @@ main.asm
 2   568	04FF  2B F8			     sub di, ax
 2   569	0501  2B F8			     sub di, ax
 2   570	0503  2B F8			     sub di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 11
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 11
 main.asm
 
 
@@ -680,7 +680,7 @@ main.asm
 2   625	0571  2B F8			     sub di, ax
 1   626
 1   627	0573  83 C7 02			     add di, 2
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 12
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 12
 main.asm
 
 
@@ -742,7 +742,7 @@ main.asm
 2   682	05DC  03 F8			     add di, ax
 2   683	05DE  03 F8			     add di, ax
 2   684	05E0  03 F8			     add di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 13
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 13
 main.asm
 
 
@@ -804,7 +804,7 @@ main.asm
 2   739	064E  03 F8			     add di, ax
 2   740	0650  03 F8			     add di, ax
 2   741	0652  03 F8			     add di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 14
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 14
 main.asm
 
 
@@ -866,7 +866,7 @@ main.asm
 2   796	06C0  03 F8			     add di, ax
 2   797	06C2  03 F8			     add di, ax
 2   798	06C4  03 F8			     add di, ax
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 15
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 15
 main.asm
 
 
@@ -891,7 +891,7 @@ main.asm
 1   816
 1   817	06D1  33 DB			     xor bx, bx
 1   818
-1   819	06D3  B9 0780			     mov cx, 80	* 24
+1   819	06D3  B9 0780			     mov cx, 80	* 24				     ; we clear	all without last line
 1   820
 1   821	06D6  26: C7 07	0000	     @@Next: mov es:[bx], word ptr 0
 1   822
@@ -928,7 +928,7 @@ main.asm
 1   853	06F2  F7 E2			     mul dx		     ; ax *= 10
 1   854
 1   855	06F4  8B 17			     mov dx, [bx]
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 16
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 16
 main.asm
 
 
@@ -964,14 +964,14 @@ main.asm
 1   884	0710  8B C2			     mov ax, dx
 1   885
 1   886	0712  8B DF			     mov bx, di
-1   887	0714  83 C3 0A			     add bx, 5 * 2
+1   887	0714  83 C3 0A			     add bx, 5 * 2	     ; indent for 5 chars
 1   888
 1   889	0717  E8 0047			     call Binout
 1   890
 1   891	071A  8B C2			     mov ax, dx
 1   892
 1   893	071C  8B DF			     mov bx, di
-1   894	071E  83 C3 0A			     add bx, 5 * 2
+1   894	071E  83 C3 0A			     add bx, 5 * 2	     ; indent for 5 chars
 1   895
 1   896	0721  E8 0062			     call Decout
 1   897
@@ -990,7 +990,7 @@ main.asm
 2   910
 2   911	0725  BF B800			     mov di, 0B800h
 2   912	0728  8E C7			     mov es, di
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 17
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 17
 main.asm
 
 
@@ -1052,7 +1052,7 @@ main.asm
 2   967	0766  8B FB			     mov di, bx		     ; prepare ptr to vm, bx is	arg of line beginning
 2   968
 2   969	0768  B9 0010			     mov cx, word ptr 10h    ; length of output
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 18
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 18
 main.asm
 
 
@@ -1114,7 +1114,7 @@ main.asm
 2  1024	07B5  83 EF 02			     sub di, 2		     ; prev word in vm
 2  1025
 2  1026	07B8  3D 0000			     cmp ax, 0		     ; if ax ==	0 why must we continue
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 19
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 19
 main.asm
 
 
@@ -1149,7 +1149,7 @@ main.asm
 1  1054	07CD  43		     @@Next: inc bx
 1  1055
 1  1056	07CE  8B 17			     mov dx, [bx]
-1  1057	07D0  B6 0F			     mov dh, 0Fh
+1  1057	07D0  B6 0F			     mov dh, 0Fh		 ; background
 1  1058
 1  1059	07D2  26: 89 15			     mov es:[di], dx
 1  1060
@@ -1160,14 +1160,14 @@ main.asm
 1  1065	07DA  C3			     ret
 1  1066	07DB				     endp
    1067
-   1068	07DB  06 00 07*(00)	     buf     db	     6,	0, 6-1+2 dup (0)
-   1069	07E4  05 05 53 75 6D 3A	     lsum    db	     5,	5, 'Sum:'
+   1068	07DB  06 00 07*(00)	     buf     db	     6,	0, 6-1+2 dup (0)		     ; buffer for input
+   1069	07E4  05 05 53 75 6D 3A	     lsum    db	     5,	5, 'Sum:'		     ; labels
    1070	07EA  05 05 53 75 62 3A	     lsub db 5,	5, 'Sub:'
    1071	07F0  05 05 4D 75 6C 3A	     lmul db 5,	5, 'Mul:'
    1072	07F6  05 05 44 69 76 3A	     ldiv db 5,	5, 'Div:'
    1073
    1074				     end     Start
-Turbo Assembler	 Version 4.1	    02/17/23 15:15:21	    Page 20
+Turbo Assembler	 Version 4.1	    02/17/23 15:27:36	    Page 20
 Symbol Table
 
 
@@ -1177,7 +1177,7 @@ Symbol Name			  Type	 Value
 
 ??DATE				  Text	 "02/17/23"
 ??FILENAME			  Text	 "main	  "
-??TIME				  Text	 "15:15:21"
+??TIME				  Text	 "15:27:36"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
 @@DEC				  Near	 DGROUP:0753

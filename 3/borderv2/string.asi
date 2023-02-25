@@ -1,0 +1,30 @@
+;
+; args - ah, di, dl
+; ah - attribute
+; di - start
+; dl - length
+; destroys - si, cx
+;
+
+String  proc
+
+        lodsb
+        stosw
+
+        lodsb
+
+        mov cl, dl
+        sub cl, 2
+        xor ch, ch
+
+@@Next: mov es:[di], ax
+
+        add di, 2
+
+        loop @@Next
+
+        lodsb
+        stosw
+
+        ret
+        endp

@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    02/17/23 01:32:16	    Page 1
+Turbo Assembler	 Version 4.1	    02/17/23 19:05:26	    Page 1
 main.asm
 
 
@@ -40,7 +40,7 @@ main.asm
      35	011B  CD 21			     int 21h
      36
      37				     end     Start
-Turbo Assembler	 Version 4.1	    02/17/23 01:32:16	    Page 2
+Turbo Assembler	 Version 4.1	    02/17/23 19:05:26	    Page 2
 Symbol Table
 
 
@@ -51,7 +51,7 @@ Symbol Name			  Type	 Value
 ??DATE				  Text	 "02/17/23"
 ??FILENAME			  Text	 "main	  "
 ??NEXT				  Near	 DGROUP:010D
-??TIME				  Text	 "01:32:16"
+??TIME				  Text	 "19:05:26"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
 @CODE				  Text	 DGROUP
