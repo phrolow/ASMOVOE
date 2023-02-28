@@ -1,0 +1,26 @@
+; void *strchr(const char *str, int ch)
+
+strchr  proc
+        push bp
+        mov bp, sp
+
+        mov si, [bp + 4]
+
+        mov bx, [bp + 6]
+
+@@Next: lodsb
+
+        cmp al, bl
+        je to_ret
+
+        cmp al, '$'
+        jne @@Next
+
+        mov si, 1
+
+to_ret: dec si
+
+        mov sp, bp
+        pop bp
+        ret
+        endp

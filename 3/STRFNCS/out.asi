@@ -1,0 +1,49 @@
+; pls si
+
+fout    proc
+        push bp
+        mov bp, sp
+
+        push si
+
+        mov ah, 1Eh
+
+        mov di, 0B800h
+        mov es, di
+
+        mov di, (80 * 5 + 10) * 2
+
+        mov dh, 15
+        mov dl, 60
+
+        mov si, offset frame
+
+        call Border
+        
+        pop si
+
+        mov bl, byte ptr [si]
+        xor bh, bh
+
+        inc si
+
+        xor ah, ah
+        mov al, bl
+
+        mov dl, 10
+        div dl
+
+        mov dl, ah
+        mov dh, al
+
+        call Text
+
+        mov sp, bp  
+        pop bp
+        ret
+        endp
+
+include bordre.asi
+include text.asi
+
+

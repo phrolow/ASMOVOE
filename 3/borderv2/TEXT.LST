@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 1
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 1
 text.asm
 
 
@@ -17,7 +17,7 @@ text.asm
      12
      13	0108			     Text    proc
      14
-     15	0108  BE 026Dr			     mov si, offset txt
+     15	0108  BE 02B2r			     mov si, offset txt
      16
      17	010B  AC			     lodsb
      18
@@ -44,608 +44,657 @@ text.asm
      39				     здесь	джамп сразу к распечатке маленькой; важно не   +
      40				     проебать dl
      41
-     42	0127  E9 012F			     jmp smol_txt
+     42	0127  E9 016E			     jmp smol_txt
      43
      44	012A			     not_smol_txt1:
      45
-     46	012A  83 EF 1E			     sub di, word ptr 30
+     46	012A  83 EF 14			     sub di, word ptr 20
      47
-     48	012D  8A C6			     mov al, dh
-     49
-     50					     REPT 80
-     51
-     52					     sub di, ax
-     53
-     54					     ENDM
-1    55
-1    56	012F  2B F8			     sub di, ax
-1    57
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 2
+     48	012D  8A CE			     mov cl, dh
+     49	012F  32 ED			     xor ch, ch
+     50
+     51					     REPT 160
+     52
+     53					     sub di, ax
+     54
+     55					     ENDM
+1    56
+1    57	0131  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 2
 text.asm
 
 
 
 1    58
-1    59	0131  2B F8			     sub di, ax
-1    60
+1    59
+1    60	0133  2B F8			     sub di, ax
 1    61
-1    62	0133  2B F8			     sub di, ax
-1    63
+1    62
+1    63	0135  2B F8			     sub di, ax
 1    64
-1    65	0135  2B F8			     sub di, ax
-1    66
+1    65
+1    66	0137  2B F8			     sub di, ax
 1    67
-1    68	0137  2B F8			     sub di, ax
-1    69
+1    68
+1    69	0139  2B F8			     sub di, ax
 1    70
-1    71	0139  2B F8			     sub di, ax
-1    72
+1    71
+1    72	013B  2B F8			     sub di, ax
 1    73
-1    74	013B  2B F8			     sub di, ax
-1    75
+1    74
+1    75	013D  2B F8			     sub di, ax
 1    76
-1    77	013D  2B F8			     sub di, ax
-1    78
+1    77
+1    78	013F  2B F8			     sub di, ax
 1    79
-1    80	013F  2B F8			     sub di, ax
-1    81
+1    80
+1    81	0141  2B F8			     sub di, ax
 1    82
-1    83	0141  2B F8			     sub di, ax
-1    84
+1    83
+1    84	0143  2B F8			     sub di, ax
 1    85
-1    86	0143  2B F8			     sub di, ax
-1    87
+1    86
+1    87	0145  2B F8			     sub di, ax
 1    88
-1    89	0145  2B F8			     sub di, ax
-1    90
+1    89
+1    90	0147  2B F8			     sub di, ax
 1    91
-1    92	0147  2B F8			     sub di, ax
-1    93
+1    92
+1    93	0149  2B F8			     sub di, ax
 1    94
-1    95	0149  2B F8			     sub di, ax
-1    96
+1    95
+1    96	014B  2B F8			     sub di, ax
 1    97
-1    98	014B  2B F8			     sub di, ax
-1    99
+1    98
+1    99	014D  2B F8			     sub di, ax
 1   100
-1   101	014D  2B F8			     sub di, ax
-1   102
+1   101
+1   102	014F  2B F8			     sub di, ax
 1   103
-1   104	014F  2B F8			     sub di, ax
-1   105
+1   104
+1   105	0151  2B F8			     sub di, ax
 1   106
-1   107	0151  2B F8			     sub di, ax
-1   108
+1   107
+1   108	0153  2B F8			     sub di, ax
 1   109
-1   110	0153  2B F8			     sub di, ax
-1   111
+1   110
+1   111	0155  2B F8			     sub di, ax
 1   112
-1   113	0155  2B F8			     sub di, ax
-1   114
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 3
+1   113
+1   114	0157  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 3
 text.asm
 
 
 
 1   115
-1   116	0157  2B F8			     sub di, ax
-1   117
+1   116
+1   117	0159  2B F8			     sub di, ax
 1   118
-1   119	0159  2B F8			     sub di, ax
-1   120
+1   119
+1   120	015B  2B F8			     sub di, ax
 1   121
-1   122	015B  2B F8			     sub di, ax
-1   123
+1   122
+1   123	015D  2B F8			     sub di, ax
 1   124
-1   125	015D  2B F8			     sub di, ax
-1   126
+1   125
+1   126	015F  2B F8			     sub di, ax
 1   127
-1   128	015F  2B F8			     sub di, ax
-1   129
+1   128
+1   129	0161  2B F8			     sub di, ax
 1   130
-1   131	0161  2B F8			     sub di, ax
-1   132
+1   131
+1   132	0163  2B F8			     sub di, ax
 1   133
-1   134	0163  2B F8			     sub di, ax
-1   135
+1   134
+1   135	0165  2B F8			     sub di, ax
 1   136
-1   137	0165  2B F8			     sub di, ax
-1   138
+1   137
+1   138	0167  2B F8			     sub di, ax
 1   139
-1   140	0167  2B F8			     sub di, ax
-1   141
+1   140
+1   141	0169  2B F8			     sub di, ax
 1   142
-1   143	0169  2B F8			     sub di, ax
-1   144
+1   143
+1   144	016B  2B F8			     sub di, ax
 1   145
-1   146	016B  2B F8			     sub di, ax
-1   147
+1   146
+1   147	016D  2B F8			     sub di, ax
 1   148
-1   149	016D  2B F8			     sub di, ax
-1   150
+1   149
+1   150	016F  2B F8			     sub di, ax
 1   151
-1   152	016F  2B F8			     sub di, ax
-1   153
+1   152
+1   153	0171  2B F8			     sub di, ax
 1   154
-1   155	0171  2B F8			     sub di, ax
-1   156
+1   155
+1   156	0173  2B F8			     sub di, ax
 1   157
-1   158	0173  2B F8			     sub di, ax
-1   159
+1   158
+1   159	0175  2B F8			     sub di, ax
 1   160
-1   161	0175  2B F8			     sub di, ax
-1   162
+1   161
+1   162	0177  2B F8			     sub di, ax
 1   163
-1   164	0177  2B F8			     sub di, ax
-1   165
+1   164
+1   165	0179  2B F8			     sub di, ax
 1   166
-1   167	0179  2B F8			     sub di, ax
-1   168
+1   167
+1   168	017B  2B F8			     sub di, ax
 1   169
-1   170	017B  2B F8			     sub di, ax
-1   171
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 4
+1   170
+1   171	017D  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 4
 text.asm
 
 
 
 1   172
-1   173	017D  2B F8			     sub di, ax
-1   174
+1   173
+1   174	017F  2B F8			     sub di, ax
 1   175
-1   176	017F  2B F8			     sub di, ax
-1   177
+1   176
+1   177	0181  2B F8			     sub di, ax
 1   178
-1   179	0181  2B F8			     sub di, ax
-1   180
+1   179
+1   180	0183  2B F8			     sub di, ax
 1   181
-1   182	0183  2B F8			     sub di, ax
-1   183
+1   182
+1   183	0185  2B F8			     sub di, ax
 1   184
-1   185	0185  2B F8			     sub di, ax
-1   186
+1   185
+1   186	0187  2B F8			     sub di, ax
 1   187
-1   188	0187  2B F8			     sub di, ax
-1   189
+1   188
+1   189	0189  2B F8			     sub di, ax
 1   190
-1   191	0189  2B F8			     sub di, ax
-1   192
+1   191
+1   192	018B  2B F8			     sub di, ax
 1   193
-1   194	018B  2B F8			     sub di, ax
-1   195
+1   194
+1   195	018D  2B F8			     sub di, ax
 1   196
-1   197	018D  2B F8			     sub di, ax
-1   198
+1   197
+1   198	018F  2B F8			     sub di, ax
 1   199
-1   200	018F  2B F8			     sub di, ax
-1   201
+1   200
+1   201	0191  2B F8			     sub di, ax
 1   202
-1   203	0191  2B F8			     sub di, ax
-1   204
+1   203
+1   204	0193  2B F8			     sub di, ax
 1   205
-1   206	0193  2B F8			     sub di, ax
-1   207
+1   206
+1   207	0195  2B F8			     sub di, ax
 1   208
-1   209	0195  2B F8			     sub di, ax
-1   210
+1   209
+1   210	0197  2B F8			     sub di, ax
 1   211
-1   212	0197  2B F8			     sub di, ax
-1   213
+1   212
+1   213	0199  2B F8			     sub di, ax
 1   214
-1   215	0199  2B F8			     sub di, ax
-1   216
+1   215
+1   216	019B  2B F8			     sub di, ax
 1   217
-1   218	019B  2B F8			     sub di, ax
-1   219
+1   218
+1   219	019D  2B F8			     sub di, ax
 1   220
-1   221	019D  2B F8			     sub di, ax
-1   222
+1   221
+1   222	019F  2B F8			     sub di, ax
 1   223
-1   224	019F  2B F8			     sub di, ax
-1   225
+1   224
+1   225	01A1  2B F8			     sub di, ax
 1   226
-1   227	01A1  2B F8			     sub di, ax
-1   228
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 5
+1   227
+1   228	01A3  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 5
 text.asm
 
 
 
 1   229
-1   230	01A3  2B F8			     sub di, ax
-1   231
+1   230
+1   231	01A5  2B F8			     sub di, ax
 1   232
-1   233	01A5  2B F8			     sub di, ax
-1   234
+1   233
+1   234	01A7  2B F8			     sub di, ax
 1   235
-1   236	01A7  2B F8			     sub di, ax
-1   237
+1   236
+1   237	01A9  2B F8			     sub di, ax
 1   238
-1   239	01A9  2B F8			     sub di, ax
-1   240
+1   239
+1   240	01AB  2B F8			     sub di, ax
 1   241
-1   242	01AB  2B F8			     sub di, ax
-1   243
+1   242
+1   243	01AD  2B F8			     sub di, ax
 1   244
-1   245	01AD  2B F8			     sub di, ax
-1   246
+1   245
+1   246	01AF  2B F8			     sub di, ax
 1   247
-1   248	01AF  2B F8			     sub di, ax
-1   249
+1   248
+1   249	01B1  2B F8			     sub di, ax
 1   250
-1   251	01B1  2B F8			     sub di, ax
-1   252
+1   251
+1   252	01B3  2B F8			     sub di, ax
 1   253
-1   254	01B3  2B F8			     sub di, ax
-1   255
+1   254
+1   255	01B5  2B F8			     sub di, ax
 1   256
-1   257	01B5  2B F8			     sub di, ax
-1   258
+1   257
+1   258	01B7  2B F8			     sub di, ax
 1   259
-1   260	01B7  2B F8			     sub di, ax
-1   261
+1   260
+1   261	01B9  2B F8			     sub di, ax
 1   262
-1   263	01B9  2B F8			     sub di, ax
-1   264
+1   263
+1   264	01BB  2B F8			     sub di, ax
 1   265
-1   266	01BB  2B F8			     sub di, ax
-1   267
+1   266
+1   267	01BD  2B F8			     sub di, ax
 1   268
-1   269	01BD  2B F8			     sub di, ax
-1   270
+1   269
+1   270	01BF  2B F8			     sub di, ax
 1   271
-1   272	01BF  2B F8			     sub di, ax
-1   273
+1   272
+1   273	01C1  2B F8			     sub di, ax
 1   274
-1   275	01C1  2B F8			     sub di, ax
-1   276
+1   275
+1   276	01C3  2B F8			     sub di, ax
 1   277
-1   278	01C3  2B F8			     sub di, ax
-1   279
+1   278
+1   279	01C5  2B F8			     sub di, ax
 1   280
-1   281	01C5  2B F8			     sub di, ax
-1   282
+1   281
+1   282	01C7  2B F8			     sub di, ax
 1   283
-1   284	01C7  2B F8			     sub di, ax
-1   285
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 6
+1   284
+1   285	01C9  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 6
 text.asm
 
 
 
 1   286
-1   287	01C9  2B F8			     sub di, ax
-1   288
+1   287
+1   288	01CB  2B F8			     sub di, ax
 1   289
-1   290	01CB  2B F8			     sub di, ax
-1   291
+1   290
+1   291	01CD  2B F8			     sub di, ax
 1   292
-1   293	01CD  2B F8			     sub di, ax
-1   294
-    295
-    296	01CF  46			     inc si
-    297
-    298	01D0  3D 0000		     @@Next: cmp ax, 0
-    299	01D3  75 03			     jne not_smol_txt
-    300
-    301	01D5  E9 0081			     jmp smol_txt
-    302
-    303	01D8			     not_smol_txt:
-    304
-    305	01D8  B4 1E			     mov ah, 1Eh
-    306
-    307					     REPT 60
-    308
-    309					     lodsb
-    310					     stosw
-    311
-    312					     ENDM
+1   293
+1   294	01CF  2B F8			     sub di, ax
+1   295
+1   296
+1   297	01D1  2B F8			     sub di, ax
+1   298
+1   299
+1   300	01D3  2B F8			     sub di, ax
+1   301
+1   302
+1   303	01D5  2B F8			     sub di, ax
+1   304
+1   305
+1   306	01D7  2B F8			     sub di, ax
+1   307
+1   308
+1   309	01D9  2B F8			     sub di, ax
+1   310
+1   311
+1   312	01DB  2B F8			     sub di, ax
 1   313
-1   314	01DA  AC			     lodsb
-1   315	01DB  AB			     stosw
+1   314
+1   315	01DD  2B F8			     sub di, ax
 1   316
 1   317
-1   318	01DC  AC			     lodsb
-1   319	01DD  AB			     stosw
+1   318	01DF  2B F8			     sub di, ax
+1   319
 1   320
-1   321
-1   322	01DE  AC			     lodsb
-1   323	01DF  AB			     stosw
-1   324
+1   321	01E1  2B F8			     sub di, ax
+1   322
+1   323
+1   324	01E3  2B F8			     sub di, ax
 1   325
-1   326	01E0  AC			     lodsb
-1   327	01E1  AB			     stosw
+1   326
+1   327	01E5  2B F8			     sub di, ax
 1   328
 1   329
-1   330	01E2  AC			     lodsb
-1   331	01E3  AB			     stosw
+1   330	01E7  2B F8			     sub di, ax
+1   331
 1   332
-1   333
-1   334	01E4  AC			     lodsb
-1   335	01E5  AB			     stosw
-1   336
+1   333	01E9  2B F8			     sub di, ax
+1   334
+1   335
+1   336	01EB  2B F8			     sub di, ax
 1   337
-1   338	01E6  AC			     lodsb
-1   339	01E7  AB			     stosw
+1   338
+1   339	01ED  2B F8			     sub di, ax
 1   340
 1   341
-1   342	01E8  AC			     lodsb
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 7
+1   342	01EF  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 7
 text.asm
 
 
 
-1   343	01E9  AB			     stosw
+1   343
 1   344
-1   345
-1   346	01EA  AC			     lodsb
-1   347	01EB  AB			     stosw
-1   348
+1   345	01F1  2B F8			     sub di, ax
+1   346
+1   347
+1   348	01F3  2B F8			     sub di, ax
 1   349
-1   350	01EC  AC			     lodsb
-1   351	01ED  AB			     stosw
+1   350
+1   351	01F5  2B F8			     sub di, ax
 1   352
 1   353
-1   354	01EE  AC			     lodsb
-1   355	01EF  AB			     stosw
+1   354	01F7  2B F8			     sub di, ax
+1   355
 1   356
-1   357
-1   358	01F0  AC			     lodsb
-1   359	01F1  AB			     stosw
-1   360
+1   357	01F9  2B F8			     sub di, ax
+1   358
+1   359
+1   360	01FB  2B F8			     sub di, ax
 1   361
-1   362	01F2  AC			     lodsb
-1   363	01F3  AB			     stosw
+1   362
+1   363	01FD  2B F8			     sub di, ax
 1   364
 1   365
-1   366	01F4  AC			     lodsb
-1   367	01F5  AB			     stosw
+1   366	01FF  2B F8			     sub di, ax
+1   367
 1   368
-1   369
-1   370	01F6  AC			     lodsb
-1   371	01F7  AB			     stosw
-1   372
+1   369	0201  2B F8			     sub di, ax
+1   370
+1   371
+1   372	0203  2B F8			     sub di, ax
 1   373
-1   374	01F8  AC			     lodsb
-1   375	01F9  AB			     stosw
+1   374
+1   375	0205  2B F8			     sub di, ax
 1   376
 1   377
-1   378	01FA  AC			     lodsb
-1   379	01FB  AB			     stosw
+1   378	0207  2B F8			     sub di, ax
+1   379
 1   380
-1   381
-1   382	01FC  AC			     lodsb
-1   383	01FD  AB			     stosw
-1   384
+1   381	0209  2B F8			     sub di, ax
+1   382
+1   383
+1   384	020B  2B F8			     sub di, ax
 1   385
-1   386	01FE  AC			     lodsb
-1   387	01FF  AB			     stosw
+1   386
+1   387	020D  2B F8			     sub di, ax
 1   388
 1   389
-1   390	0200  AC			     lodsb
-1   391	0201  AB			     stosw
+1   390	020F  2B F8			     sub di, ax
+1   391
 1   392
-1   393
-1   394	0202  AC			     lodsb
-1   395	0203  AB			     stosw
-1   396
+1   393	0211  2B F8			     sub di, ax
+1   394
+1   395
+1   396	0213  2B F8			     sub di, ax
 1   397
-1   398	0204  AC			     lodsb
-1   399	0205  AB			     stosw
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 8
+1   398
+1   399	0215  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 8
 text.asm
 
 
 
 1   400
 1   401
-1   402	0206  AC			     lodsb
-1   403	0207  AB			     stosw
+1   402	0217  2B F8			     sub di, ax
+1   403
 1   404
-1   405
-1   406	0208  AC			     lodsb
-1   407	0209  AB			     stosw
-1   408
+1   405	0219  2B F8			     sub di, ax
+1   406
+1   407
+1   408	021B  2B F8			     sub di, ax
 1   409
-1   410	020A  AC			     lodsb
-1   411	020B  AB			     stosw
+1   410
+1   411	021D  2B F8			     sub di, ax
 1   412
 1   413
-1   414	020C  AC			     lodsb
-1   415	020D  AB			     stosw
+1   414	021F  2B F8			     sub di, ax
+1   415
 1   416
-1   417
-1   418	020E  AC			     lodsb
-1   419	020F  AB			     stosw
-1   420
+1   417	0221  2B F8			     sub di, ax
+1   418
+1   419
+1   420	0223  2B F8			     sub di, ax
 1   421
-1   422	0210  AC			     lodsb
-1   423	0211  AB			     stosw
+1   422
+1   423	0225  2B F8			     sub di, ax
 1   424
 1   425
-1   426	0212  AC			     lodsb
-1   427	0213  AB			     stosw
+1   426	0227  2B F8			     sub di, ax
+1   427
 1   428
-1   429
-1   430	0214  AC			     lodsb
-1   431	0215  AB			     stosw
-1   432
+1   429	0229  2B F8			     sub di, ax
+1   430
+1   431
+1   432	022B  2B F8			     sub di, ax
 1   433
-1   434	0216  AC			     lodsb
-1   435	0217  AB			     stosw
+1   434
+1   435	022D  2B F8			     sub di, ax
 1   436
 1   437
-1   438	0218  AC			     lodsb
-1   439	0219  AB			     stosw
+1   438	022F  2B F8			     sub di, ax
+1   439
 1   440
-1   441
-1   442	021A  AC			     lodsb
-1   443	021B  AB			     stosw
-1   444
+1   441	0231  2B F8			     sub di, ax
+1   442
+1   443
+1   444	0233  2B F8			     sub di, ax
 1   445
-1   446	021C  AC			     lodsb
-1   447	021D  AB			     stosw
+1   446
+1   447	0235  2B F8			     sub di, ax
 1   448
 1   449
-1   450	021E  AC			     lodsb
-1   451	021F  AB			     stosw
+1   450	0237  2B F8			     sub di, ax
+1   451
 1   452
-1   453
-1   454	0220  AC			     lodsb
-1   455	0221  AB			     stosw
-1   456
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 9
+1   453	0239  2B F8			     sub di, ax
+1   454
+1   455
+1   456	023B  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 9
 text.asm
 
 
 
 1   457
-1   458	0222  AC			     lodsb
-1   459	0223  AB			     stosw
+1   458
+1   459	023D  2B F8			     sub di, ax
 1   460
 1   461
-1   462	0224  AC			     lodsb
-1   463	0225  AB			     stosw
+1   462	023F  2B F8			     sub di, ax
+1   463
 1   464
-1   465
-1   466	0226  AC			     lodsb
-1   467	0227  AB			     stosw
-1   468
+1   465	0241  2B F8			     sub di, ax
+1   466
+1   467
+1   468	0243  2B F8			     sub di, ax
 1   469
-1   470	0228  AC			     lodsb
-1   471	0229  AB			     stosw
+1   470
+1   471	0245  2B F8			     sub di, ax
 1   472
 1   473
-1   474	022A  AC			     lodsb
-1   475	022B  AB			     stosw
+1   474	0247  2B F8			     sub di, ax
+1   475
 1   476
-1   477
-1   478	022C  AC			     lodsb
-1   479	022D  AB			     stosw
-1   480
+1   477	0249  2B F8			     sub di, ax
+1   478
+1   479
+1   480	024B  2B F8			     sub di, ax
 1   481
-1   482	022E  AC			     lodsb
-1   483	022F  AB			     stosw
+1   482
+1   483	024D  2B F8			     sub di, ax
 1   484
 1   485
-1   486	0230  AC			     lodsb
-1   487	0231  AB			     stosw
+1   486	024F  2B F8			     sub di, ax
+1   487
 1   488
-1   489
-1   490	0232  AC			     lodsb
-1   491	0233  AB			     stosw
-1   492
+1   489	0251  2B F8			     sub di, ax
+1   490
+1   491
+1   492	0253  2B F8			     sub di, ax
 1   493
-1   494	0234  AC			     lodsb
-1   495	0235  AB			     stosw
+1   494
+1   495	0255  2B F8			     sub di, ax
 1   496
 1   497
-1   498	0236  AC			     lodsb
-1   499	0237  AB			     stosw
+1   498	0257  2B F8			     sub di, ax
+1   499
 1   500
-1   501
-1   502	0238  AC			     lodsb
-1   503	0239  AB			     stosw
-1   504
+1   501	0259  2B F8			     sub di, ax
+1   502
+1   503
+1   504	025B  2B F8			     sub di, ax
 1   505
-1   506	023A  AC			     lodsb
-1   507	023B  AB			     stosw
+1   506
+1   507	025D  2B F8			     sub di, ax
 1   508
 1   509
-1   510	023C  AC			     lodsb
-1   511	023D  AB			     stosw
+1   510	025F  2B F8			     sub di, ax
+1   511
 1   512
-1   513
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 10
+1   513	0261  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 10
 text.asm
 
 
 
-1   514	023E  AC			     lodsb
-1   515	023F  AB			     stosw
-1   516
+1   514
+1   515
+1   516	0263  2B F8			     sub di, ax
 1   517
-1   518	0240  AC			     lodsb
-1   519	0241  AB			     stosw
+1   518
+1   519	0265  2B F8			     sub di, ax
 1   520
 1   521
-1   522	0242  AC			     lodsb
-1   523	0243  AB			     stosw
+1   522	0267  2B F8			     sub di, ax
+1   523
 1   524
-1   525
-1   526	0244  AC			     lodsb
-1   527	0245  AB			     stosw
-1   528
+1   525	0269  2B F8			     sub di, ax
+1   526
+1   527
+1   528	026B  2B F8			     sub di, ax
 1   529
-1   530	0246  AC			     lodsb
-1   531	0247  AB			     stosw
+1   530
+1   531	026D  2B F8			     sub di, ax
 1   532
 1   533
-1   534	0248  AC			     lodsb
-1   535	0249  AB			     stosw
-1   536
-1   537
-1   538	024A  AC			     lodsb
-1   539	024B  AB			     stosw
-1   540
-1   541
-1   542	024C  AC			     lodsb
-1   543	024D  AB			     stosw
-1   544
-1   545
-1   546	024E  AC			     lodsb
-1   547	024F  AB			     stosw
-1   548
-1   549
-1   550	0250  AC			     lodsb
-1   551	0251  AB			     stosw
-1   552
+1   534	026F  2B F8			     sub di, ax
+1   535
+    536
+    537	0271  46			     inc si
+    538
+    539	0272			     @@Next:
+    540	0272  80 F9 00			     cmp cl, 0
+    541	0275  75 03			     jne not_smol_txt
+    542
+    543	0277  EB 1F 90			     jmp smol_txt
+    544
+    545	027A			     not_smol_txt:
+    546
+    547	027A  B4 1E			     mov ah, 1Eh
+    548
+    549					     REPT 10
+    550
+    551					     lodsb
+    552					     stosw
     553
-    554	0252  48			     dec ax
-    555	0253  83 C7 28			     add di, (80 - 60) * 2
-    556
-    557	0256  E9 FF77			     jmp @@Next
-    558
-    559	0259			     smol_txt:
-    560
-    561	0259  8A C2			     mov al, dl
-    562	025B  32 E4			     xor ah, ah
-    563
-    564	025D  2B F8			     sub di, ax
-    565
-    566	025F  8B CA			     mov cx, dx
-    567	0261  32 ED			     xor ch, ch
-    568
-    569	0263  B4 1E			     mov ah, 1Eh
-    570
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 11
+    554					     ENDM
+1   555
+1   556	027C  AC			     lodsb
+1   557	027D  AB			     stosw
+1   558
+1   559
+1   560	027E  AC			     lodsb
+1   561	027F  AB			     stosw
+1   562
+1   563
+1   564	0280  AC			     lodsb
+1   565	0281  AB			     stosw
+1   566
+1   567
+1   568	0282  AC			     lodsb
+1   569	0283  AB			     stosw
+1   570
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 11
 text.asm
 
 
 
-    571	0265  83 E7 FE			     and di, 0FFFEh		     ; need even di
-    572
-    573	0268			     @@Next2:
-    574
-    575	0268  AC			     lodsb
-    576	0269  AB			     stosw
-    577
-    578	026A  E2 FC			     loop @@Next2
-    579
-    580	026C  C3			     ret
-    581	026D				     endp
-    582
-    583	026D  34 20 47 6F 76 6E	6F+  txt     db	52, 20h, 'Govnozalupapenisherdavalkahuyblyadinasukayeblanishe'
-    584	      7A 61 6C 75 70 61	70+
-    585	      65 6E 69 73 68 65	72+
-    586	      64 61 76 61 6C 6B	61+
-    587	      68 75 79 62 6C 79	61+
-    588	      64 69 6E 61 73 75	6B+
-    589	      61 79 65 62 6C 61	6E+
-    590	      69 73 68 65
-    591
-    592				     end     Start
-Turbo Assembler	 Version 4.1	    02/25/23 26:17:20	    Page 12
+1   571
+1   572	0284  AC			     lodsb
+1   573	0285  AB			     stosw
+1   574
+1   575
+1   576	0286  AC			     lodsb
+1   577	0287  AB			     stosw
+1   578
+1   579
+1   580	0288  AC			     lodsb
+1   581	0289  AB			     stosw
+1   582
+1   583
+1   584	028A  AC			     lodsb
+1   585	028B  AB			     stosw
+1   586
+1   587
+1   588	028C  AC			     lodsb
+1   589	028D  AB			     stosw
+1   590
+1   591
+1   592	028E  AC			     lodsb
+1   593	028F  AB			     stosw
+1   594
+    595
+    596	0290  FE C9			     dec cl
+    597	0292  81 C7 008C		     add di, (80 - 10) * 2
+    598
+    599	0296  EB DA			     jmp @@Next
+    600
+    601	0298			     smol_txt:
+    602	0298  83 C7 0A			     add di, 10
+    603
+    604	029B  8A C2			     mov al, dl
+    605	029D  32 E4			     xor ah, ah
+    606
+    607	029F  2B F8			     sub di, ax
+    608
+    609	02A1  8B CA			     mov cx, dx
+    610	02A3  32 ED			     xor ch, ch
+    611	02A5  83 E9 01			     sub cx, 1			     ; fix
+    612
+    613	02A8  B4 1E			     mov ah, 1Eh
+    614
+    615	02AA  83 E7 FE			     and di, 0FFFEh		     ; need even di
+    616
+    617	02AD			     @@Next2:
+    618
+    619	02AD  AC			     lodsb
+    620	02AE  AB			     stosw
+    621
+    622	02AF  E2 FC			     loop @@Next2
+    623
+    624	02B1  C3			     ret
+    625	02B2				     endp
+    626
+    627	02B2  34 20 47 6F 76 6E	6F+  txt     db	52, 20h, 'Govnozalupapenisherdavalkahuyblyadinasukayeblanishe'
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 12
+text.asm
+
+
+
+    628	      7A 61 6C 75 70 61	70+
+    629	      65 6E 69 73 68 65	72+
+    630	      64 61 76 61 6C 6B	61+
+    631	      68 75 79 62 6C 79	61+
+    632	      64 69 6E 61 73 75	6B+
+    633	      61 79 65 62 6C 61	6E+
+    634	      69 73 68 65
+    635
+    636				     end     Start
+Turbo Assembler	 Version 4.1	    02/26/23 17:37:47	    Page 13
 Symbol Table
 
 
@@ -653,13 +702,13 @@ Symbol Table
 
 Symbol Name			  Type	 Value
 
-??DATE				  Text	 "02/25/23"
+??DATE				  Text	 "02/26/23"
 ??FILENAME			  Text	 "text	  "
-??TIME				  Text	 "26:17:19"
+??TIME				  Text	 "17:37:47"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
-@@NEXT				  Near	 DGROUP:01D0
-@@NEXT2				  Near	 DGROUP:0268
+@@NEXT				  Near	 DGROUP:0272
+@@NEXT2				  Near	 DGROUP:02AD
 @CODE				  Text	 DGROUP
 @CODESIZE			  Text	 0
 @CPU				  Text	 0101H
@@ -671,16 +720,16 @@ Symbol Name			  Type	 Value
 @MODEL				  Text	 1
 @STACK				  Text	 DGROUP
 @WORDSIZE			  Text	 2
-NOT_SMOL_TXT			  Near	 DGROUP:01D8
+NOT_SMOL_TXT			  Near	 DGROUP:027A
 NOT_SMOL_TXT1			  Near	 DGROUP:012A
-SMOL_TXT			  Near	 DGROUP:0259
+SMOL_TXT			  Near	 DGROUP:0298
 START				  Near	 DGROUP:0100
 TEXT				  Near	 DGROUP:0108
-TXT				  Byte	 DGROUP:026D
+TXT				  Byte	 DGROUP:02B2
 
 Groups & Segments		  Bit Size Align  Combine Class
 
 DGROUP				  Group
   _DATA				  16  0000 Word	  Public  DATA
-  _TEXT				  16  02A2 Word	  Public  CODE
+  _TEXT				  16  02E7 Word	  Public  CODE
 

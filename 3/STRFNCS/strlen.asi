@@ -1,0 +1,20 @@
+strlen  proc
+        push bp
+        mov bp, sp
+
+        mov ax, [bp + 4]
+
+        mov bx, 0FFFFh
+        mov si, ax
+
+@@Next: lodsb
+
+        inc bx
+
+        cmp al, '$'
+        jne @@Next
+
+        mov sp, bp
+        pop bp
+        ret
+        endp

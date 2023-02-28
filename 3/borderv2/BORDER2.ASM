@@ -85,11 +85,40 @@ ncbrd:  sub bl, 1
 custom:
 
         call Border
+        
+        mov bx, word ptr 80h
+        mov bl, [bx]
+        xor bh, bh
+
+        mov si, 82h
+
+        cmp byte ptr [si], byte ptr 0
+        jne not_custom
+
+        add si, 9
+        sub bl, 9
+
+not_custom:
+
+        inc si
+        dec bl
+
+        xor ah, ah
+        mov al, bl
+
+        mov dl, 10
+        div dl
+
+        mov dl, ah
+        mov dh, al
+
+        call Text
 
         mov ax, 4C00h
         int 21h
 
         include bordre.asi
+        include text.asi
 
 cbrd    db   ?,   ?,   ?,   ?,   ?,   ?,   ?,   ?,   ?  ; custom border
 brd1    db 40h, 40h, 40h, 40h, 00h, 40h, 40h, 40h, 40h

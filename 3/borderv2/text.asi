@@ -1,32 +1,4 @@
-.model tiny
-.code
-
-locals @@
-
-org 100h
-
-Start:  call Text
-
-        mov ax, 4C00h
-        int 21h
-
 Text    proc
-
-        mov si, offset txt
-
-        lodsb
-
-        xor ah, ah
-
-        mov dl, 10
-
-        div dl
-
-        mov dh, al
-        mov dl, ah
-
-        mov di, 0B800h
-        mov es, di
 
         mov di, 80 * 25
 
@@ -40,16 +12,22 @@ Text    proc
 
 not_smol_txt1:
 
-        sub di, word ptr 20
+        sub di, word ptr 10
 
-        mov cl, dh
-        xor ch, ch
+        xor ah, ah
+        mov al, dh
+
+        mov cl, 2
+        div cl
 
         REPT 160
         
         sub di, ax
 
         ENDM
+
+        mov cl, dh
+        xor ch, ch
 
         inc si
 
@@ -75,9 +53,9 @@ not_smol_txt:
 
         jmp @@Next
 
-smol_txt:
-        add di, 10
+        add di, 5
 
+smol_txt:
         mov al, dl
         xor ah, ah
 
@@ -85,7 +63,7 @@ smol_txt:
 
         mov cx, dx
         xor ch, ch
-        sub cx, 1                       ; fix 
+        dec cx
 
         mov ah, 1Eh
 
@@ -96,11 +74,10 @@ smol_txt:
         lodsb
         stosw
 
+        cmp cx, 0
+        je @@ret                        ; cause loop incs cx
+
         loop @@Next2
 
-        ret
+@@ret:  ret
         endp
-
-txt     db 52, 20h, 'Govnozalupapenisherdavalkahuyblyadinasukayeblanishe'
-
-end     Start
