@@ -1,0 +1,22 @@
+; char *strcpy(char *str1, const char *str2)
+
+strcpy  proc
+        push bp
+        mov bp, sp
+
+        mov di, [bp + 4]
+
+        mov si, [bp + 6]
+
+@@Next: lodsb
+        stosb
+
+        cmp al, '$'
+        jne @@Next
+
+        mov di, [bp + 4]
+
+        mov sp, bp
+        pop bp
+        ret
+        endp

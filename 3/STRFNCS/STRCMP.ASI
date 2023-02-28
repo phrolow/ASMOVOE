@@ -1,0 +1,34 @@
+;int strcmp(
+;   const char *buffer1,
+;   const char *buffer2
+;);
+
+strcmp  proc
+        push bp
+        mov bp, sp
+
+        mov si, [bp + 4]
+
+        mov bx, [bp + 6]
+
+@@Next: lodsb
+        
+        mov dl, [bx]
+        inc bx
+
+        cmp al, dl
+        jne exit
+
+        cmp al, '$'
+        je exit
+
+        cmp dl, '$'
+        je exit
+
+        jmp @@Next
+
+exit:   sub al, dl
+
+        pop bp
+        ret
+        endp

@@ -1,0 +1,26 @@
+;void *memset(
+;   void *dest,
+;   int c,
+;   size_t count
+;);
+
+memset  proc
+        push bp
+        mov bp, sp
+
+        mov di, [bp + 4]
+
+        mov ax, [bp + 6]
+
+        mov cx, [bp + 8]
+
+@@Next: stosb
+
+        loop @@Next
+
+        mov si, [bp + 4]
+
+        mov sp, bp
+        pop bp
+        ret
+        endp

@@ -1,0 +1,27 @@
+;int memcmp(
+;   const void *buffer1,
+;   const void *buffer2,
+;   size_t count
+;);
+
+memcmp  proc
+        push bp
+        mov bp, sp
+
+        mov si, [bp + 4]
+
+        mov bx, [bp + 6]
+
+        mov cx, [bp + 8]
+
+@@Next: lodsb
+        sub al, [bx]
+
+        inc bx
+
+        cmp al, 0
+        loope @@Next
+
+        pop bp
+        ret
+        endp

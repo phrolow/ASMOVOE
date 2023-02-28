@@ -1,0 +1,304 @@
+Turbo Assembler	 Version 4.1	    02/28/23 18:48:15	    Page 1
+memcmp.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3
+      4				     org 100h
+      5
+      6				     locals @@
+      7
+      8	0100  E8 0074		     Start:  call frm
+      9
+     10	0103  50 55 8B EC C7 46	02+	     push 3				 ; length
+     11	      0003 5D
+     12
+     13	010D  B8 0203r			     mov ax, offset str2		 ; str2
+     14	0110  50			     push ax
+     15
+     16	0111  B8 01FFr			     mov ax, offset str1		 ; ptr to str1
+     17	0114  50			     push ax
+     18
+     19	0115  E8 0049			     call memcmp
+     20
+     21	0118  32 E4			     xor ah, ah
+     22	011A  BB 07CC			     mov bx, (40 * 25 -	2) * 2
+     23
+     24	011D  E8 0005			     call hexout
+     25
+     26	0120  B8 4C00			     mov ax, 04C00h
+     27	0123  CD 21			     int 21h
+     28
+     29				     include hexout.asi
+1    30				     ;===============================================;
+1    31				     ; Uses: ax, bx								     ;
+1    32				     ; Destroys: cx, es, di						     ;
+1    33				     ; Returns:										     ;
+1    34				     ; Expects:	num in ax, start of label in bx		     ;
+1    35				     ;===============================================;
+1    36
+1    37	0125			     Hexout  proc
+1    38
+1    39	0125  BF B800			     mov di, 0B800h
+1    40	0128  8E C7			     mov es, di
+1    41	012A  8B FB			     mov di, bx		     ; set vm to line begin (dx)
+1    42
+1    43	012C  B9 0004			     mov cx, word ptr 4	     ; we output 4 chars
+1    44
+1    45	012F  BB 000F		     @@Next: mov bx, 0Fh	     ; bit mask
+1    46
+1    47	0132  FE C9			     dec cl
+1    48
+1    49	0134  D3 E3			     shl bx, cl
+1    50	0136  D3 E3			     shl bx, cl
+1    51	0138  D3 E3			     shl bx, cl
+1    52	013A  D3 E3			     shl bx, cl
+1    53
+1    54	013C  23 D8			     and bx, ax
+1    55
+1    56	013E  D3 EB			     shr bx, cl
+1    57	0140  D3 EB			     shr bx, cl
+Turbo Assembler	 Version 4.1	    02/28/23 18:48:15	    Page 2
+memcmp.asm
+
+
+
+1    58	0142  D3 EB			     shr bx, cl
+1    59	0144  D3 EB			     shr bx, cl
+1    60
+1    61	0146  FE C1			     inc cl		     ; getting the letter
+1    62
+1    63	0148  83 FB 0A			     cmp bx, 0Ah	     ; is char decimal
+1    64	014B  72 06			     jb	@@Dec
+1    65
+1    66	014D  83 C3 37			     add bx, 'A' - 10d	     ; if char not decimal
+1    67
+1    68	0150  EB 04 90			     jmp @@Out
+1    69
+1    70	0153  83 C3 30		     @@Dec:  add bx, '0'	     ; if char is decimal
+1    71
+1    72	0156  B7 4B		     @@Out:  mov bh, 4Bh
+1    73
+1    74	0158  26: 89 1D			     mov es:[di], bx	     ; output
+1    75
+1    76	015B  83 C7 02			     add di, 2
+1    77
+1    78	015E  E2 CF			     loop @@Next
+1    79
+1    80	0160  C3			     ret
+1    81	0161				     endp
+     82				     include memcmp.asi
+1    83				     ;int memcmp(
+1    84				     ;	 const void *buffer1,
+1    85				     ;	 const void *buffer2,
+1    86				     ;	 size_t	count
+1    87				     ;);
+1    88
+1    89	0161			     memcmp  proc
+1    90	0161  55			     push bp
+1    91	0162  8B EC			     mov bp, sp
+1    92
+1    93	0164  8B 76 04			     mov si, [bp + 4]
+1    94
+1    95	0167  8B 5E 06			     mov bx, [bp + 6]
+1    96
+1    97	016A  8B 4E 08			     mov cx, [bp + 8]
+1    98
+1    99	016D  AC		     @@Next: lodsb
+1   100	016E  2A 07			     sub al, [bx]
+1   101
+1   102	0170  43			     inc bx
+1   103
+1   104	0171  3C 00			     cmp al, 0
+1   105	0173  E1 F8			     loope @@Next
+1   106
+1   107	0175  5D			     pop bp
+1   108	0176  C3			     ret
+1   109	0177				     endp
+    110				     include stdfrm.asi
+1   111	0177			     frm     proc
+1   112	0177  55			     push bp
+1   113	0178  8B EC			     mov bp, sp
+1   114
+Turbo Assembler	 Version 4.1	    02/28/23 18:48:15	    Page 3
+memcmp.asm
+
+
+
+1   115	017A  B4 1E			     mov ah, 1Eh
+1   116
+1   117	017C  BF B800			     mov di, 0B800h
+1   118	017F  8E C7			     mov es, di
+1   119
+1   120	0181  BF 0334			     mov di, (80 * 5 + 10) * 2
+1   121
+1   122	0184  B6 0F			     mov dh, 15
+1   123	0186  B2 3C			     mov dl, 60
+1   124
+1   125	0188  BE 01F6r			     mov si, offset frame
+1   126
+1   127	018B  E8 0004			     call Border
+1   128
+1   129	018E  8B E5			     mov sp, bp
+1   130	0190  5D			     pop bp
+1   131	0191  C3			     ret
+1   132	0192				     endp
+1   133
+1   134				     include bordre.asi
+2   135				     ;
+2   136				     ; args - ah, di, dl, si
+2   137				     ; ah - attribute
+2   138				     ; di - start
+2   139				     ; dl - width
+2   140				     ; si - border source
+2   141				     ; dh - height
+2   142				     ; destroys	- dohuya
+2   143				     ;
+2   144
+2   145	0192			     Border  proc
+2   146	0192  55			     push bp
+2   147	0193  8B EC			     mov bp, sp
+2   148
+2   149	0195  55			     push bp
+2   150
+2   151	0196  E8 0048			     call String
+2   152
+2   153	0199  81 C7 00A0		     add di, 80	* 2
+2   154
+2   155	019D  32 FF			     xor bh, bh
+2   156	019F  8A DA			     mov bl, dl
+2   157
+2   158	01A1  2B FB			     sub di, bx
+2   159	01A3  2B FB			     sub di, bx
+2   160
+2   161	01A5  8B EA			     mov bp, dx
+2   162	01A7  81 E5 FF00		     and bp, 0FF00h
+2   163	01AB  D1 ED D1 ED D1 ED	D1+	     shr bp, 8
+    164	      ED D1 ED D1 ED D1	ED+
+    165	      D1 ED
+2   166	01BB  83 ED 02			     sub bp, 2
+2   167
+2   168	01BE  E8 0020		     zaloop: call String
+2   169
+2   170	01C1  83 EE 03			     sub si, 3
+2   171
+Turbo Assembler	 Version 4.1	    02/28/23 18:48:15	    Page 4
+memcmp.asm
+
+
+
+2   172	01C4  81 C7 00A0		     add di, 80	* 2
+2   173
+2   174	01C8  32 FF			     xor bh, bh
+2   175	01CA  8A DA			     mov bl, dl
+2   176
+2   177	01CC  2B FB			     sub di, bx
+2   178	01CE  2B FB			     sub di, bx
+2   179
+2   180	01D0  4D			     dec bp
+2   181
+2   182	01D1  83 FD 00			     cmp bp, 0
+2   183	01D4  75 E8			     jne zaloop
+2   184
+2   185	01D6  83 C6 03			     add si, 3
+2   186
+2   187	01D9  E8 0005			     call String
+2   188
+2   189	01DC  5D			     pop bp
+2   190
+2   191	01DD  8B E5			     mov sp, bp
+2   192	01DF  5D			     pop bp
+2   193	01E0  C3			     ret
+2   194	01E1				     endp
+2   195
+2   196					     include string.asi
+3   197				     ;
+3   198				     ; args - ah, di, dl
+3   199				     ; ah - attribute
+3   200				     ; di - start
+3   201				     ; dl - length
+3   202				     ; destroys	- si, cx
+3   203				     ;
+3   204
+3   205	01E1			     String  proc
+3   206
+3   207	01E1  AC			     lodsb
+3   208	01E2  AB			     stosw
+3   209
+3   210	01E3  AC			     lodsb
+3   211
+3   212	01E4  8A CA			     mov cl, dl
+3   213	01E6  80 E9 02			     sub cl, 2
+3   214	01E9  32 ED			     xor ch, ch
+3   215
+3   216	01EB  26: 89 05		     @@Next: mov es:[di], ax
+3   217
+3   218	01EE  83 C7 02			     add di, 2
+3   219
+3   220	01F1  E2 F8			     loop @@Next
+3   221
+3   222	01F3  AC			     lodsb
+3   223	01F4  AB			     stosw
+3   224
+3   225	01F5  C3			     ret
+3   226	01F6				     endp
+    227
+    228	01F6  44 45 44 45 20 45	44+  frame   db	'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E',	'D'
+Turbo Assembler	 Version 4.1	    02/28/23 18:48:15	    Page 5
+memcmp.asm
+
+
+
+    229	      45 44
+    230	01FF  01 02 02 24	     str1    db	1, 2, 2, '$'
+    231	0203  01 02 03 04	     str2    db	1, 2, 3, 4
+    232
+    233				     end     Start
+Turbo Assembler	 Version 4.1	    02/28/23 18:48:15	    Page 6
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/28/23"
+??FILENAME			  Text	 "memcmp  "
+??TIME				  Text	 "18:48:15"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@@DEC				  Near	 DGROUP:0153
+@@NEXT				  Near	 DGROUP:012F
+@@NEXT				  Near	 DGROUP:016D
+@@NEXT				  Near	 DGROUP:01EB
+@@OUT				  Near	 DGROUP:0156
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MEMCMP
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+BORDER				  Near	 DGROUP:0192
+FRAME				  Byte	 DGROUP:01F6
+FRM				  Near	 DGROUP:0177
+HEXOUT				  Near	 DGROUP:0125
+MEMCMP				  Near	 DGROUP:0161
+START				  Near	 DGROUP:0100
+STR1				  Byte	 DGROUP:01FF
+STR2				  Byte	 DGROUP:0203
+STRING				  Near	 DGROUP:01E1
+ZALOOP				  Near	 DGROUP:01BE
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0207 Word	  Public  CODE
+
