@@ -12,8 +12,6 @@ Text    proc
 
 not_smol_txt1:
 
-        sub di, word ptr 10
-
         xor ah, ah
         mov al, dh
 
@@ -26,17 +24,15 @@ not_smol_txt1:
         mov cl, dh
         xor ch, ch
 
-        add di, 10
-
 @@Next: 
-        sub di, 10
-
         cmp cl, 0
         jne not_smol_txt
 
         jmp smol_txt
 
 not_smol_txt:
+
+        sub di, 5 * 2
 
         mov ah, 1Eh
 
@@ -48,9 +44,7 @@ not_smol_txt:
         ENDM
 
         dec cl
-        add di, (80 - 10) * 2
-
-        add di, 10
+        add di, (80 - 5) * 2
 
         jmp @@Next
 
