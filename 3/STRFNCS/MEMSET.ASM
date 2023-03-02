@@ -5,7 +5,7 @@ org 100h
 
 locals @@
 
-Start:  mov ax, word ptr 5
+Start:  mov ax, word ptr 9
         push ax
 
         mov ax, word ptr 2
@@ -30,6 +30,6 @@ include out.asi
 
 frame   db 'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E', 'D'
 jopa    db 1, 2, 3, '$'
-outl    db 9, 5, 5, 5, 5, 5, 5, 5, 5, 5, '#'
+outl    db 11, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 
 end     Start

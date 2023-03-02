@@ -92,7 +92,7 @@ custom:
 
         mov si, 82h
 
-        cmp byte ptr [si], byte ptr 0
+        cmp byte ptr [si], byte ptr '0'
         jne not_custom
 
         add si, 9
@@ -101,6 +101,7 @@ custom:
 not_custom:
 
         inc si
+        dec bl
         dec bl
 
         xor ah, ah

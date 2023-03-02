@@ -3,10 +3,10 @@ Text    proc
         mov di, 80 * 25
 
         mov ax, dx
-        xor ah, ah               ; dl в общ
+        xor ah, ah                      ; dl в общ
 
         cmp dh, 0
-        jne not_smol_txt1            ; концептуально - сначала идет распечатка "больших" строк, а потом маленькой; ну и здесь джамп сразу к распечатке маленькой; важно не проебать dl
+        jne not_smol_txt1               ; концептуально - сначала идет распечатка "больших" строк, а потом маленькой; ну и здесь джамп сразу к распечатке маленькой; важно не проебать dl
 
         jmp smol_txt
 
@@ -17,9 +17,6 @@ not_smol_txt1:
         xor ah, ah
         mov al, dh
 
-        mov cl, 2
-        div cl
-
         REPT 160
         
         sub di, ax
@@ -29,9 +26,11 @@ not_smol_txt1:
         mov cl, dh
         xor ch, ch
 
-        inc si
+        add di, 10
 
 @@Next: 
+        sub di, 10
+
         cmp cl, 0
         jne not_smol_txt
 
@@ -51,9 +50,9 @@ not_smol_txt:
         dec cl
         add di, (80 - 10) * 2
 
-        jmp @@Next
+        add di, 10
 
-        add di, 5
+        jmp @@Next
 
 smol_txt:
         mov al, dl
@@ -63,19 +62,18 @@ smol_txt:
 
         mov cx, dx
         xor ch, ch
-        dec cx
 
         mov ah, 1Eh
 
         and di, 0FFFEh                  ; need even di
 
 @@Next2:
+        cmp cx, 0
+        je @@ret                        ; cause loop incs cx
 
         lodsb
         stosw
 
-        cmp cx, 0
-        je @@ret                        ; cause loop incs cx
 
         loop @@Next2
 
