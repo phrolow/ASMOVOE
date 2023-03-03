@@ -6,38 +6,56 @@
 org 100h
 locals @@
 
-Start   cli
+Start:          jmp EOP
 
-        xor bx, bx
-        mov es, bx
-        mov bx, 9 * 4
+New09           proc
 
-        mov ax, es:[bx]
-        mov Old09Ofs, ax
+                push ax bx es
 
-        mov es:[bx], offset New09
+                mov bx, 0B800h
+                mov es, bx
+                mov bx, 80 * 25
 
-        add bx, 2
-        mov ax, es:[bx]
-        mov Old09Seg, ax
+                mov es:[bx], 1E41h
 
-        mov ax, cs
-        mov es:[bx], ax
+                mov al, 20h
+                out 20h, al
 
-        sti
+                pop es bx ax
 
-        mov ax, 4C00h
-        int 21h
+                db 0EAh
 
-New09   proc
+Old09Ofs        dw 0
+Old09Seg        dw 0
+                
+                iret
+                endp
 
-        push ax bx es
+EOP:            cli
 
-        mov bx, 0B800h
+                xor bx, bx
+                mov es, bx
+                mov bx, 4 * 9                           ; to int table
 
-        mov es, bx
-        mov ah, 4Eh
-        mov bx, 160 * 5 + 80
+                mov ax, es:[bx]
+                mov Old09Ofs, ax
+                mov es:[bx], offset New09
 
-        in al, 60h
-        mov 
+                add bx, 2
+
+                mov ax, es:[bx]
+                mov Old09Seg, ax
+                mov ax, cs
+                mov es:[bx], ax
+
+                sti
+
+                ;jmp New09
+
+                mov ax, 3100h
+                mov dx, offset EOP
+                shr dx, 4
+                inc dx
+                int 21h
+
+end             Start
