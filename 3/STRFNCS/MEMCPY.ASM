@@ -31,6 +31,6 @@ include out.asi
 
 frame   db 'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E', 'D'
 jopa    db 1, 2, 3, '$'
-outl    db 8, 5, 5, 5, 5, 5, 5, 5, 5, 5, '#'
+outl    db 8, 5, 5, 5, 5, 5, 5, 5, 5
 
 end     Start

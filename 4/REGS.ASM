@@ -1,6 +1,9 @@
 .286
 .model tiny
 .code
+
+locals @@
+
 org 100h
 
 Start:  jmp EOP
@@ -25,7 +28,7 @@ EOP:    cli
 
         sti
 
-        
+        jmp New09
 
         mov ax, 3100h
         mov dx, offset EOP

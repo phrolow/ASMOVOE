@@ -20,9 +20,6 @@ skip:   in al, 61h                                      ; blinking
         and al, not 80h
         out 61h, al
 
-        mov al, 20h                                     ; end of interrupt
-        out 20h, al
-
         pop bp es bx ax
 
                 db 0eah

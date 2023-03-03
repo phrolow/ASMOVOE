@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 1
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 1
 memcpy.asm
 
 
@@ -13,10 +13,10 @@ memcpy.asm
       8	0100  B8 0004		     Start:  mov ax, 4
       9	0103  50			     push ax
      10
-     11	0104  B8 0372r			     mov ax, offset jopa
+     11	0104  B8 0369r			     mov ax, offset jopa
      12	0107  50			     push ax
      13
-     14	0108  B8 0376r			     mov ax, offset outl
+     14	0108  B8 036Dr			     mov ax, offset outl
      15	010B  40			     inc ax
      16	010C  50			     push ax
      17
@@ -60,7 +60,7 @@ memcpy.asm
 1    55
 1    56	0132			     fout    proc
 1    57	0132  55			     push bp
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 2
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 2
 memcpy.asm
 
 
@@ -79,7 +79,7 @@ memcpy.asm
 1    69	0140  B6 0F			     mov dh, 15
 1    70	0142  B2 3C			     mov dl, 60
 1    71
-1    72	0144  BE 0369r			     mov si, offset frame
+1    72	0144  BE 0360r			     mov si, offset frame
 1    73
 1    74	0147  E8 0019			     call Border
 1    75
@@ -122,7 +122,7 @@ memcpy.asm
 2   112	0164  8B EC			     mov bp, sp
 2   113
 2   114	0166  55			     push bp
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 3
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 3
 memcpy.asm
 
 
@@ -184,7 +184,7 @@ memcpy.asm
 3   169
 3   170	01B2			     String  proc
 3   171
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 4
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 4
 memcpy.asm
 
 
@@ -215,674 +215,666 @@ memcpy.asm
 2   195	01C7  BF 07D0			     mov di, 80	* 25
 2   196
 2   197	01CA  8B C2			     mov ax, dx
-2   198	01CC  32 E4			     xor ah, ah		      ;	dl в общ
+2   198	01CC  32 E4			     xor ah, ah			     ; dl в общ
 2   199
 2   200	01CE  80 FE 00			     cmp dh, 0
-2   201	01D1  75 03			     jne not_smol_txt1		  ; концептуально - сначала	идет    +
+2   201	01D1  75 03			     jne not_smol_txt1		     ; концептуально - сначала идет +
     202				     распечатка "больших" строк, а потом маленькой; ну и    +
     203				     здесь	джамп сразу к распечатке маленькой; важно не   +
     204				     проебать dl
 2   205
-2   206	01D3  E9 0179			     jmp smol_txt
+2   206	01D3  E9 0171			     jmp smol_txt
 2   207
 2   208	01D6			     not_smol_txt1:
 2   209
-2   210	01D6  83 EF 0A			     sub di, word ptr 10
-2   211
-2   212	01D9  32 E4			     xor ah, ah
-2   213	01DB  8A C6			     mov al, dh
+2   210	01D6  32 E4			     xor ah, ah
+2   211	01D8  8A C6			     mov al, dh
+2   212
+2   213					     REPT 160
 2   214
-2   215	01DD  B1 02			     mov cl, 2
-2   216	01DF  F6 F1			     div cl
-2   217
-2   218					     REPT 160
-2   219
-2   220					     sub di, ax
-2   221
-2   222					     ENDM
+2   215					     sub di, ax
+2   216
+2   217					     ENDM
+3   218
+3   219	01DA  2B F8			     sub di, ax
+3   220
+3   221
+3   222	01DC  2B F8			     sub di, ax
 3   223
-3   224	01E1  2B F8			     sub di, ax
-3   225
+3   224
+3   225	01DE  2B F8			     sub di, ax
 3   226
-3   227	01E3  2B F8			     sub di, ax
-3   228
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 5
+3   227
+3   228	01E0  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 5
 memcpy.asm
 
 
 
 3   229
-3   230	01E5  2B F8			     sub di, ax
-3   231
+3   230
+3   231	01E2  2B F8			     sub di, ax
 3   232
-3   233	01E7  2B F8			     sub di, ax
-3   234
+3   233
+3   234	01E4  2B F8			     sub di, ax
 3   235
-3   236	01E9  2B F8			     sub di, ax
-3   237
+3   236
+3   237	01E6  2B F8			     sub di, ax
 3   238
-3   239	01EB  2B F8			     sub di, ax
-3   240
+3   239
+3   240	01E8  2B F8			     sub di, ax
 3   241
-3   242	01ED  2B F8			     sub di, ax
-3   243
+3   242
+3   243	01EA  2B F8			     sub di, ax
 3   244
-3   245	01EF  2B F8			     sub di, ax
-3   246
+3   245
+3   246	01EC  2B F8			     sub di, ax
 3   247
-3   248	01F1  2B F8			     sub di, ax
-3   249
+3   248
+3   249	01EE  2B F8			     sub di, ax
 3   250
-3   251	01F3  2B F8			     sub di, ax
-3   252
+3   251
+3   252	01F0  2B F8			     sub di, ax
 3   253
-3   254	01F5  2B F8			     sub di, ax
-3   255
+3   254
+3   255	01F2  2B F8			     sub di, ax
 3   256
-3   257	01F7  2B F8			     sub di, ax
-3   258
+3   257
+3   258	01F4  2B F8			     sub di, ax
 3   259
-3   260	01F9  2B F8			     sub di, ax
-3   261
+3   260
+3   261	01F6  2B F8			     sub di, ax
 3   262
-3   263	01FB  2B F8			     sub di, ax
-3   264
+3   263
+3   264	01F8  2B F8			     sub di, ax
 3   265
-3   266	01FD  2B F8			     sub di, ax
-3   267
+3   266
+3   267	01FA  2B F8			     sub di, ax
 3   268
-3   269	01FF  2B F8			     sub di, ax
-3   270
+3   269
+3   270	01FC  2B F8			     sub di, ax
 3   271
-3   272	0201  2B F8			     sub di, ax
-3   273
+3   272
+3   273	01FE  2B F8			     sub di, ax
 3   274
-3   275	0203  2B F8			     sub di, ax
-3   276
+3   275
+3   276	0200  2B F8			     sub di, ax
 3   277
-3   278	0205  2B F8			     sub di, ax
-3   279
+3   278
+3   279	0202  2B F8			     sub di, ax
 3   280
-3   281	0207  2B F8			     sub di, ax
-3   282
+3   281
+3   282	0204  2B F8			     sub di, ax
 3   283
-3   284	0209  2B F8			     sub di, ax
-3   285
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 6
+3   284
+3   285	0206  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 6
 memcpy.asm
 
 
 
 3   286
-3   287	020B  2B F8			     sub di, ax
-3   288
+3   287
+3   288	0208  2B F8			     sub di, ax
 3   289
-3   290	020D  2B F8			     sub di, ax
-3   291
+3   290
+3   291	020A  2B F8			     sub di, ax
 3   292
-3   293	020F  2B F8			     sub di, ax
-3   294
+3   293
+3   294	020C  2B F8			     sub di, ax
 3   295
-3   296	0211  2B F8			     sub di, ax
-3   297
+3   296
+3   297	020E  2B F8			     sub di, ax
 3   298
-3   299	0213  2B F8			     sub di, ax
-3   300
+3   299
+3   300	0210  2B F8			     sub di, ax
 3   301
-3   302	0215  2B F8			     sub di, ax
-3   303
+3   302
+3   303	0212  2B F8			     sub di, ax
 3   304
-3   305	0217  2B F8			     sub di, ax
-3   306
+3   305
+3   306	0214  2B F8			     sub di, ax
 3   307
-3   308	0219  2B F8			     sub di, ax
-3   309
+3   308
+3   309	0216  2B F8			     sub di, ax
 3   310
-3   311	021B  2B F8			     sub di, ax
-3   312
+3   311
+3   312	0218  2B F8			     sub di, ax
 3   313
-3   314	021D  2B F8			     sub di, ax
-3   315
+3   314
+3   315	021A  2B F8			     sub di, ax
 3   316
-3   317	021F  2B F8			     sub di, ax
-3   318
+3   317
+3   318	021C  2B F8			     sub di, ax
 3   319
-3   320	0221  2B F8			     sub di, ax
-3   321
+3   320
+3   321	021E  2B F8			     sub di, ax
 3   322
-3   323	0223  2B F8			     sub di, ax
-3   324
+3   323
+3   324	0220  2B F8			     sub di, ax
 3   325
-3   326	0225  2B F8			     sub di, ax
-3   327
+3   326
+3   327	0222  2B F8			     sub di, ax
 3   328
-3   329	0227  2B F8			     sub di, ax
-3   330
+3   329
+3   330	0224  2B F8			     sub di, ax
 3   331
-3   332	0229  2B F8			     sub di, ax
-3   333
+3   332
+3   333	0226  2B F8			     sub di, ax
 3   334
-3   335	022B  2B F8			     sub di, ax
-3   336
+3   335
+3   336	0228  2B F8			     sub di, ax
 3   337
-3   338	022D  2B F8			     sub di, ax
-3   339
+3   338
+3   339	022A  2B F8			     sub di, ax
 3   340
-3   341	022F  2B F8			     sub di, ax
-3   342
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 7
+3   341
+3   342	022C  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 7
 memcpy.asm
 
 
 
 3   343
-3   344	0231  2B F8			     sub di, ax
-3   345
+3   344
+3   345	022E  2B F8			     sub di, ax
 3   346
-3   347	0233  2B F8			     sub di, ax
-3   348
+3   347
+3   348	0230  2B F8			     sub di, ax
 3   349
-3   350	0235  2B F8			     sub di, ax
-3   351
+3   350
+3   351	0232  2B F8			     sub di, ax
 3   352
-3   353	0237  2B F8			     sub di, ax
-3   354
+3   353
+3   354	0234  2B F8			     sub di, ax
 3   355
-3   356	0239  2B F8			     sub di, ax
-3   357
+3   356
+3   357	0236  2B F8			     sub di, ax
 3   358
-3   359	023B  2B F8			     sub di, ax
-3   360
+3   359
+3   360	0238  2B F8			     sub di, ax
 3   361
-3   362	023D  2B F8			     sub di, ax
-3   363
+3   362
+3   363	023A  2B F8			     sub di, ax
 3   364
-3   365	023F  2B F8			     sub di, ax
-3   366
+3   365
+3   366	023C  2B F8			     sub di, ax
 3   367
-3   368	0241  2B F8			     sub di, ax
-3   369
+3   368
+3   369	023E  2B F8			     sub di, ax
 3   370
-3   371	0243  2B F8			     sub di, ax
-3   372
+3   371
+3   372	0240  2B F8			     sub di, ax
 3   373
-3   374	0245  2B F8			     sub di, ax
-3   375
+3   374
+3   375	0242  2B F8			     sub di, ax
 3   376
-3   377	0247  2B F8			     sub di, ax
-3   378
+3   377
+3   378	0244  2B F8			     sub di, ax
 3   379
-3   380	0249  2B F8			     sub di, ax
-3   381
+3   380
+3   381	0246  2B F8			     sub di, ax
 3   382
-3   383	024B  2B F8			     sub di, ax
-3   384
+3   383
+3   384	0248  2B F8			     sub di, ax
 3   385
-3   386	024D  2B F8			     sub di, ax
-3   387
+3   386
+3   387	024A  2B F8			     sub di, ax
 3   388
-3   389	024F  2B F8			     sub di, ax
-3   390
+3   389
+3   390	024C  2B F8			     sub di, ax
 3   391
-3   392	0251  2B F8			     sub di, ax
-3   393
+3   392
+3   393	024E  2B F8			     sub di, ax
 3   394
-3   395	0253  2B F8			     sub di, ax
-3   396
+3   395
+3   396	0250  2B F8			     sub di, ax
 3   397
-3   398	0255  2B F8			     sub di, ax
-3   399
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 8
+3   398
+3   399	0252  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 8
 memcpy.asm
 
 
 
 3   400
-3   401	0257  2B F8			     sub di, ax
-3   402
+3   401
+3   402	0254  2B F8			     sub di, ax
 3   403
-3   404	0259  2B F8			     sub di, ax
-3   405
+3   404
+3   405	0256  2B F8			     sub di, ax
 3   406
-3   407	025B  2B F8			     sub di, ax
-3   408
+3   407
+3   408	0258  2B F8			     sub di, ax
 3   409
-3   410	025D  2B F8			     sub di, ax
-3   411
+3   410
+3   411	025A  2B F8			     sub di, ax
 3   412
-3   413	025F  2B F8			     sub di, ax
-3   414
+3   413
+3   414	025C  2B F8			     sub di, ax
 3   415
-3   416	0261  2B F8			     sub di, ax
-3   417
+3   416
+3   417	025E  2B F8			     sub di, ax
 3   418
-3   419	0263  2B F8			     sub di, ax
-3   420
+3   419
+3   420	0260  2B F8			     sub di, ax
 3   421
-3   422	0265  2B F8			     sub di, ax
-3   423
+3   422
+3   423	0262  2B F8			     sub di, ax
 3   424
-3   425	0267  2B F8			     sub di, ax
-3   426
+3   425
+3   426	0264  2B F8			     sub di, ax
 3   427
-3   428	0269  2B F8			     sub di, ax
-3   429
+3   428
+3   429	0266  2B F8			     sub di, ax
 3   430
-3   431	026B  2B F8			     sub di, ax
-3   432
+3   431
+3   432	0268  2B F8			     sub di, ax
 3   433
-3   434	026D  2B F8			     sub di, ax
-3   435
+3   434
+3   435	026A  2B F8			     sub di, ax
 3   436
-3   437	026F  2B F8			     sub di, ax
-3   438
+3   437
+3   438	026C  2B F8			     sub di, ax
 3   439
-3   440	0271  2B F8			     sub di, ax
-3   441
+3   440
+3   441	026E  2B F8			     sub di, ax
 3   442
-3   443	0273  2B F8			     sub di, ax
-3   444
+3   443
+3   444	0270  2B F8			     sub di, ax
 3   445
-3   446	0275  2B F8			     sub di, ax
-3   447
+3   446
+3   447	0272  2B F8			     sub di, ax
 3   448
-3   449	0277  2B F8			     sub di, ax
-3   450
+3   449
+3   450	0274  2B F8			     sub di, ax
 3   451
-3   452	0279  2B F8			     sub di, ax
-3   453
+3   452
+3   453	0276  2B F8			     sub di, ax
 3   454
-3   455	027B  2B F8			     sub di, ax
-3   456
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 9
+3   455
+3   456	0278  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 9
 memcpy.asm
 
 
 
 3   457
-3   458	027D  2B F8			     sub di, ax
-3   459
+3   458
+3   459	027A  2B F8			     sub di, ax
 3   460
-3   461	027F  2B F8			     sub di, ax
-3   462
+3   461
+3   462	027C  2B F8			     sub di, ax
 3   463
-3   464	0281  2B F8			     sub di, ax
-3   465
+3   464
+3   465	027E  2B F8			     sub di, ax
 3   466
-3   467	0283  2B F8			     sub di, ax
-3   468
+3   467
+3   468	0280  2B F8			     sub di, ax
 3   469
-3   470	0285  2B F8			     sub di, ax
-3   471
+3   470
+3   471	0282  2B F8			     sub di, ax
 3   472
-3   473	0287  2B F8			     sub di, ax
-3   474
+3   473
+3   474	0284  2B F8			     sub di, ax
 3   475
-3   476	0289  2B F8			     sub di, ax
-3   477
+3   476
+3   477	0286  2B F8			     sub di, ax
 3   478
-3   479	028B  2B F8			     sub di, ax
-3   480
+3   479
+3   480	0288  2B F8			     sub di, ax
 3   481
-3   482	028D  2B F8			     sub di, ax
-3   483
+3   482
+3   483	028A  2B F8			     sub di, ax
 3   484
-3   485	028F  2B F8			     sub di, ax
-3   486
+3   485
+3   486	028C  2B F8			     sub di, ax
 3   487
-3   488	0291  2B F8			     sub di, ax
-3   489
+3   488
+3   489	028E  2B F8			     sub di, ax
 3   490
-3   491	0293  2B F8			     sub di, ax
-3   492
+3   491
+3   492	0290  2B F8			     sub di, ax
 3   493
-3   494	0295  2B F8			     sub di, ax
-3   495
+3   494
+3   495	0292  2B F8			     sub di, ax
 3   496
-3   497	0297  2B F8			     sub di, ax
-3   498
+3   497
+3   498	0294  2B F8			     sub di, ax
 3   499
-3   500	0299  2B F8			     sub di, ax
-3   501
+3   500
+3   501	0296  2B F8			     sub di, ax
 3   502
-3   503	029B  2B F8			     sub di, ax
-3   504
+3   503
+3   504	0298  2B F8			     sub di, ax
 3   505
-3   506	029D  2B F8			     sub di, ax
-3   507
+3   506
+3   507	029A  2B F8			     sub di, ax
 3   508
-3   509	029F  2B F8			     sub di, ax
-3   510
+3   509
+3   510	029C  2B F8			     sub di, ax
 3   511
-3   512	02A1  2B F8			     sub di, ax
-3   513
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 10
+3   512
+3   513	029E  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 10
 memcpy.asm
 
 
 
 3   514
-3   515	02A3  2B F8			     sub di, ax
-3   516
+3   515
+3   516	02A0  2B F8			     sub di, ax
 3   517
-3   518	02A5  2B F8			     sub di, ax
-3   519
+3   518
+3   519	02A2  2B F8			     sub di, ax
 3   520
-3   521	02A7  2B F8			     sub di, ax
-3   522
+3   521
+3   522	02A4  2B F8			     sub di, ax
 3   523
-3   524	02A9  2B F8			     sub di, ax
-3   525
+3   524
+3   525	02A6  2B F8			     sub di, ax
 3   526
-3   527	02AB  2B F8			     sub di, ax
-3   528
+3   527
+3   528	02A8  2B F8			     sub di, ax
 3   529
-3   530	02AD  2B F8			     sub di, ax
-3   531
+3   530
+3   531	02AA  2B F8			     sub di, ax
 3   532
-3   533	02AF  2B F8			     sub di, ax
-3   534
+3   533
+3   534	02AC  2B F8			     sub di, ax
 3   535
-3   536	02B1  2B F8			     sub di, ax
-3   537
+3   536
+3   537	02AE  2B F8			     sub di, ax
 3   538
-3   539	02B3  2B F8			     sub di, ax
-3   540
+3   539
+3   540	02B0  2B F8			     sub di, ax
 3   541
-3   542	02B5  2B F8			     sub di, ax
-3   543
+3   542
+3   543	02B2  2B F8			     sub di, ax
 3   544
-3   545	02B7  2B F8			     sub di, ax
-3   546
+3   545
+3   546	02B4  2B F8			     sub di, ax
 3   547
-3   548	02B9  2B F8			     sub di, ax
-3   549
+3   548
+3   549	02B6  2B F8			     sub di, ax
 3   550
-3   551	02BB  2B F8			     sub di, ax
-3   552
+3   551
+3   552	02B8  2B F8			     sub di, ax
 3   553
-3   554	02BD  2B F8			     sub di, ax
-3   555
+3   554
+3   555	02BA  2B F8			     sub di, ax
 3   556
-3   557	02BF  2B F8			     sub di, ax
-3   558
+3   557
+3   558	02BC  2B F8			     sub di, ax
 3   559
-3   560	02C1  2B F8			     sub di, ax
-3   561
+3   560
+3   561	02BE  2B F8			     sub di, ax
 3   562
-3   563	02C3  2B F8			     sub di, ax
-3   564
+3   563
+3   564	02C0  2B F8			     sub di, ax
 3   565
-3   566	02C5  2B F8			     sub di, ax
-3   567
+3   566
+3   567	02C2  2B F8			     sub di, ax
 3   568
-3   569	02C7  2B F8			     sub di, ax
-3   570
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 11
+3   569
+3   570	02C4  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 11
 memcpy.asm
 
 
 
 3   571
-3   572	02C9  2B F8			     sub di, ax
-3   573
+3   572
+3   573	02C6  2B F8			     sub di, ax
 3   574
-3   575	02CB  2B F8			     sub di, ax
-3   576
+3   575
+3   576	02C8  2B F8			     sub di, ax
 3   577
-3   578	02CD  2B F8			     sub di, ax
-3   579
+3   578
+3   579	02CA  2B F8			     sub di, ax
 3   580
-3   581	02CF  2B F8			     sub di, ax
-3   582
+3   581
+3   582	02CC  2B F8			     sub di, ax
 3   583
-3   584	02D1  2B F8			     sub di, ax
-3   585
+3   584
+3   585	02CE  2B F8			     sub di, ax
 3   586
-3   587	02D3  2B F8			     sub di, ax
-3   588
+3   587
+3   588	02D0  2B F8			     sub di, ax
 3   589
-3   590	02D5  2B F8			     sub di, ax
-3   591
+3   590
+3   591	02D2  2B F8			     sub di, ax
 3   592
-3   593	02D7  2B F8			     sub di, ax
-3   594
+3   593
+3   594	02D4  2B F8			     sub di, ax
 3   595
-3   596	02D9  2B F8			     sub di, ax
-3   597
+3   596
+3   597	02D6  2B F8			     sub di, ax
 3   598
-3   599	02DB  2B F8			     sub di, ax
-3   600
+3   599
+3   600	02D8  2B F8			     sub di, ax
 3   601
-3   602	02DD  2B F8			     sub di, ax
-3   603
+3   602
+3   603	02DA  2B F8			     sub di, ax
 3   604
-3   605	02DF  2B F8			     sub di, ax
-3   606
+3   605
+3   606	02DC  2B F8			     sub di, ax
 3   607
-3   608	02E1  2B F8			     sub di, ax
-3   609
+3   608
+3   609	02DE  2B F8			     sub di, ax
 3   610
-3   611	02E3  2B F8			     sub di, ax
-3   612
+3   611
+3   612	02E0  2B F8			     sub di, ax
 3   613
-3   614	02E5  2B F8			     sub di, ax
-3   615
+3   614
+3   615	02E2  2B F8			     sub di, ax
 3   616
-3   617	02E7  2B F8			     sub di, ax
-3   618
+3   617
+3   618	02E4  2B F8			     sub di, ax
 3   619
-3   620	02E9  2B F8			     sub di, ax
-3   621
+3   620
+3   621	02E6  2B F8			     sub di, ax
 3   622
-3   623	02EB  2B F8			     sub di, ax
-3   624
+3   623
+3   624	02E8  2B F8			     sub di, ax
 3   625
-3   626	02ED  2B F8			     sub di, ax
-3   627
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 12
+3   626
+3   627	02EA  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 12
 memcpy.asm
 
 
 
 3   628
-3   629	02EF  2B F8			     sub di, ax
-3   630
+3   629
+3   630	02EC  2B F8			     sub di, ax
 3   631
-3   632	02F1  2B F8			     sub di, ax
-3   633
+3   632
+3   633	02EE  2B F8			     sub di, ax
 3   634
-3   635	02F3  2B F8			     sub di, ax
-3   636
+3   635
+3   636	02F0  2B F8			     sub di, ax
 3   637
-3   638	02F5  2B F8			     sub di, ax
-3   639
+3   638
+3   639	02F2  2B F8			     sub di, ax
 3   640
-3   641	02F7  2B F8			     sub di, ax
-3   642
+3   641
+3   642	02F4  2B F8			     sub di, ax
 3   643
-3   644	02F9  2B F8			     sub di, ax
-3   645
+3   644
+3   645	02F6  2B F8			     sub di, ax
 3   646
-3   647	02FB  2B F8			     sub di, ax
-3   648
+3   647
+3   648	02F8  2B F8			     sub di, ax
 3   649
-3   650	02FD  2B F8			     sub di, ax
-3   651
+3   650
+3   651	02FA  2B F8			     sub di, ax
 3   652
-3   653	02FF  2B F8			     sub di, ax
-3   654
+3   653
+3   654	02FC  2B F8			     sub di, ax
 3   655
-3   656	0301  2B F8			     sub di, ax
-3   657
+3   656
+3   657	02FE  2B F8			     sub di, ax
 3   658
-3   659	0303  2B F8			     sub di, ax
-3   660
+3   659
+3   660	0300  2B F8			     sub di, ax
 3   661
-3   662	0305  2B F8			     sub di, ax
-3   663
+3   662
+3   663	0302  2B F8			     sub di, ax
 3   664
-3   665	0307  2B F8			     sub di, ax
-3   666
+3   665
+3   666	0304  2B F8			     sub di, ax
 3   667
-3   668	0309  2B F8			     sub di, ax
-3   669
+3   668
+3   669	0306  2B F8			     sub di, ax
 3   670
-3   671	030B  2B F8			     sub di, ax
-3   672
+3   671
+3   672	0308  2B F8			     sub di, ax
 3   673
-3   674	030D  2B F8			     sub di, ax
-3   675
+3   674
+3   675	030A  2B F8			     sub di, ax
 3   676
-3   677	030F  2B F8			     sub di, ax
-3   678
+3   677
+3   678	030C  2B F8			     sub di, ax
 3   679
-3   680	0311  2B F8			     sub di, ax
-3   681
+3   680
+3   681	030E  2B F8			     sub di, ax
 3   682
-3   683	0313  2B F8			     sub di, ax
-3   684
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 13
+3   683
+3   684	0310  2B F8			     sub di, ax
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 13
 memcpy.asm
 
 
 
 3   685
-3   686	0315  2B F8			     sub di, ax
-3   687
+3   686
+3   687	0312  2B F8			     sub di, ax
 3   688
-3   689	0317  2B F8			     sub di, ax
-3   690
+3   689
+3   690	0314  2B F8			     sub di, ax
 3   691
-3   692	0319  2B F8			     sub di, ax
-3   693
+3   692
+3   693	0316  2B F8			     sub di, ax
 3   694
-3   695	031B  2B F8			     sub di, ax
-3   696
+3   695
+3   696	0318  2B F8			     sub di, ax
 3   697
-3   698	031D  2B F8			     sub di, ax
-3   699
-3   700
-3   701	031F  2B F8			     sub di, ax
-3   702
-2   703
-2   704	0321  8A CE			     mov cl, dh
-2   705	0323  32 ED			     xor ch, ch
-2   706
-2   707	0325  46			     inc si
-2   708
-2   709	0326			     @@Next:
-2   710	0326  80 F9 00			     cmp cl, 0
-2   711	0329  75 03			     jne not_smol_txt
-2   712
-2   713	032B  EB 22 90			     jmp smol_txt
-2   714
-2   715	032E			     not_smol_txt:
-2   716
-2   717	032E  B4 1E			     mov ah, 1Eh
+2   698
+2   699	031A  8A CE			     mov cl, dh
+2   700	031C  32 ED			     xor ch, ch
+2   701
+2   702	031E			     @@Next:
+2   703	031E  80 F9 00			     cmp cl, 0
+2   704	0321  75 03			     jne not_smol_txt
+2   705
+2   706	0323  EB 22 90			     jmp smol_txt
+2   707
+2   708	0326			     not_smol_txt:
+2   709
+2   710	0326  83 EF 0A			     sub di, 5 * 2
+2   711
+2   712	0329  B4 1E			     mov ah, 1Eh
+2   713
+2   714					     REPT 10
+2   715
+2   716					     lodsb
+2   717					     stosw
 2   718
-2   719					     REPT 10
-2   720
-2   721					     lodsb
-2   722					     stosw
-2   723
-2   724					     ENDM
-3   725
-3   726	0330  AC			     lodsb
-3   727	0331  AB			     stosw
+2   719					     ENDM
+3   720
+3   721	032B  AC			     lodsb
+3   722	032C  AB			     stosw
+3   723
+3   724
+3   725	032D  AC			     lodsb
+3   726	032E  AB			     stosw
+3   727
 3   728
-3   729
-3   730	0332  AC			     lodsb
-3   731	0333  AB			     stosw
+3   729	032F  AC			     lodsb
+3   730	0330  AB			     stosw
+3   731
 3   732
-3   733
-3   734	0334  AC			     lodsb
-3   735	0335  AB			     stosw
+3   733	0331  AC			     lodsb
+3   734	0332  AB			     stosw
+3   735
 3   736
-3   737
-3   738	0336  AC			     lodsb
-3   739	0337  AB			     stosw
+3   737	0333  AC			     lodsb
+3   738	0334  AB			     stosw
+3   739
 3   740
-3   741
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 14
+3   741	0335  AC			     lodsb
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 14
 memcpy.asm
 
 
 
-3   742	0338  AC			     lodsb
-3   743	0339  AB			     stosw
+3   742	0336  AB			     stosw
+3   743
 3   744
-3   745
-3   746	033A  AC			     lodsb
-3   747	033B  AB			     stosw
+3   745	0337  AC			     lodsb
+3   746	0338  AB			     stosw
+3   747
 3   748
-3   749
-3   750	033C  AC			     lodsb
-3   751	033D  AB			     stosw
+3   749	0339  AC			     lodsb
+3   750	033A  AB			     stosw
+3   751
 3   752
-3   753
-3   754	033E  AC			     lodsb
-3   755	033F  AB			     stosw
+3   753	033B  AC			     lodsb
+3   754	033C  AB			     stosw
+3   755
 3   756
-3   757
-3   758	0340  AC			     lodsb
-3   759	0341  AB			     stosw
-3   760
-3   761
-3   762	0342  AC			     lodsb
-3   763	0343  AB			     stosw
-3   764
+3   757	033D  AC			     lodsb
+3   758	033E  AB			     stosw
+3   759
+2   760
+2   761	033F  FE C9			     dec cl
+2   762	0341  81 C7 0096		     add di, (80 - 5) *	2
+2   763
+2   764	0345  EB D7			     jmp @@Next
 2   765
-2   766	0344  FE C9			     dec cl
-2   767	0346  81 C7 008C		     add di, (80 - 10) * 2
-2   768
-2   769	034A  EB DA			     jmp @@Next
-2   770
-2   771	034C  83 C7 05			     add di, 5
-2   772
-2   773	034F			     smol_txt:
-2   774	034F  8A C2			     mov al, dl
-2   775	0351  32 E4			     xor ah, ah
+2   766	0347			     smol_txt:
+2   767	0347  8A C2			     mov al, dl
+2   768	0349  32 E4			     xor ah, ah
+2   769
+2   770	034B  2B F8			     sub di, ax
+2   771
+2   772	034D  8B CA			     mov cx, dx
+2   773	034F  32 ED			     xor ch, ch
+2   774
+2   775	0351  B4 1E			     mov ah, 1Eh
 2   776
-2   777	0353  2B F8			     sub di, ax
+2   777	0353  83 E7 FE			     and di, 0FFFEh		     ; need even di
 2   778
-2   779	0355  8B CA			     mov cx, dx
-2   780	0357  32 ED			     xor ch, ch
-2   781	0359  49			     dec cx
+2   779	0356			     @@Next2:
+2   780	0356  83 F9 00			     cmp cx, 0
+2   781	0359  74 04			     je	@@ret			     ; cause loop incs cx
 2   782
-2   783	035A  B4 1E			     mov ah, 1Eh
-2   784
-2   785	035C  83 E7 FE			     and di, 0FFFEh		     ; need even di
+2   783	035B  AC			     lodsb
+2   784	035C  AB			     stosw
+2   785
 2   786
-2   787	035F			     @@Next2:
+2   787	035D  E2 F7			     loop @@Next2
 2   788
-2   789	035F  AC			     lodsb
-2   790	0360  AB			     stosw
-2   791
-2   792	0361  83 F9 00			     cmp cx, 0
-2   793	0364  74 02			     je	@@ret			     ; cause loop incs cx
-2   794
-2   795	0366  E2 F7			     loop @@Next2
-2   796
-2   797	0368  C3		     @@ret:  ret
-2   798	0369				     endp
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 15
+2   789	035F  C3		     @@ret:  ret
+2   790	0360				     endp
+1   791
+1   792
+1   793
+    794
+    795	0360  44 45 44 45 20 45	44+  frame   db	'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E',	'D'
+    796	      45 44
+    797	0369  01 02 03 24	     jopa    db	1, 2, 3, '$'
+    798	036D  08 05 05 05 05 05	05+  outl    db	8, 5, 5, 5, 5, 5, 5, 5,	5
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 15
 memcpy.asm
 
 
 
-1   799
-1   800
-1   801
-    802
-    803	0369  44 45 44 45 20 45	44+  frame   db	'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E',	'D'
-    804	      45 44
-    805	0372  01 02 03 24	     jopa    db	1, 2, 3, '$'
-    806	0376  08 05 05 05 05 05	05+  outl    db	8, 5, 5, 5, 5, 5, 5, 5,	5, 5, '#'
-    807	      05 05 05 23
-    808
-    809				     end     Start
-Turbo Assembler	 Version 4.1	    02/28/23 18:22:23	    Page 16
+    799	      05 05
+    800
+    801				     end     Start
+Turbo Assembler	 Version 4.1	    03/03/23 20:34:12	    Page 16
 Symbol Table
 
 
@@ -890,16 +882,16 @@ Symbol Table
 
 Symbol Name			  Type	 Value
 
-??DATE				  Text	 "02/28/23"
+??DATE				  Text	 "03/03/23"
 ??FILENAME			  Text	 "memcpy  "
-??TIME				  Text	 "18:22:23"
+??TIME				  Text	 "20:34:12"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
 @@NEXT				  Near	 DGROUP:0127
 @@NEXT				  Near	 DGROUP:01BC
-@@NEXT				  Near	 DGROUP:0326
-@@NEXT2				  Near	 DGROUP:035F
-@@RET				  Near	 DGROUP:0368
+@@NEXT				  Near	 DGROUP:031E
+@@NEXT2				  Near	 DGROUP:0356
+@@RET				  Near	 DGROUP:035F
 @CODE				  Text	 DGROUP
 @CODESIZE			  Text	 0
 @CPU				  Text	 0101H
@@ -913,13 +905,13 @@ Symbol Name			  Type	 Value
 @WORDSIZE			  Text	 2
 BORDER				  Near	 DGROUP:0163
 FOUT				  Near	 DGROUP:0132
-FRAME				  Byte	 DGROUP:0369
-JOPA				  Byte	 DGROUP:0372
+FRAME				  Byte	 DGROUP:0360
+JOPA				  Byte	 DGROUP:0369
 MEMCPY				  Near	 DGROUP:011B
-NOT_SMOL_TXT			  Near	 DGROUP:032E
+NOT_SMOL_TXT			  Near	 DGROUP:0326
 NOT_SMOL_TXT1			  Near	 DGROUP:01D6
-OUTL				  Byte	 DGROUP:0376
-SMOL_TXT			  Near	 DGROUP:034F
+OUTL				  Byte	 DGROUP:036D
+SMOL_TXT			  Near	 DGROUP:0347
 START				  Near	 DGROUP:0100
 STRING				  Near	 DGROUP:01B2
 TEXT				  Near	 DGROUP:01C7
@@ -929,5 +921,5 @@ Groups & Segments		  Bit Size Align  Combine Class
 
 DGROUP				  Group
   _DATA				  16  0000 Word	  Public  DATA
-  _TEXT				  16  0381 Word	  Public  CODE
+  _TEXT				  16  0376 Word	  Public  CODE
 

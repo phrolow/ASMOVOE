@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    03/03/23 17:13:50	    Page 1
+Turbo Assembler	 Version 4.1	    03/03/23 20:47:21	    Page 1
 vzlomzho.asm
 
 
@@ -8,16 +8,16 @@ vzlomzho.asm
       3	0000			     .code
       4				     org 100h
       5
-      6	0100  EB 2A 90		     Start:  jmp EOP
+      6	0100  EB 26 90		     Start:  jmp EOP
       7
       8	0103			     New09   proc
       9	0103  50 53 06			     push ax bx	es				     ;copy data
      10
      11	0106  BB B800			     mov bx, 0b800h
      12	0109  8E C3			     mov es, bx					     ; video mem
-     13	010B  BB 0376			     mov bx, 160d * 5 +	86d			     ; in the middle of	screen
-     14
-     15	010E  B4 CE			     mov ah, 0CEh				      ;	colors
+     13	010B  B4 CE			     mov ah, 0CEh				      ;	colors
+     14	010D  BB 0376			     mov bx, 160d * 5 +	86d			     ; in the middle of	screen
+     15
      16	0110  E4 60			     in	al, 60h					     ; 60h -> al
      17	0112  26: 89 07			     mov es:[bx], ax				     ; print it	un video mem
      18
@@ -27,51 +27,48 @@ vzlomzho.asm
      22	011B  24 7F			     and al, not 80h
      23	011D  E6 61			     out 61h, al
      24
-     25	011F  B0 20			     mov al, 20h				     ; end of interrupt
-     26	0121  E6 20			     out 20h, al
-     27
-     28	0123  07 5B 58			     pop es bx ax
-     29
-     30	0126  EA				     db	0eah
-     31	0127  0000		     Old09Ofs	     dw	0h
-     32	0129  0000		     Old09Seg	     dw	0h
+     25	011F  07 5B 58			     pop es bx ax
+     26
+     27	0122  EA				     db	0eah
+     28	0123  0000		     Old09Ofs	     dw	0h
+     29	0125  0000		     Old09Seg	     dw	0h
+     30
+     31	0127  CF			     iret
+     32	0128				     endp
      33
-     34	012B  CF			     iret
-     35	012C				     endp
-     36
-     37	012C  FA		     EOP:    cli
-     38
-     39	012D  33 DB			     xor bx, bx
-     40	012F  8E C3			     mov es, bx
-     41	0131  BB 0024			     mov bx, 4 * 9				     ; 8 interruption -	keyboard
-     42
-     43	0134  26: 8B 07			     mov ax, es:[bx]
-     44	0137  A3 0127r			     mov Old09Ofs, ax				     ; old interrupt
-     45	013A  26: C7 07	0103r		     mov es:[bx], offset New09			     ; change on new version
-     46
-     47	013F  83 C3 02			     add bx, 2
-     48	0142  26: 8B 07			     mov ax, es:[bx]
-     49	0145  A3 0129r			     mov Old09Seg, ax				     ; pointer on segment
-     50	0148  8C C8			     mov ax, cs
-     51	014A  26: 89 07			     mov es:[bx], ax				     ; NewSegment
+     34	0128  FA		     EOP:    cli
+     35
+     36	0129  33 DB			     xor bx, bx
+     37	012B  8E C3			     mov es, bx
+     38	012D  BB 0024			     mov bx, 4 * 9				     ; 8 interruption -	keyboard
+     39
+     40	0130  26: 8B 07			     mov ax, es:[bx]
+     41	0133  A3 0123r			     mov Old09Ofs, ax				     ; old interrupt
+     42	0136  26: C7 07	0103r		     mov es:[bx], offset New09			     ; change on new version
+     43
+     44	013B  83 C3 02			     add bx, 2
+     45	013E  26: 8B 07			     mov ax, es:[bx]
+     46	0141  A3 0125r			     mov Old09Seg, ax				     ; pointer on segment
+     47	0144  8C C8			     mov ax, cs
+     48	0146  26: 89 07			     mov es:[bx], ax				     ; NewSegment
+     49
+     50	0149  FB			     sti
+     51
      52
-     53	014D  FB			     sti
-     54
-     55
-     56
-     57	014E  B8 3100			     mov ax, 3100h
-Turbo Assembler	 Version 4.1	    03/03/23 17:13:50	    Page 2
+     53
+     54	014A  B8 3100			     mov ax, 3100h
+     55	014D  BA 0128r			     mov dx, offset EOP
+     56	0150  C1 EA 04			     shr dx, 4
+     57	0153  42			     inc dx
+Turbo Assembler	 Version 4.1	    03/03/23 20:47:21	    Page 2
 vzlomzho.asm
 
 
 
-     58	0151  BA 012Cr			     mov dx, offset EOP
-     59	0154  C1 EA 04			     shr dx, 4
-     60	0157  42			     inc dx
-     61	0158  CD 21			     int 21h
-     62
-     63				     end     Start
-Turbo Assembler	 Version 4.1	    03/03/23 17:13:50	    Page 3
+     58	0154  CD 21			     int 21h
+     59
+     60				     end     Start
+Turbo Assembler	 Version 4.1	    03/03/23 20:47:21	    Page 3
 Symbol Table
 
 
@@ -81,7 +78,7 @@ Symbol Name			  Type	 Value
 
 ??DATE				  Text	 "03/03/23"
 ??FILENAME			  Text	 "vzlomzho"
-??TIME				  Text	 "17:13:50"
+??TIME				  Text	 "20:47:20"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
 @CODE				  Text	 DGROUP
@@ -95,15 +92,15 @@ Symbol Name			  Type	 Value
 @MODEL				  Text	 1
 @STACK				  Text	 DGROUP
 @WORDSIZE			  Text	 2
-EOP				  Near	 DGROUP:012C
+EOP				  Near	 DGROUP:0128
 NEW09				  Near	 DGROUP:0103
-OLD09OFS			  Word	 DGROUP:0127
-OLD09SEG			  Word	 DGROUP:0129
+OLD09OFS			  Word	 DGROUP:0123
+OLD09SEG			  Word	 DGROUP:0125
 START				  Near	 DGROUP:0100
 
 Groups & Segments		  Bit Size Align  Combine Class
 
 DGROUP				  Group
   _DATA				  16  0000 Word	  Public  DATA
-  _TEXT				  16  015A Word	  Public  CODE
+  _TEXT				  16  0156 Word	  Public  CODE
 

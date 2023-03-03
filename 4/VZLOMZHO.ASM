@@ -22,9 +22,6 @@ New09   proc
         and al, not 80h
         out 61h, al
 
-        mov al, 20h                                     ; end of interrupt
-        out 20h, al
-
         pop es bx ax
 
                 db 0eah
@@ -51,8 +48,6 @@ EOP:    cli
         mov es:[bx], ax                                 ; NewSegment
 
         sti
-
-        
 
         mov ax, 3100h
         mov dx, offset EOP

@@ -23,13 +23,15 @@ Start:  mov si, 80h
         sub bl, 9                       ; length minus char of our custom border
 
         mov di, offset cbrd
+     
+        mov cx, 9
 
-        REPT 9
+ReadCustom:
 
         lodsb
         stosb
 
-        ENDM
+        loop ReadCustom
 
 ncbrd:  sub bl, 1
 
@@ -58,11 +60,13 @@ ncbrd:  sub bl, 1
 
         mov cl, dh
 
-        REPT 160
+        mov bp, cx
 
-        sub di, cx                      ; y of lt 
+        mov cx, word ptr 80 * 2
 
-        ENDM                            ; di to start
+lty:    sub di, bp                      ; y of lt 
+
+        loop lty                        ; di to start
 
         add dh, 5
 
@@ -100,9 +104,8 @@ custom:
 
 not_custom:
 
-        inc si
-        dec bl
-        dec bl
+        add si, 2
+        sub bl, 3
 
         xor ah, ah
         mov al, bl
@@ -122,7 +125,7 @@ not_custom:
         include text.asi
 
 cbrd    db   ?,   ?,   ?,   ?,   ?,   ?,   ?,   ?,   ?  ; custom border
-brd1    db 40h, 40h, 40h, 40h, 00h, 40h, 40h, 40h, 40h
+brd1    db 0C9h, 0CDh, 0BBh, 0BAh, 00h, 0BAh, 0C8h, 0CDh, 0BCh
 brd2    db 80h, 80h, 80h, 80h, 00h, 80h, 80h, 80h, 80h
 brd3    db 1Eh, 1Eh, 1Eh, 1Eh, 00h, 1Eh, 1Eh, 1Eh, 1Eh
 brd4    db 40h, 40h, 40h, 40h, 00h, 40h, 40h, 40h, 40h

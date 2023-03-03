@@ -15,11 +15,17 @@ not_smol_txt1:
         xor ah, ah
         mov al, dh
 
-        REPT 160
+        mov bp, cx
+
+        mov cx, word ptr 80 * 2
+
+Height:
         
         sub di, ax
 
-        ENDM
+        loop Height
+
+        mov cx, bp
 
         mov cl, dh
         xor ch, ch
@@ -36,12 +42,18 @@ not_smol_txt:
 
         mov ah, 1Eh
 
-        REPT 10
+        mov bp, cx
+
+        mov cx, word ptr 10
+
+WriteLine:
 
         lodsb
         stosw
 
-        ENDM
+        loop WriteLine
+
+        mov cx, bp
 
         dec cl
         add di, (80 - 5) * 2
