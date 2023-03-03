@@ -1,61 +1,63 @@
-; task was to set a resident into program
-
 .286
 .model tiny
 .code
 org 100h
-locals @@
 
-Start:          jmp EOP
+Start:  jmp EOP
 
-New09           proc
+New09   proc
+        push ax bx es                                   ;copy data
 
-                push ax bx es
+        mov bx, 0b800h
+        mov es, bx                                      ; video mem
+        mov ah, 0CEh                                     ; colors
+        mov bx, 160d * 5 + 86d                          ; in the middle of screen
 
-                mov bx, 0B800h
-                mov es, bx
-                mov bx, 80 * 25
+        in al, 60h                                      ; 60h -> al
+        mov es:[bx], ax                                 ; print it un video mem
 
-                mov es:[bx], 1E41h
+        in al, 61h                                      ; blinking
+        or al, 80h
+        out 61h, al
+        and al, not 80h
+        out 61h, al
 
-                mov al, 20h
-                out 20h, al
+        mov al, 20h                                     ; end of interrupt
+        out 20h, al
 
-                pop es bx ax
+        pop es bx ax
 
-                db 0EAh
+                db 0eah
+Old09Ofs        dw 0h
+Old09Seg        dw 0h
 
-Old09Ofs        dw 0
-Old09Seg        dw 0
-                
-                iret
-                endp
+        iret
+        endp
 
-EOP:            cli
+EOP:    cli
 
-                xor bx, bx
-                mov es, bx
-                mov bx, 4 * 9                           ; to int table
+        xor bx, bx
+        mov es, bx
+        mov bx, 4 * 9                                   ; 8 interruption - keyboard
+        
+        mov ax, es:[bx]
+        mov Old09Ofs, ax                                ; old interrupt
+        mov es:[bx], offset New09                       ; change on new version
 
-                mov ax, es:[bx]
-                mov Old09Ofs, ax
-                mov es:[bx], offset New09
+        add bx, 2
+        mov ax, es:[bx]
+        mov Old09Seg, ax                                ; pointer on segment
+        mov ax, cs
+        mov es:[bx], ax                                 ; NewSegment
 
-                add bx, 2
+        sti
 
-                mov ax, es:[bx]
-                mov Old09Seg, ax
-                mov ax, cs
-                mov es:[bx], ax
+        
 
-                sti
+        mov ax, 3100h
+        mov dx, offset EOP
+        shr dx, 4
+        inc dx
+        int 21h
 
-                ;jmp New09
-
-                mov ax, 3100h
-                mov dx, offset EOP
-                shr dx, 4
-                inc dx
-                int 21h
-
-end             Start
+end     Start

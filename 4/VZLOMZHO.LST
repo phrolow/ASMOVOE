@@ -1,75 +1,77 @@
-Turbo Assembler	 Version 4.1	    03/03/23 04:04:22	    Page 1
+Turbo Assembler	 Version 4.1	    03/03/23 17:13:50	    Page 1
 vzlomzho.asm
 
 
 
-      1				     ; task was	to set a resident into program
-      2
-      3				     .286
-      4	0000			     .model tiny
-      5	0000			     .code
-      6				     org 100h
-      7				     locals @@
-      8
-      9	0100  EB 1E 90		     Start:	     jmp EOP
+      1				     .286
+      2	0000			     .model tiny
+      3	0000			     .code
+      4				     org 100h
+      5
+      6	0100  EB 2A 90		     Start:  jmp EOP
+      7
+      8	0103			     New09   proc
+      9	0103  50 53 06			     push ax bx	es				     ;copy data
      10
-     11	0103			     New09	     proc
-     12
-     13	0103  50 53 06				     push ax bx	es
+     11	0106  BB B800			     mov bx, 0b800h
+     12	0109  8E C3			     mov es, bx					     ; video mem
+     13	010B  BB 0376			     mov bx, 160d * 5 +	86d			     ; in the middle of	screen
      14
-     15	0106  BB B800				     mov bx, 0B800h
-     16	0109  8E C3				     mov es, bx
-     17	010B  BB 07D0				     mov bx, 80	* 25
+     15	010E  B4 CE			     mov ah, 0CEh				      ;	colors
+     16	0110  E4 60			     in	al, 60h					     ; 60h -> al
+     17	0112  26: 89 07			     mov es:[bx], ax				     ; print it	un video mem
      18
-     19	010E  26: C7 07	1E41			     mov es:[bx], 1E41h
-     20
-     21	0113  B0 20				     mov al, 20h
-     22	0115  E6 20				     out 20h, al
-     23
-     24	0117  07 5B 58				     pop es bx ax
-     25
-     26	011A  EA				     db	0EAh
+     19	0115  E4 61			     in	al, 61h					     ; blinking
+     20	0117  0C 80			     or	al, 80h
+     21	0119  E6 61			     out 61h, al
+     22	011B  24 7F			     and al, not 80h
+     23	011D  E6 61			     out 61h, al
+     24
+     25	011F  B0 20			     mov al, 20h				     ; end of interrupt
+     26	0121  E6 20			     out 20h, al
      27
-     28	011B  0000		     Old09Ofs	     dw	0
-     29	011D  0000		     Old09Seg	     dw	0
-     30
-     31	011F  CF				     iret
-     32	0120					     endp
+     28	0123  07 5B 58			     pop es bx ax
+     29
+     30	0126  EA				     db	0eah
+     31	0127  0000		     Old09Ofs	     dw	0h
+     32	0129  0000		     Old09Seg	     dw	0h
      33
-     34	0120  FA		     EOP:	     cli
-     35
-     36	0121  33 DB				     xor bx, bx
-     37	0123  8E C3				     mov es, bx
-     38	0125  BB 0024				     mov bx, 4 * 9			     ; to int table
-     39
-     40	0128  26: 8B 07				     mov ax, es:[bx]
-     41	012B  A3 011Br				     mov Old09Ofs, ax
-     42	012E  26: C7 07	0103r			     mov es:[bx], offset New09
-     43
-     44	0133  83 C3 02				     add bx, 2
-     45
-     46	0136  26: 8B 07				     mov ax, es:[bx]
-     47	0139  A3 011Dr				     mov Old09Seg, ax
-     48	013C  8C C8				     mov ax, cs
-     49	013E  26: 89 07				     mov es:[bx], ax
-     50
-     51	0141  FB				     sti
+     34	012B  CF			     iret
+     35	012C				     endp
+     36
+     37	012C  FA		     EOP:    cli
+     38
+     39	012D  33 DB			     xor bx, bx
+     40	012F  8E C3			     mov es, bx
+     41	0131  BB 0024			     mov bx, 4 * 9				     ; 8 interruption -	keyboard
+     42
+     43	0134  26: 8B 07			     mov ax, es:[bx]
+     44	0137  A3 0127r			     mov Old09Ofs, ax				     ; old interrupt
+     45	013A  26: C7 07	0103r		     mov es:[bx], offset New09			     ; change on new version
+     46
+     47	013F  83 C3 02			     add bx, 2
+     48	0142  26: 8B 07			     mov ax, es:[bx]
+     49	0145  A3 0129r			     mov Old09Seg, ax				     ; pointer on segment
+     50	0148  8C C8			     mov ax, cs
+     51	014A  26: 89 07			     mov es:[bx], ax				     ; NewSegment
      52
-     53						     ;jmp New09
+     53	014D  FB			     sti
      54
-     55	0142  B8 3100				     mov ax, 3100h
-     56	0145  BA 0120r				     mov dx, offset EOP
-     57	0148  C1 EA 04				     shr dx, 4
-Turbo Assembler	 Version 4.1	    03/03/23 04:04:22	    Page 2
+     55
+     56
+     57	014E  B8 3100			     mov ax, 3100h
+Turbo Assembler	 Version 4.1	    03/03/23 17:13:50	    Page 2
 vzlomzho.asm
 
 
 
-     58	014B  42				     inc dx
-     59	014C  CD 21				     int 21h
-     60
-     61				     end	     Start
-Turbo Assembler	 Version 4.1	    03/03/23 04:04:22	    Page 3
+     58	0151  BA 012Cr			     mov dx, offset EOP
+     59	0154  C1 EA 04			     shr dx, 4
+     60	0157  42			     inc dx
+     61	0158  CD 21			     int 21h
+     62
+     63				     end     Start
+Turbo Assembler	 Version 4.1	    03/03/23 17:13:50	    Page 3
 Symbol Table
 
 
@@ -79,7 +81,7 @@ Symbol Name			  Type	 Value
 
 ??DATE				  Text	 "03/03/23"
 ??FILENAME			  Text	 "vzlomzho"
-??TIME				  Text	 "04:04:22"
+??TIME				  Text	 "17:13:50"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
 @CODE				  Text	 DGROUP
@@ -93,15 +95,15 @@ Symbol Name			  Type	 Value
 @MODEL				  Text	 1
 @STACK				  Text	 DGROUP
 @WORDSIZE			  Text	 2
-EOP				  Near	 DGROUP:0120
+EOP				  Near	 DGROUP:012C
 NEW09				  Near	 DGROUP:0103
-OLD09OFS			  Word	 DGROUP:011B
-OLD09SEG			  Word	 DGROUP:011D
+OLD09OFS			  Word	 DGROUP:0127
+OLD09SEG			  Word	 DGROUP:0129
 START				  Near	 DGROUP:0100
 
 Groups & Segments		  Bit Size Align  Combine Class
 
 DGROUP				  Group
   _DATA				  16  0000 Word	  Public  DATA
-  _TEXT				  16  014E Word	  Public  CODE
+  _TEXT				  16  015A Word	  Public  CODE
 
