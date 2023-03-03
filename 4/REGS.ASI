@@ -1,0 +1,35 @@
+New09   proc
+        push ax bx es bp                                ;copy data
+        mov bp, sp
+
+        mov bx, 0b800h
+        mov es, bx                                      ; video mem
+        mov bx, 25 * 80 - 4                             ; in the middle of screen
+
+        in al, 60h                                      ; 60h -> al
+        cmp al, 2
+        jne skip
+
+        mov ax, [bp + 10]
+
+        call hexout
+
+skip:   in al, 61h                                      ; blinking
+        or al, 80h
+        out 61h, al
+        and al, not 80h
+        out 61h, al
+
+        mov al, 20h                                     ; end of interrupt
+        out 20h, al
+
+        pop bp es bx ax
+
+                db 0eah
+Old09Ofs        dw 0h
+Old09Seg        dw 0h
+
+        iret
+        endp
+
+include hexout.asi
