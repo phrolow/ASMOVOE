@@ -19,10 +19,14 @@ NextChar:   inc cx
             cmp al, 0Dh
             je NewLine
 
+            cmp cx, 10
+            je FilledLine
+
             jmp NextChar
 
 NewLine:    dec cl
-            mov [di], cl
+
+FilledLine: mov [di], cl
             inc di
             xor cx, cx
 
@@ -72,6 +76,15 @@ DontUp:     mov cl, dh
 
 WriteLine:  mov dx, [bx]
 
+            mov al, [si]
+            cmp al, 2
+            jne NotSeparator
+
+            lodsb
+
+NotSeparator:
+
+            xor dh, dh
             sub di, dx
             and di, 0FFFEh                  ; line must be in mid
 
@@ -89,15 +102,16 @@ WriteChar:  lodsb
             sub di, dx
 
             and dx, 01h
-            cmp dx, 1
-            jne @@even
+            cmp dx, 0
+            jne @@odd
 
-            dec di
-            dec bx
+            inc di
 
-            add di, 80
+@@odd:      inc bx
 
-@@even:     loop WriteLine
+            add di, 80 * 2
+
+loop WriteLine
 
             ret
             endp
