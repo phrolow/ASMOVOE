@@ -6,7 +6,7 @@
 ;===============================================;
 
 Hexout	proc
-	push cx
+	push cx di
 
 	mov di, 0B800h
 	mov es, di
@@ -49,6 +49,6 @@ Hexout	proc
 
 	loop @@Next
 	
-	pop cx
+	pop di cx
 	ret
 	endp

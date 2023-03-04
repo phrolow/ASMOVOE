@@ -6,9 +6,11 @@ locals @@
 
 org 100h
 
-Start:  jmp EOP
+Start:  jmp MakeResident
 
 include regs.asi
+
+MakeResident:    
 
 EOP:    cli
 
@@ -31,7 +33,7 @@ EOP:    cli
         mov ax, 3100h
         mov dx, offset EOP
         shr dx, 4
-        inc dx
+        add dx, 2
         int 21h
 
 end     Start
