@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    03/03/23 20:31:03	    Page 1
+Turbo Assembler	 Version 4.1	    03/04/23 07:45:47	    Page 1
 memchr.asm
 
 
@@ -10,262 +10,275 @@ memchr.asm
       5
       6				     locals @@
       7
-      8	0100  E8 008A		     Start:  call frm
-      9
-     10	0103  50 55 8B EC C7 46	02+	     push 4				 ; length
-     11	      0004 5D
-     12
-     13	010D  50 55 8B EC C7 46	02+	     push 1			       ; char to search
-     14	      0001 5D
+      8	0100  B4 0A		     Start:  mov ah, 0Ah
+      9	0102  BA 0235r			     mov dx, offset args
+     10	0105  CD 21			     int 21h
+     11
+     12	0107  B4 0A			     mov ah, 0Ah
+     13	0109  BA 0224r			     mov dx, offset jopa
+     14	010C  CD 21			     int 21h
      15
-     16	0117  B8 0215r			     mov ax, offset jopa		 ; ptr to mem
-     17	011A  50			     push ax
-     18
-     19	011B  E8 0054			     call memchr
-     20
-     21	011E  83 FE 00			     cmp si, 0
-     22	0121  74 05			     je	nullptr
-     23
-     24	0123  81 EE 0215r		     sub si, offset jopa
-     25	0127  46			     inc si
-     26
-     27	0128			     nullptr:
-     28	0128  4E			     dec si
-     29
-     30	0129  8B C6			     mov ax, si
-     31	012B  BB 07CC			     mov bx, (40 * 25 -	2) * 2
-     32
-     33	012E  E8 0005			     call hexout
-     34
-     35	0131  B8 4C00			     mov ax, 04C00h
-     36	0134  CD 21			     int 21h
-     37
-     38				     include hexout.asi
-1    39				     ;===============================================;
-1    40				     ; Uses: ax, bx								     ;
-1    41				     ; Destroys: cx, es, di						     ;
-1    42				     ; Returns:										     ;
-1    43				     ; Expects:	num in ax, start of label in bx		     ;
-1    44				     ;===============================================;
-1    45
-1    46	0136			     Hexout  proc
-1    47
-1    48	0136  BF B800			     mov di, 0B800h
-1    49	0139  8E C7			     mov es, di
-1    50	013B  8B FB			     mov di, bx		     ; set vm to line begin (dx)
-1    51
-1    52	013D  B9 0004			     mov cx, word ptr 4	     ; we output 4 chars
-1    53
-1    54	0140  BB 000F		     @@Next: mov bx, 0Fh	     ; bit mask
-1    55
-1    56	0143  FE C9			     dec cl
-1    57
-Turbo Assembler	 Version 4.1	    03/03/23 20:31:03	    Page 2
+     16	010E  E8 008B			     call frm
+     17
+     18	0111  BB 0235r			     mov bx, offset args
+     19	0114  8B 47 02			     mov ax, [bx + 2]
+     20	0117  32 E4			     xor ah, ah
+     21	0119  50			     push ax				      ;	length
+     22
+     23	011A  BB 0235r			     mov bx, offset args
+     24	011D  8B 47 04			     mov ax, [bx + 4]
+     25	0120  32 E4			     xor ah, ah
+     26	0122  50			     push ax				      ;	char to	search
+     27
+     28	0123  B8 0224r			     mov ax, offset jopa		     ; ptr to mem
+     29	0126  05 0002			     add ax, 2
+     30	0129  50			     push ax
+     31
+     32	012A  E8 0054			     call memchr
+     33
+     34	012D  83 FE 00			     cmp si, 0
+     35	0130  74 05			     je	nullptr
+     36
+     37	0132  81 EE 0224r		     sub si, offset jopa
+     38	0136  4E			     dec si
+     39
+     40	0137			     nullptr:
+     41	0137  4E			     dec si
+     42
+     43	0138  8B C6			     mov ax, si
+     44	013A  BB 07CC			     mov bx, (40 * 25 -	2) * 2
+     45
+     46	013D  E8 0005			     call hexout
+     47
+     48	0140  B8 4C00			     mov ax, 04C00h
+     49	0143  CD 21			     int 21h
+     50
+     51				     include hexout.asi
+1    52				     ;===============================================;
+1    53				     ; Uses: ax, bx								     ;
+1    54				     ; Destroys: cx, es, di						     ;
+1    55				     ; Returns:										     ;
+1    56				     ; Expects:	num in ax, start of label in bx		     ;
+1    57				     ;===============================================;
+Turbo Assembler	 Version 4.1	    03/04/23 07:45:47	    Page 2
 memchr.asm
 
 
 
-1    58	0145  D3 E3			     shl bx, cl
-1    59	0147  D3 E3			     shl bx, cl
-1    60	0149  D3 E3			     shl bx, cl
-1    61	014B  D3 E3			     shl bx, cl
-1    62
-1    63	014D  23 D8			     and bx, ax
+1    58
+1    59	0145			     Hexout  proc
+1    60
+1    61	0145  BF B800			     mov di, 0B800h
+1    62	0148  8E C7			     mov es, di
+1    63	014A  8B FB			     mov di, bx		     ; set vm to line begin (dx)
 1    64
-1    65	014F  D3 EB			     shr bx, cl
-1    66	0151  D3 EB			     shr bx, cl
-1    67	0153  D3 EB			     shr bx, cl
-1    68	0155  D3 EB			     shr bx, cl
-1    69
-1    70	0157  FE C1			     inc cl		     ; getting the letter
-1    71
-1    72	0159  83 FB 0A			     cmp bx, 0Ah	     ; is char decimal
-1    73	015C  72 06			     jb	@@Dec
-1    74
-1    75	015E  83 C3 37			     add bx, 'A' - 10d	     ; if char not decimal
-1    76
-1    77	0161  EB 04 90			     jmp @@Out
-1    78
-1    79	0164  83 C3 30		     @@Dec:  add bx, '0'	     ; if char is decimal
-1    80
-1    81	0167  B7 4B		     @@Out:  mov bh, 4Bh
+1    65	014C  B9 0004			     mov cx, word ptr 4	     ; we output 4 chars
+1    66
+1    67	014F  BB 000F		     @@Next: mov bx, 0Fh	     ; bit mask
+1    68
+1    69	0152  FE C9			     dec cl
+1    70
+1    71	0154  D3 E3			     shl bx, cl
+1    72	0156  D3 E3			     shl bx, cl
+1    73	0158  D3 E3			     shl bx, cl
+1    74	015A  D3 E3			     shl bx, cl
+1    75
+1    76	015C  23 D8			     and bx, ax
+1    77
+1    78	015E  D3 EB			     shr bx, cl
+1    79	0160  D3 EB			     shr bx, cl
+1    80	0162  D3 EB			     shr bx, cl
+1    81	0164  D3 EB			     shr bx, cl
 1    82
-1    83	0169  26: 89 1D			     mov es:[di], bx	     ; output
+1    83	0166  FE C1			     inc cl		     ; getting the letter
 1    84
-1    85	016C  83 C7 02			     add di, 2
-1    86
-1    87	016F  E2 CF			     loop @@Next
-1    88
-1    89	0171  C3			     ret
-1    90	0172				     endp
-     91				     include memchr.asi
-1    92				     ; void *memchr(const void *buffer,	int ch,	size_t count);
+1    85	0168  83 FB 0A			     cmp bx, 0Ah	     ; is char decimal
+1    86	016B  72 06			     jb	@@Dec
+1    87
+1    88	016D  83 C3 37			     add bx, 'A' - 10d	     ; if char not decimal
+1    89
+1    90	0170  EB 04 90			     jmp @@Out
+1    91
+1    92	0173  83 C3 30		     @@Dec:  add bx, '0'	     ; if char is decimal
 1    93
-1    94	0172			     memchr  proc
-1    95	0172  55			     push bp
-1    96	0173  8B EC			     mov bp, sp
+1    94	0176  B7 4B		     @@Out:  mov bh, 4Bh
+1    95
+1    96	0178  26: 89 1D			     mov es:[di], bx	     ; output
 1    97
-1    98	0175  8B 76 04			     mov si, [bp + 4]
+1    98	017B  83 C7 02			     add di, 2
 1    99
-1   100	0178  8B 5E 06			     mov bx, [bp + 6]
+1   100	017E  E2 CF			     loop @@Next
 1   101
-1   102	017B  8B 4E 08			     mov cx, [bp + 8]
-1   103
-1   104	017E  AC		     @@Next: lodsb
-1   105
-1   106	017F  3A C3			     cmp al, bl
-1   107	0181  74 05			     je	to_ret
-1   108
-1   109	0183  E2 F9			     loop @@Next
+1   102	0180  C3			     ret
+1   103	0181				     endp
+    104				     include memchr.asi
+1   105				     ; void *memchr(const void *buffer,	int ch,	size_t count);
+1   106
+1   107	0181			     memchr  proc
+1   108	0181  55			     push bp
+1   109	0182  8B EC			     mov bp, sp
 1   110
-1   111	0185  BE 0001			     mov si, 1
+1   111	0184  8B 76 04			     mov si, [bp + 4]
 1   112
-1   113	0188  4E		     to_ret: dec si
+1   113	0187  8B 5E 06			     mov bx, [bp + 6]
 1   114
-Turbo Assembler	 Version 4.1	    03/03/23 20:31:03	    Page 3
+Turbo Assembler	 Version 4.1	    03/04/23 07:45:47	    Page 3
 memchr.asm
 
 
 
-1   115	0189  8B E5			     mov sp, bp
-1   116	018B  5D			     pop bp
-1   117	018C  C3			     ret
-1   118	018D				     endp
-    119				     include stdfrm.asi
-1   120	018D			     frm     proc
-1   121	018D  55			     push bp
-1   122	018E  8B EC			     mov bp, sp
+1   115	018A  8B 4E 08			     mov cx, [bp + 8]
+1   116
+1   117	018D  AC		     @@Next: lodsb
+1   118
+1   119	018E  3A C3			     cmp al, bl
+1   120	0190  74 05			     je	to_ret
+1   121
+1   122	0192  E2 F9			     loop @@Next
 1   123
-1   124	0190  B4 1E			     mov ah, 1Eh
+1   124	0194  BE 0001			     mov si, 1
 1   125
-1   126	0192  BF B800			     mov di, 0B800h
-1   127	0195  8E C7			     mov es, di
-1   128
-1   129	0197  BF 0334			     mov di, (80 * 5 + 10) * 2
-1   130
-1   131	019A  B6 0F			     mov dh, 15
-1   132	019C  B2 3C			     mov dl, 60
-1   133
-1   134	019E  BE 020Cr			     mov si, offset frame
-1   135
-1   136	01A1  E8 0004			     call Border
-1   137
-1   138	01A4  8B E5			     mov sp, bp
-1   139	01A6  5D			     pop bp
-1   140	01A7  C3			     ret
-1   141	01A8				     endp
-1   142
-1   143				     include bordre.asi
-2   144				     ;
-2   145				     ; args - ah, di, dl, si
-2   146				     ; ah - attribute
-2   147				     ; di - start
-2   148				     ; dl - width
-2   149				     ; si - border source
-2   150				     ; dh - height
-2   151				     ; destroys	- dohuya
-2   152				     ;
-2   153
-2   154	01A8			     Border  proc
-2   155	01A8  55			     push bp
-2   156	01A9  8B EC			     mov bp, sp
-2   157
-2   158	01AB  55			     push bp
-2   159
-2   160	01AC  E8 0048			     call String
-2   161
-2   162	01AF  81 C7 00A0		     add di, 80	* 2
-2   163
-2   164	01B3  32 FF			     xor bh, bh
-2   165	01B5  8A DA			     mov bl, dl
+1   126	0197  4E		     to_ret: dec si
+1   127
+1   128	0198  8B E5			     mov sp, bp
+1   129	019A  5D			     pop bp
+1   130	019B  C3			     ret
+1   131	019C				     endp
+    132				     include stdfrm.asi
+1   133	019C			     frm     proc
+1   134	019C  55			     push bp
+1   135	019D  8B EC			     mov bp, sp
+1   136
+1   137	019F  B4 1E			     mov ah, 1Eh
+1   138
+1   139	01A1  BF B800			     mov di, 0B800h
+1   140	01A4  8E C7			     mov es, di
+1   141
+1   142	01A6  BF 0334			     mov di, (80 * 5 + 10) * 2
+1   143
+1   144	01A9  B6 0F			     mov dh, 15
+1   145	01AB  B2 3C			     mov dl, 60
+1   146
+1   147	01AD  BE 021Br			     mov si, offset frame
+1   148
+1   149	01B0  E8 0004			     call Border
+1   150
+1   151	01B3  8B E5			     mov sp, bp
+1   152	01B5  5D			     pop bp
+1   153	01B6  C3			     ret
+1   154	01B7				     endp
+1   155
+1   156				     include bordre.asi
+2   157				     ;
+2   158				     ; args - ah, di, dl, si
+2   159				     ; ah - attribute
+2   160				     ; di - start
+2   161				     ; dl - width
+2   162				     ; si - border source
+2   163				     ; dh - height
+2   164				     ; destroys	- dohuya
+2   165				     ;
 2   166
-2   167	01B7  2B FB			     sub di, bx
-2   168	01B9  2B FB			     sub di, bx
-2   169
-2   170	01BB  8B EA			     mov bp, dx
-2   171	01BD  81 E5 FF00		     and bp, 0FF00h
-Turbo Assembler	 Version 4.1	    03/03/23 20:31:03	    Page 4
+2   167	01B7			     Border  proc
+2   168	01B7  55			     push bp
+2   169	01B8  8B EC			     mov bp, sp
+2   170
+2   171	01BA  55			     push bp
+Turbo Assembler	 Version 4.1	    03/04/23 07:45:47	    Page 4
 memchr.asm
 
 
 
-2   172	01C1  D1 ED D1 ED D1 ED	D1+	     shr bp, 8
-    173	      ED D1 ED D1 ED D1	ED+
-    174	      D1 ED
-2   175	01D1  83 ED 02			     sub bp, 2
+2   172
+2   173	01BB  E8 0048			     call String
+2   174
+2   175	01BE  81 C7 00A0		     add di, 80	* 2
 2   176
-2   177	01D4  E8 0020		     zaloop: call String
-2   178
-2   179	01D7  83 EE 03			     sub si, 3
-2   180
-2   181	01DA  81 C7 00A0		     add di, 80	* 2
+2   177	01C2  32 FF			     xor bh, bh
+2   178	01C4  8A DA			     mov bl, dl
+2   179
+2   180	01C6  2B FB			     sub di, bx
+2   181	01C8  2B FB			     sub di, bx
 2   182
-2   183	01DE  32 FF			     xor bh, bh
-2   184	01E0  8A DA			     mov bl, dl
-2   185
-2   186	01E2  2B FB			     sub di, bx
-2   187	01E4  2B FB			     sub di, bx
-2   188
-2   189	01E6  4D			     dec bp
-2   190
-2   191	01E7  83 FD 00			     cmp bp, 0
-2   192	01EA  75 E8			     jne zaloop
+2   183	01CA  8B EA			     mov bp, dx
+2   184	01CC  81 E5 FF00		     and bp, 0FF00h
+2   185	01D0  D1 ED D1 ED D1 ED	D1+	     shr bp, 8
+    186	      ED D1 ED D1 ED D1	ED+
+    187	      D1 ED
+2   188	01E0  83 ED 02			     sub bp, 2
+2   189
+2   190	01E3  E8 0020		     zaloop: call String
+2   191
+2   192	01E6  83 EE 03			     sub si, 3
 2   193
-2   194	01EC  83 C6 03			     add si, 3
+2   194	01E9  81 C7 00A0		     add di, 80	* 2
 2   195
-2   196	01EF  E8 0005			     call String
-2   197
-2   198	01F2  5D			     pop bp
-2   199
-2   200	01F3  8B E5			     mov sp, bp
-2   201	01F5  5D			     pop bp
-2   202	01F6  C3			     ret
-2   203	01F7				     endp
-2   204
-2   205					     include string.asi
-3   206				     ;
-3   207				     ; args - ah, di, dl
-3   208				     ; ah - attribute
-3   209				     ; di - start
-3   210				     ; dl - length
-3   211				     ; destroys	- si, cx
-3   212				     ;
-3   213
-3   214	01F7			     String  proc
-3   215
-3   216	01F7  AC			     lodsb
-3   217	01F8  AB			     stosw
-3   218
-3   219	01F9  AC			     lodsb
-3   220
-3   221	01FA  8A CA			     mov cl, dl
-3   222	01FC  80 E9 02			     sub cl, 2
-3   223	01FF  32 ED			     xor ch, ch
-3   224
-3   225	0201  26: 89 05		     @@Next: mov es:[di], ax
+2   196	01ED  32 FF			     xor bh, bh
+2   197	01EF  8A DA			     mov bl, dl
+2   198
+2   199	01F1  2B FB			     sub di, bx
+2   200	01F3  2B FB			     sub di, bx
+2   201
+2   202	01F5  4D			     dec bp
+2   203
+2   204	01F6  83 FD 00			     cmp bp, 0
+2   205	01F9  75 E8			     jne zaloop
+2   206
+2   207	01FB  83 C6 03			     add si, 3
+2   208
+2   209	01FE  E8 0005			     call String
+2   210
+2   211	0201  5D			     pop bp
+2   212
+2   213	0202  8B E5			     mov sp, bp
+2   214	0204  5D			     pop bp
+2   215	0205  C3			     ret
+2   216	0206				     endp
+2   217
+2   218					     include string.asi
+3   219				     ;
+3   220				     ; args - ah, di, dl
+3   221				     ; ah - attribute
+3   222				     ; di - start
+3   223				     ; dl - length
+3   224				     ; destroys	- si, cx
+3   225				     ;
 3   226
-3   227	0204  83 C7 02			     add di, 2
+3   227	0206			     String  proc
 3   228
-Turbo Assembler	 Version 4.1	    03/03/23 20:31:03	    Page 5
+Turbo Assembler	 Version 4.1	    03/04/23 07:45:47	    Page 5
 memchr.asm
 
 
 
-3   229	0207  E2 F8			     loop @@Next
-3   230
-3   231	0209  AC			     lodsb
-3   232	020A  AB			     stosw
+3   229	0206  AC			     lodsb
+3   230	0207  AB			     stosw
+3   231
+3   232	0208  AC			     lodsb
 3   233
-3   234	020B  C3			     ret
-3   235	020C				     endp
-    236
-    237	020C  44 45 44 45 20 45	44+  frame   db	'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E',	'D'
-    238	      45 44
-    239	0215  01 02 03 24	     jopa    db	1, 2, 3, '$'
-    240	0219  02 00		     outl    db	2, 0
-    241
-    242				     end     Start
-Turbo Assembler	 Version 4.1	    03/03/23 20:31:03	    Page 6
+3   234	0209  8A CA			     mov cl, dl
+3   235	020B  80 E9 02			     sub cl, 2
+3   236	020E  32 ED			     xor ch, ch
+3   237
+3   238	0210  26: 89 05		     @@Next: mov es:[di], ax
+3   239
+3   240	0213  83 C7 02			     add di, 2
+3   241
+3   242	0216  E2 F8			     loop @@Next
+3   243
+3   244	0218  AC			     lodsb
+3   245	0219  AB			     stosw
+3   246
+3   247	021A  C3			     ret
+3   248	021B				     endp
+    249
+    250	021B  44 45 44 45 20 45	44+  frame   db	'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E',	'D'
+    251	      45 44
+    252	0224  0A 00 0F*(00)	     jopa    db	10, 0, 15 dup(0)
+    253	0235  05 00 05*(00)	     args    db	5, 0, 5	dup(0)
+    254
+    255				     end     Start
+Turbo Assembler	 Version 4.1	    03/04/23 07:45:47	    Page 6
 Symbol Table
 
 
@@ -273,16 +286,16 @@ Symbol Table
 
 Symbol Name			  Type	 Value
 
-??DATE				  Text	 "03/03/23"
+??DATE				  Text	 "03/04/23"
 ??FILENAME			  Text	 "memchr  "
-??TIME				  Text	 "20:31:02"
+??TIME				  Text	 "07:45:47"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
-@@DEC				  Near	 DGROUP:0164
-@@NEXT				  Near	 DGROUP:0140
-@@NEXT				  Near	 DGROUP:017E
-@@NEXT				  Near	 DGROUP:0201
-@@OUT				  Near	 DGROUP:0167
+@@DEC				  Near	 DGROUP:0173
+@@NEXT				  Near	 DGROUP:014F
+@@NEXT				  Near	 DGROUP:018D
+@@NEXT				  Near	 DGROUP:0210
+@@OUT				  Near	 DGROUP:0176
 @CODE				  Text	 DGROUP
 @CODESIZE			  Text	 0
 @CPU				  Text	 0101H
@@ -294,22 +307,22 @@ Symbol Name			  Type	 Value
 @MODEL				  Text	 1
 @STACK				  Text	 DGROUP
 @WORDSIZE			  Text	 2
-BORDER				  Near	 DGROUP:01A8
-FRAME				  Byte	 DGROUP:020C
-FRM				  Near	 DGROUP:018D
-HEXOUT				  Near	 DGROUP:0136
-JOPA				  Byte	 DGROUP:0215
-MEMCHR				  Near	 DGROUP:0172
-NULLPTR				  Near	 DGROUP:0128
-OUTL				  Byte	 DGROUP:0219
+ARGS				  Byte	 DGROUP:0235
+BORDER				  Near	 DGROUP:01B7
+FRAME				  Byte	 DGROUP:021B
+FRM				  Near	 DGROUP:019C
+HEXOUT				  Near	 DGROUP:0145
+JOPA				  Byte	 DGROUP:0224
+MEMCHR				  Near	 DGROUP:0181
+NULLPTR				  Near	 DGROUP:0137
 START				  Near	 DGROUP:0100
-STRING				  Near	 DGROUP:01F7
-TO_RET				  Near	 DGROUP:0188
-ZALOOP				  Near	 DGROUP:01D4
+STRING				  Near	 DGROUP:0206
+TO_RET				  Near	 DGROUP:0197
+ZALOOP				  Near	 DGROUP:01E3
 
 Groups & Segments		  Bit Size Align  Combine Class
 
 DGROUP				  Group
   _DATA				  16  0000 Word	  Public  DATA
-  _TEXT				  16  021B Word	  Public  CODE
+  _TEXT				  16  023C Word	  Public  CODE
 

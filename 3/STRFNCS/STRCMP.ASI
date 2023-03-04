@@ -19,10 +19,10 @@ strcmp  proc
         cmp al, dl
         jne exit
 
-        cmp al, '$'
+        cmp al, 0Dh
         je exit
 
-        cmp dl, '$'
+        cmp dl, 0Dh
         je exit
 
         jmp @@Next

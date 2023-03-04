@@ -5,11 +5,19 @@ org 100h
 
 locals @@
 
-Start:  mov ax, offset jopa
+Start:  mov ah, 0Ah
+        mov dx, offset outl
+        int 21h
+
+        mov dx, offset src
+        int 21h
+
+        mov ax, offset src
+        add ax, 2
         push ax
 
         mov ax, offset outl
-        inc ax
+        add ax, 2
         push ax
 
         call strcpy
@@ -27,7 +35,7 @@ include strcpy.asi
 include out.asi
 
 frame   db 'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E', 'D'
-jopa    db 1, 2, 3, '$'
-outl    db 8, 5, 5, 5, 5, 5, 5, 5, 5, 5, '#'
+src     db 10, 0, 10 dup(0)
+outl    db 10, 0, 10 dup(0)
 
 end     Start

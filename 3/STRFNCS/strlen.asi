@@ -11,7 +11,7 @@ strlen  proc
 
         inc bx
 
-        cmp al, '$'
+        cmp al, 0Dh
         jne @@Next
 
         mov sp, bp

@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 1
+Turbo Assembler	 Version 4.1	    03/04/23 08:08:35	    Page 1
 memset.asm
 
 
@@ -10,873 +10,331 @@ memset.asm
       5
       6				     locals @@
       7
-      8	0100  B8 0009		     Start:  mov ax, word ptr 9
-      9	0103  50			     push ax
-     10
-     11	0104  B8 0002			     mov ax, word ptr 2
-     12	0107  50			     push ax
-     13
-     14	0108  B8 036Ar			     mov ax, offset outl
-     15	010B  40			     inc ax
-     16	010C  50			     push ax
-     17
-     18	010D  E8 0009			     call memset
-     19
-     20	0110  4E			     dec si
-     21
-     22	0111  E8 001B			     call fout
-     23
-     24	0114  B8 4C00			     mov ax, 04C00h
-     25	0117  CD 21			     int 21h
-     26
-     27				     include memset.asi
-1    28				     ;void *memset(
-1    29				     ;	 void *dest,
-1    30				     ;	 int c,
-1    31				     ;	 size_t	count
-1    32				     ;);
-1    33
-1    34	0119			     memset  proc
-1    35	0119  55			     push bp
-1    36	011A  8B EC			     mov bp, sp
-1    37
-1    38	011C  8B 7E 04			     mov di, [bp + 4]
-1    39
-1    40	011F  8B 46 06			     mov ax, [bp + 6]
-1    41
-1    42	0122  8B 4E 08			     mov cx, [bp + 8]
-1    43
-1    44	0125  AA		     @@Next: stosb
-1    45
-1    46	0126  E2 FD			     loop @@Next
-1    47
-1    48	0128  8B 76 04			     mov si, [bp + 4]
-1    49
-1    50	012B  8B E5			     mov sp, bp
-1    51	012D  5D			     pop bp
-1    52	012E  C3			     ret
-1    53	012F				     endp
-     54
-     55				     include out.asi
-1    56				     ; pls si
-1    57
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 2
+      8	0100  B4 0A		     Start:  mov ah, 0Ah
+      9	0102  BA 0250r			     mov dx, offset outl
+     10	0105  CD 21			     int 21h
+     11
+     12	0107  B4 0A			     mov ah, 0Ah
+     13	0109  BA 024Br			     mov dx, offset args
+     14	010C  CD 21			     int 21h
+     15
+     16	010E  BB 024Br			     mov bx, offset args
+     17	0111  8B 47 02			     mov ax, [bx + 2]
+     18	0114  32 E4			     xor ah, ah
+     19	0116  50			     push ax			     ; count
+     20
+     21	0117  8B 47 04			     mov ax, [bx + 4]
+     22	011A  32 E4			     xor ah, ah
+     23	011C  50			     push ax			     ; char
+     24
+     25	011D  B8 0250r			     mov ax, offset outl
+     26	0120  05 0002			     add ax, 2
+     27	0123  50			     push ax			     ; dest
+     28
+     29	0124  E8 0009			     call memset
+     30
+     31	0127  4E			     dec si
+     32
+     33	0128  E8 001B			     call fout
+     34
+     35	012B  B8 4C00			     mov ax, 04C00h
+     36	012E  CD 21			     int 21h
+     37
+     38				     include memset.asi
+1    39				     ;void *memset(
+1    40				     ;	 void *dest,
+1    41				     ;	 int c,
+1    42				     ;	 size_t	count
+1    43				     ;);
+1    44
+1    45	0130			     memset  proc
+1    46	0130  55			     push bp
+1    47	0131  8B EC			     mov bp, sp
+1    48
+1    49	0133  8B 7E 04			     mov di, [bp + 4]
+1    50
+1    51	0136  8B 46 06			     mov ax, [bp + 6]
+1    52
+1    53	0139  8B 4E 08			     mov cx, [bp + 8]
+1    54
+1    55	013C  AA		     @@Next: stosb
+1    56
+1    57	013D  E2 FD			     loop @@Next
+Turbo Assembler	 Version 4.1	    03/04/23 08:08:35	    Page 2
 memset.asm
 
 
 
-1    58	012F			     fout    proc
-1    59	012F  55			     push bp
-1    60	0130  8B EC			     mov bp, sp
-1    61
-1    62	0132  56			     push si
-1    63
-1    64	0133  B4 1E			     mov ah, 1Eh
-1    65
-1    66	0135  BF B800			     mov di, 0B800h
-1    67	0138  8E C7			     mov es, di
+1    58
+1    59	013F  8B 76 04			     mov si, [bp + 4]
+1    60
+1    61	0142  8B E5			     mov sp, bp
+1    62	0144  5D			     pop bp
+1    63	0145  C3			     ret
+1    64	0146				     endp
+     65
+     66				     include out.asi
+1    67				     ; pls si
 1    68
-1    69	013A  BF 0334			     mov di, (80 * 5 + 10) * 2
-1    70
-1    71	013D  B6 0F			     mov dh, 15
-1    72	013F  B2 3C			     mov dl, 60
-1    73
-1    74	0141  BE 035Dr			     mov si, offset frame
-1    75
-1    76	0144  E8 0019			     call Border
-1    77
-1    78	0147  5E			     pop si
+1    69	0146			     fout    proc
+1    70	0146  55			     push bp
+1    71	0147  8B EC			     mov bp, sp
+1    72
+1    73	0149  56			     push si
+1    74
+1    75	014A  B4 1E			     mov ah, 1Eh
+1    76
+1    77	014C  BF B800			     mov di, 0B800h
+1    78	014F  8E C7			     mov es, di
 1    79
-1    80	0148  8A 1C			     mov bl, byte ptr [si]
-1    81	014A  32 FF			     xor bh, bh
-1    82
-1    83	014C  46			     inc si
+1    80	0151  BF 0334			     mov di, (80 * 5 + 10) * 2
+1    81
+1    82	0154  B6 0F			     mov dh, 15
+1    83	0156  B2 3C			     mov dl, 60
 1    84
-1    85	014D  32 E4			     xor ah, ah
-1    86	014F  8A C3			     mov al, bl
-1    87
-1    88	0151  B2 0A			     mov dl, 10
-1    89	0153  F6 F2			     div dl
+1    85	0158  BE 0236r			     mov si, offset frame
+1    86
+1    87	015B  E8 0019			     call Border
+1    88
+1    89	015E  5E			     pop si
 1    90
-1    91	0155  8A D4			     mov dl, ah
-1    92	0157  8A F0			     mov dh, al
+1    91	015F  8A 1C			     mov bl, byte ptr [si]
+1    92	0161  32 FF			     xor bh, bh
 1    93
-1    94	0159  E8 0068			     call Text
+1    94	0163  46			     inc si
 1    95
-1    96	015C  8B E5			     mov sp, bp
-1    97	015E  5D			     pop bp
-1    98	015F  C3			     ret
-1    99	0160				     endp
-1   100
-1   101				     include bordre.asi
-2   102				     ;
-2   103				     ; args - ah, di, dl, si
-2   104				     ; ah - attribute
-2   105				     ; di - start
-2   106				     ; dl - width
-2   107				     ; si - border source
-2   108				     ; dh - height
-2   109				     ; destroys	- dohuya
-2   110				     ;
-2   111
-2   112	0160			     Border  proc
-2   113	0160  55			     push bp
-2   114	0161  8B EC			     mov bp, sp
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 3
+1    96	0164  32 E4			     xor ah, ah
+1    97	0166  8A C3			     mov al, bl
+1    98
+1    99	0168  B2 0A			     mov dl, 10
+1   100	016A  F6 F2			     div dl
+1   101
+1   102	016C  8A D4			     mov dl, ah
+1   103	016E  8A F0			     mov dh, al
+1   104
+1   105	0170  E8 0068			     call Text
+1   106
+1   107	0173  8B E5			     mov sp, bp
+1   108	0175  5D			     pop bp
+1   109	0176  C3			     ret
+1   110	0177				     endp
+1   111
+1   112				     include bordre.asi
+2   113				     ;
+2   114				     ; args - ah, di, dl, si
+Turbo Assembler	 Version 4.1	    03/04/23 08:08:35	    Page 3
 memset.asm
 
 
 
-2   115
-2   116	0163  55			     push bp
-2   117
-2   118	0164  E8 0048			     call String
-2   119
-2   120	0167  81 C7 00A0		     add di, 80	* 2
-2   121
-2   122	016B  32 FF			     xor bh, bh
-2   123	016D  8A DA			     mov bl, dl
-2   124
-2   125	016F  2B FB			     sub di, bx
-2   126	0171  2B FB			     sub di, bx
-2   127
-2   128	0173  8B EA			     mov bp, dx
-2   129	0175  81 E5 FF00		     and bp, 0FF00h
-2   130	0179  D1 ED D1 ED D1 ED	D1+	     shr bp, 8
-    131	      ED D1 ED D1 ED D1	ED+
-    132	      D1 ED
-2   133	0189  83 ED 02			     sub bp, 2
-2   134
-2   135	018C  E8 0020		     zaloop: call String
-2   136
-2   137	018F  83 EE 03			     sub si, 3
+2   115				     ; ah - attribute
+2   116				     ; di - start
+2   117				     ; dl - width
+2   118				     ; si - border source
+2   119				     ; dh - height
+2   120				     ; destroys	- dohuya
+2   121				     ;
+2   122
+2   123	0177			     Border  proc
+2   124	0177  55			     push bp
+2   125	0178  8B EC			     mov bp, sp
+2   126
+2   127	017A  55			     push bp
+2   128
+2   129	017B  E8 0048			     call String
+2   130
+2   131	017E  81 C7 00A0		     add di, 80	* 2
+2   132
+2   133	0182  32 FF			     xor bh, bh
+2   134	0184  8A DA			     mov bl, dl
+2   135
+2   136	0186  2B FB			     sub di, bx
+2   137	0188  2B FB			     sub di, bx
 2   138
-2   139	0192  81 C7 00A0		     add di, 80	* 2
-2   140
-2   141	0196  32 FF			     xor bh, bh
-2   142	0198  8A DA			     mov bl, dl
-2   143
-2   144	019A  2B FB			     sub di, bx
-2   145	019C  2B FB			     sub di, bx
-2   146
-2   147	019E  4D			     dec bp
-2   148
-2   149	019F  83 FD 00			     cmp bp, 0
-2   150	01A2  75 E8			     jne zaloop
+2   139	018A  8B EA			     mov bp, dx
+2   140	018C  81 E5 FF00		     and bp, 0FF00h
+2   141	0190  D1 ED D1 ED D1 ED	D1+	     shr bp, 8
+    142	      ED D1 ED D1 ED D1	ED+
+    143	      D1 ED
+2   144	01A0  83 ED 02			     sub bp, 2
+2   145
+2   146	01A3  E8 0020		     zaloop: call String
+2   147
+2   148	01A6  83 EE 03			     sub si, 3
+2   149
+2   150	01A9  81 C7 00A0		     add di, 80	* 2
 2   151
-2   152	01A4  83 C6 03			     add si, 3
-2   153
-2   154	01A7  E8 0005			     call String
-2   155
-2   156	01AA  5D			     pop bp
+2   152	01AD  32 FF			     xor bh, bh
+2   153	01AF  8A DA			     mov bl, dl
+2   154
+2   155	01B1  2B FB			     sub di, bx
+2   156	01B3  2B FB			     sub di, bx
 2   157
-2   158	01AB  8B E5			     mov sp, bp
-2   159	01AD  5D			     pop bp
-2   160	01AE  C3			     ret
-2   161	01AF				     endp
+2   158	01B5  4D			     dec bp
+2   159
+2   160	01B6  83 FD 00			     cmp bp, 0
+2   161	01B9  75 E8			     jne zaloop
 2   162
-2   163					     include string.asi
-3   164				     ;
-3   165				     ; args - ah, di, dl
-3   166				     ; ah - attribute
-3   167				     ; di - start
-3   168				     ; dl - length
-3   169				     ; destroys	- si, cx
-3   170				     ;
-3   171
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 4
+2   163	01BB  83 C6 03			     add si, 3
+2   164
+2   165	01BE  E8 0005			     call String
+2   166
+2   167	01C1  5D			     pop bp
+2   168
+2   169	01C2  8B E5			     mov sp, bp
+2   170	01C4  5D			     pop bp
+2   171	01C5  C3			     ret
+Turbo Assembler	 Version 4.1	    03/04/23 08:08:35	    Page 4
 memset.asm
 
 
 
-3   172	01AF			     String  proc
-3   173
-3   174	01AF  AC			     lodsb
-3   175	01B0  AB			     stosw
-3   176
-3   177	01B1  AC			     lodsb
-3   178
-3   179	01B2  8A CA			     mov cl, dl
-3   180	01B4  80 E9 02			     sub cl, 2
-3   181	01B7  32 ED			     xor ch, ch
+2   172	01C6				     endp
+2   173
+2   174					     include string.asi
+3   175				     ;
+3   176				     ; args - ah, di, dl
+3   177				     ; ah - attribute
+3   178				     ; di - start
+3   179				     ; dl - length
+3   180				     ; destroys	- si, cx
+3   181				     ;
 3   182
-3   183	01B9  26: 89 05		     @@Next: mov es:[di], ax
+3   183	01C6			     String  proc
 3   184
-3   185	01BC  83 C7 02			     add di, 2
-3   186
-3   187	01BF  E2 F8			     loop @@Next
-3   188
-3   189	01C1  AC			     lodsb
-3   190	01C2  AB			     stosw
-3   191
-3   192	01C3  C3			     ret
-3   193	01C4				     endp
-1   194				     include text.asi
-2   195	01C4			     Text    proc
-2   196
-2   197	01C4  BF 07D0			     mov di, 80	* 25
-2   198
-2   199	01C7  8B C2			     mov ax, dx
-2   200	01C9  32 E4			     xor ah, ah			     ; dl в общ
-2   201
-2   202	01CB  80 FE 00			     cmp dh, 0
-2   203	01CE  75 03			     jne not_smol_txt1		     ; концептуально - сначала идет +
-    204				     распечатка "больших" строк, а потом маленькой; ну и    +
-    205				     здесь	джамп сразу к распечатке маленькой; важно не   +
-    206				     проебать dl
+3   185	01C6  AC			     lodsb
+3   186	01C7  AB			     stosw
+3   187
+3   188	01C8  AC			     lodsb
+3   189
+3   190	01C9  8A CA			     mov cl, dl
+3   191	01CB  80 E9 02			     sub cl, 2
+3   192	01CE  32 ED			     xor ch, ch
+3   193
+3   194	01D0  26: 89 05		     @@Next: mov es:[di], ax
+3   195
+3   196	01D3  83 C7 02			     add di, 2
+3   197
+3   198	01D6  E2 F8			     loop @@Next
+3   199
+3   200	01D8  AC			     lodsb
+3   201	01D9  AB			     stosw
+3   202
+3   203	01DA  C3			     ret
+3   204	01DB				     endp
+1   205				     include text.asi
+2   206	01DB			     Text    proc
 2   207
-2   208	01D0  E9 0171			     jmp smol_txt
+2   208	01DB  BF 07D0			     mov di, 80	* 25
 2   209
-2   210	01D3			     not_smol_txt1:
-2   211
-2   212	01D3  32 E4			     xor ah, ah
-2   213	01D5  8A C6			     mov al, dh
-2   214
-2   215					     REPT 160
-2   216
-2   217					     sub di, ax
+2   210	01DE  8B C2			     mov ax, dx
+2   211	01E0  32 E4			     xor ah, ah			     ; dl в общ
+2   212
+2   213	01E2  80 FE 00			     cmp dh, 0
+2   214	01E5  75 03			     jne not_smol_txt1		     ; концептуально - сначала идет +
+    215				     распечатка "больших" строк, а потом маленькой; ну и    +
+    216				     здесь	джамп сразу к распечатке маленькой; важно не   +
+    217				     проебать dl
 2   218
-2   219					     ENDM
-3   220
-3   221	01D7  2B F8			     sub di, ax
-3   222
-3   223
-3   224	01D9  2B F8			     sub di, ax
-3   225
-3   226
-3   227	01DB  2B F8			     sub di, ax
-3   228
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 5
+2   219	01E7  EB 34 90			     jmp smol_txt
+2   220
+2   221	01EA			     not_smol_txt1:
+2   222
+2   223	01EA  32 E4			     xor ah, ah
+2   224	01EC  8A C6			     mov al, dh
+2   225
+2   226	01EE  8B E9			     mov bp, cx
+2   227
+2   228	01F0  B9 00A0			     mov cx, word ptr 80 * 2
+Turbo Assembler	 Version 4.1	    03/04/23 08:08:35	    Page 5
 memset.asm
 
 
 
-3   229
-3   230	01DD  2B F8			     sub di, ax
-3   231
-3   232
-3   233	01DF  2B F8			     sub di, ax
-3   234
-3   235
-3   236	01E1  2B F8			     sub di, ax
-3   237
-3   238
-3   239	01E3  2B F8			     sub di, ax
-3   240
-3   241
-3   242	01E5  2B F8			     sub di, ax
-3   243
-3   244
-3   245	01E7  2B F8			     sub di, ax
-3   246
-3   247
-3   248	01E9  2B F8			     sub di, ax
-3   249
-3   250
-3   251	01EB  2B F8			     sub di, ax
-3   252
-3   253
-3   254	01ED  2B F8			     sub di, ax
-3   255
-3   256
-3   257	01EF  2B F8			     sub di, ax
-3   258
-3   259
-3   260	01F1  2B F8			     sub di, ax
-3   261
-3   262
-3   263	01F3  2B F8			     sub di, ax
-3   264
-3   265
-3   266	01F5  2B F8			     sub di, ax
-3   267
-3   268
-3   269	01F7  2B F8			     sub di, ax
-3   270
-3   271
-3   272	01F9  2B F8			     sub di, ax
-3   273
-3   274
-3   275	01FB  2B F8			     sub di, ax
-3   276
-3   277
-3   278	01FD  2B F8			     sub di, ax
-3   279
-3   280
-3   281	01FF  2B F8			     sub di, ax
-3   282
-3   283
-3   284	0201  2B F8			     sub di, ax
-3   285
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 6
+2   229
+2   230	01F3			     Height:
+2   231
+2   232	01F3  2B F8			     sub di, ax
+2   233
+2   234	01F5  E2 FC			     loop Height
+2   235
+2   236	01F7  8B CD			     mov cx, bp
+2   237
+2   238	01F9  8A CE			     mov cl, dh
+2   239	01FB  32 ED			     xor ch, ch
+2   240
+2   241	01FD			     @@Next:
+2   242	01FD  80 F9 00			     cmp cl, 0
+2   243	0200  75 03			     jne not_smol_txt
+2   244
+2   245	0202  EB 19 90			     jmp smol_txt
+2   246
+2   247	0205			     not_smol_txt:
+2   248
+2   249	0205  83 EF 0A			     sub di, 5 * 2
+2   250
+2   251	0208  B4 1E			     mov ah, 1Eh
+2   252
+2   253	020A  8B E9			     mov bp, cx
+2   254
+2   255	020C  B9 000A			     mov cx, word ptr 10
+2   256
+2   257	020F			     WriteLine:
+2   258
+2   259	020F  AC			     lodsb
+2   260	0210  AB			     stosw
+2   261
+2   262	0211  E2 FC			     loop WriteLine
+2   263
+2   264	0213  8B CD			     mov cx, bp
+2   265
+2   266	0215  FE C9			     dec cl
+2   267	0217  81 C7 0096		     add di, (80 - 5) *	2
+2   268
+2   269	021B  EB E0			     jmp @@Next
+2   270
+2   271	021D			     smol_txt:
+2   272	021D  8A C2			     mov al, dl
+2   273	021F  32 E4			     xor ah, ah
+2   274
+2   275	0221  2B F8			     sub di, ax
+2   276
+2   277	0223  8B CA			     mov cx, dx
+2   278	0225  32 ED			     xor ch, ch
+2   279
+2   280	0227  B4 1E			     mov ah, 1Eh
+2   281
+2   282	0229  83 E7 FE			     and di, 0FFFEh		     ; need even di
+2   283
+2   284	022C			     @@Next2:
+2   285	022C  83 F9 00			     cmp cx, 0
+Turbo Assembler	 Version 4.1	    03/04/23 08:08:35	    Page 6
 memset.asm
 
 
 
-3   286
-3   287	0203  2B F8			     sub di, ax
-3   288
-3   289
-3   290	0205  2B F8			     sub di, ax
-3   291
-3   292
-3   293	0207  2B F8			     sub di, ax
-3   294
-3   295
-3   296	0209  2B F8			     sub di, ax
-3   297
-3   298
-3   299	020B  2B F8			     sub di, ax
-3   300
-3   301
-3   302	020D  2B F8			     sub di, ax
-3   303
-3   304
-3   305	020F  2B F8			     sub di, ax
-3   306
-3   307
-3   308	0211  2B F8			     sub di, ax
-3   309
-3   310
-3   311	0213  2B F8			     sub di, ax
-3   312
-3   313
-3   314	0215  2B F8			     sub di, ax
-3   315
-3   316
-3   317	0217  2B F8			     sub di, ax
-3   318
-3   319
-3   320	0219  2B F8			     sub di, ax
-3   321
-3   322
-3   323	021B  2B F8			     sub di, ax
-3   324
-3   325
-3   326	021D  2B F8			     sub di, ax
-3   327
-3   328
-3   329	021F  2B F8			     sub di, ax
-3   330
-3   331
-3   332	0221  2B F8			     sub di, ax
-3   333
-3   334
-3   335	0223  2B F8			     sub di, ax
-3   336
-3   337
-3   338	0225  2B F8			     sub di, ax
-3   339
-3   340
-3   341	0227  2B F8			     sub di, ax
-3   342
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 7
-memset.asm
-
-
-
-3   343
-3   344	0229  2B F8			     sub di, ax
-3   345
-3   346
-3   347	022B  2B F8			     sub di, ax
-3   348
-3   349
-3   350	022D  2B F8			     sub di, ax
-3   351
-3   352
-3   353	022F  2B F8			     sub di, ax
-3   354
-3   355
-3   356	0231  2B F8			     sub di, ax
-3   357
-3   358
-3   359	0233  2B F8			     sub di, ax
-3   360
-3   361
-3   362	0235  2B F8			     sub di, ax
-3   363
-3   364
-3   365	0237  2B F8			     sub di, ax
-3   366
-3   367
-3   368	0239  2B F8			     sub di, ax
-3   369
-3   370
-3   371	023B  2B F8			     sub di, ax
-3   372
-3   373
-3   374	023D  2B F8			     sub di, ax
-3   375
-3   376
-3   377	023F  2B F8			     sub di, ax
-3   378
-3   379
-3   380	0241  2B F8			     sub di, ax
-3   381
-3   382
-3   383	0243  2B F8			     sub di, ax
-3   384
-3   385
-3   386	0245  2B F8			     sub di, ax
-3   387
-3   388
-3   389	0247  2B F8			     sub di, ax
-3   390
-3   391
-3   392	0249  2B F8			     sub di, ax
-3   393
-3   394
-3   395	024B  2B F8			     sub di, ax
-3   396
-3   397
-3   398	024D  2B F8			     sub di, ax
-3   399
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 8
-memset.asm
-
-
-
-3   400
-3   401	024F  2B F8			     sub di, ax
-3   402
-3   403
-3   404	0251  2B F8			     sub di, ax
-3   405
-3   406
-3   407	0253  2B F8			     sub di, ax
-3   408
-3   409
-3   410	0255  2B F8			     sub di, ax
-3   411
-3   412
-3   413	0257  2B F8			     sub di, ax
-3   414
-3   415
-3   416	0259  2B F8			     sub di, ax
-3   417
-3   418
-3   419	025B  2B F8			     sub di, ax
-3   420
-3   421
-3   422	025D  2B F8			     sub di, ax
-3   423
-3   424
-3   425	025F  2B F8			     sub di, ax
-3   426
-3   427
-3   428	0261  2B F8			     sub di, ax
-3   429
-3   430
-3   431	0263  2B F8			     sub di, ax
-3   432
-3   433
-3   434	0265  2B F8			     sub di, ax
-3   435
-3   436
-3   437	0267  2B F8			     sub di, ax
-3   438
-3   439
-3   440	0269  2B F8			     sub di, ax
-3   441
-3   442
-3   443	026B  2B F8			     sub di, ax
-3   444
-3   445
-3   446	026D  2B F8			     sub di, ax
-3   447
-3   448
-3   449	026F  2B F8			     sub di, ax
-3   450
-3   451
-3   452	0271  2B F8			     sub di, ax
-3   453
-3   454
-3   455	0273  2B F8			     sub di, ax
-3   456
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 9
-memset.asm
-
-
-
-3   457
-3   458	0275  2B F8			     sub di, ax
-3   459
-3   460
-3   461	0277  2B F8			     sub di, ax
-3   462
-3   463
-3   464	0279  2B F8			     sub di, ax
-3   465
-3   466
-3   467	027B  2B F8			     sub di, ax
-3   468
-3   469
-3   470	027D  2B F8			     sub di, ax
-3   471
-3   472
-3   473	027F  2B F8			     sub di, ax
-3   474
-3   475
-3   476	0281  2B F8			     sub di, ax
-3   477
-3   478
-3   479	0283  2B F8			     sub di, ax
-3   480
-3   481
-3   482	0285  2B F8			     sub di, ax
-3   483
-3   484
-3   485	0287  2B F8			     sub di, ax
-3   486
-3   487
-3   488	0289  2B F8			     sub di, ax
-3   489
-3   490
-3   491	028B  2B F8			     sub di, ax
-3   492
-3   493
-3   494	028D  2B F8			     sub di, ax
-3   495
-3   496
-3   497	028F  2B F8			     sub di, ax
-3   498
-3   499
-3   500	0291  2B F8			     sub di, ax
-3   501
-3   502
-3   503	0293  2B F8			     sub di, ax
-3   504
-3   505
-3   506	0295  2B F8			     sub di, ax
-3   507
-3   508
-3   509	0297  2B F8			     sub di, ax
-3   510
-3   511
-3   512	0299  2B F8			     sub di, ax
-3   513
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 10
-memset.asm
-
-
-
-3   514
-3   515	029B  2B F8			     sub di, ax
-3   516
-3   517
-3   518	029D  2B F8			     sub di, ax
-3   519
-3   520
-3   521	029F  2B F8			     sub di, ax
-3   522
-3   523
-3   524	02A1  2B F8			     sub di, ax
-3   525
-3   526
-3   527	02A3  2B F8			     sub di, ax
-3   528
-3   529
-3   530	02A5  2B F8			     sub di, ax
-3   531
-3   532
-3   533	02A7  2B F8			     sub di, ax
-3   534
-3   535
-3   536	02A9  2B F8			     sub di, ax
-3   537
-3   538
-3   539	02AB  2B F8			     sub di, ax
-3   540
-3   541
-3   542	02AD  2B F8			     sub di, ax
-3   543
-3   544
-3   545	02AF  2B F8			     sub di, ax
-3   546
-3   547
-3   548	02B1  2B F8			     sub di, ax
-3   549
-3   550
-3   551	02B3  2B F8			     sub di, ax
-3   552
-3   553
-3   554	02B5  2B F8			     sub di, ax
-3   555
-3   556
-3   557	02B7  2B F8			     sub di, ax
-3   558
-3   559
-3   560	02B9  2B F8			     sub di, ax
-3   561
-3   562
-3   563	02BB  2B F8			     sub di, ax
-3   564
-3   565
-3   566	02BD  2B F8			     sub di, ax
-3   567
-3   568
-3   569	02BF  2B F8			     sub di, ax
-3   570
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 11
-memset.asm
-
-
-
-3   571
-3   572	02C1  2B F8			     sub di, ax
-3   573
-3   574
-3   575	02C3  2B F8			     sub di, ax
-3   576
-3   577
-3   578	02C5  2B F8			     sub di, ax
-3   579
-3   580
-3   581	02C7  2B F8			     sub di, ax
-3   582
-3   583
-3   584	02C9  2B F8			     sub di, ax
-3   585
-3   586
-3   587	02CB  2B F8			     sub di, ax
-3   588
-3   589
-3   590	02CD  2B F8			     sub di, ax
-3   591
-3   592
-3   593	02CF  2B F8			     sub di, ax
-3   594
-3   595
-3   596	02D1  2B F8			     sub di, ax
-3   597
-3   598
-3   599	02D3  2B F8			     sub di, ax
-3   600
-3   601
-3   602	02D5  2B F8			     sub di, ax
-3   603
-3   604
-3   605	02D7  2B F8			     sub di, ax
-3   606
-3   607
-3   608	02D9  2B F8			     sub di, ax
-3   609
-3   610
-3   611	02DB  2B F8			     sub di, ax
-3   612
-3   613
-3   614	02DD  2B F8			     sub di, ax
-3   615
-3   616
-3   617	02DF  2B F8			     sub di, ax
-3   618
-3   619
-3   620	02E1  2B F8			     sub di, ax
-3   621
-3   622
-3   623	02E3  2B F8			     sub di, ax
-3   624
-3   625
-3   626	02E5  2B F8			     sub di, ax
-3   627
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 12
-memset.asm
-
-
-
-3   628
-3   629	02E7  2B F8			     sub di, ax
-3   630
-3   631
-3   632	02E9  2B F8			     sub di, ax
-3   633
-3   634
-3   635	02EB  2B F8			     sub di, ax
-3   636
-3   637
-3   638	02ED  2B F8			     sub di, ax
-3   639
-3   640
-3   641	02EF  2B F8			     sub di, ax
-3   642
-3   643
-3   644	02F1  2B F8			     sub di, ax
-3   645
-3   646
-3   647	02F3  2B F8			     sub di, ax
-3   648
-3   649
-3   650	02F5  2B F8			     sub di, ax
-3   651
-3   652
-3   653	02F7  2B F8			     sub di, ax
-3   654
-3   655
-3   656	02F9  2B F8			     sub di, ax
-3   657
-3   658
-3   659	02FB  2B F8			     sub di, ax
-3   660
-3   661
-3   662	02FD  2B F8			     sub di, ax
-3   663
-3   664
-3   665	02FF  2B F8			     sub di, ax
-3   666
-3   667
-3   668	0301  2B F8			     sub di, ax
-3   669
-3   670
-3   671	0303  2B F8			     sub di, ax
-3   672
-3   673
-3   674	0305  2B F8			     sub di, ax
-3   675
-3   676
-3   677	0307  2B F8			     sub di, ax
-3   678
-3   679
-3   680	0309  2B F8			     sub di, ax
-3   681
-3   682
-3   683	030B  2B F8			     sub di, ax
-3   684
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 13
-memset.asm
-
-
-
-3   685
-3   686	030D  2B F8			     sub di, ax
-3   687
-3   688
-3   689	030F  2B F8			     sub di, ax
-3   690
-3   691
-3   692	0311  2B F8			     sub di, ax
-3   693
-3   694
-3   695	0313  2B F8			     sub di, ax
-3   696
-3   697
-3   698	0315  2B F8			     sub di, ax
-3   699
-2   700
-2   701	0317  8A CE			     mov cl, dh
-2   702	0319  32 ED			     xor ch, ch
-2   703
-2   704	031B			     @@Next:
-2   705	031B  80 F9 00			     cmp cl, 0
-2   706	031E  75 03			     jne not_smol_txt
-2   707
-2   708	0320  EB 22 90			     jmp smol_txt
-2   709
-2   710	0323			     not_smol_txt:
-2   711
-2   712	0323  83 EF 0A			     sub di, 5 * 2
-2   713
-2   714	0326  B4 1E			     mov ah, 1Eh
-2   715
-2   716					     REPT 10
-2   717
-2   718					     lodsb
-2   719					     stosw
-2   720
-2   721					     ENDM
-3   722
-3   723	0328  AC			     lodsb
-3   724	0329  AB			     stosw
-3   725
-3   726
-3   727	032A  AC			     lodsb
-3   728	032B  AB			     stosw
-3   729
-3   730
-3   731	032C  AC			     lodsb
-3   732	032D  AB			     stosw
-3   733
-3   734
-3   735	032E  AC			     lodsb
-3   736	032F  AB			     stosw
-3   737
-3   738
-3   739	0330  AC			     lodsb
-3   740	0331  AB			     stosw
-3   741
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 14
-memset.asm
-
-
-
-3   742
-3   743	0332  AC			     lodsb
-3   744	0333  AB			     stosw
-3   745
-3   746
-3   747	0334  AC			     lodsb
-3   748	0335  AB			     stosw
-3   749
-3   750
-3   751	0336  AC			     lodsb
-3   752	0337  AB			     stosw
-3   753
-3   754
-3   755	0338  AC			     lodsb
-3   756	0339  AB			     stosw
-3   757
-3   758
-3   759	033A  AC			     lodsb
-3   760	033B  AB			     stosw
-3   761
-2   762
-2   763	033C  FE C9			     dec cl
-2   764	033E  81 C7 0096		     add di, (80 - 5) *	2
-2   765
-2   766	0342  EB D7			     jmp @@Next
-2   767
-2   768	0344			     smol_txt:
-2   769	0344  8A C2			     mov al, dl
-2   770	0346  32 E4			     xor ah, ah
-2   771
-2   772	0348  2B F8			     sub di, ax
-2   773
-2   774	034A  8B CA			     mov cx, dx
-2   775	034C  32 ED			     xor ch, ch
-2   776
-2   777	034E  B4 1E			     mov ah, 1Eh
-2   778
-2   779	0350  83 E7 FE			     and di, 0FFFEh		     ; need even di
-2   780
-2   781	0353			     @@Next2:
-2   782	0353  83 F9 00			     cmp cx, 0
-2   783	0356  74 04			     je	@@ret			     ; cause loop incs cx
-2   784
-2   785	0358  AC			     lodsb
-2   786	0359  AB			     stosw
-2   787
-2   788
-2   789	035A  E2 F7			     loop @@Next2
-2   790
-2   791	035C  C3		     @@ret:  ret
-2   792	035D				     endp
-1   793
-1   794
-1   795
-    796
-    797	035D  44 45 44 45 20 45	44+  frame   db	'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E',	'D'
-    798	      45 44
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 15
-memset.asm
-
-
-
-    799	0366  01 02 03 24	     jopa    db	1, 2, 3, '$'
-    800	036A  0A 05 05 05 05 05	05+  outl    db	10, 5, 5, 5, 5,	5, 5, 5, 5, 5, 5
-    801	      05 05 05 05
-    802
-    803				     end     Start
-Turbo Assembler	 Version 4.1	    03/03/23 20:32:43	    Page 16
+2   286	022F  74 04			     je	@@ret			     ; cause loop incs cx
+2   287
+2   288	0231  AC			     lodsb
+2   289	0232  AB			     stosw
+2   290
+2   291
+2   292	0233  E2 F7			     loop @@Next2
+2   293
+2   294	0235  C3		     @@ret:  ret
+2   295	0236				     endp
+1   296
+1   297
+1   298
+    299
+    300	0236  44 45 44 45 20 45	44+  frame   db	'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E',	'D'
+    301	      45 44
+    302	023F  0A 00 0A*(00)	     jopa    db	10, 0, 10 dup(0)
+    303	024B  05 00 00 00 00	     args    db	5, 0, 0, 0, 0
+    304	0250  0A 00 0A*(00)	     outl    db	10, 0, 10 dup(0)
+    305
+    306				     end     Start
+Turbo Assembler	 Version 4.1	    03/04/23 08:08:35	    Page 7
 Symbol Table
 
 
@@ -884,16 +342,16 @@ Symbol Table
 
 Symbol Name			  Type	 Value
 
-??DATE				  Text	 "03/03/23"
+??DATE				  Text	 "03/04/23"
 ??FILENAME			  Text	 "memset  "
-??TIME				  Text	 "20:32:43"
+??TIME				  Text	 "08:08:34"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
-@@NEXT				  Near	 DGROUP:0125
-@@NEXT				  Near	 DGROUP:01B9
-@@NEXT				  Near	 DGROUP:031B
-@@NEXT2				  Near	 DGROUP:0353
-@@RET				  Near	 DGROUP:035C
+@@NEXT				  Near	 DGROUP:013C
+@@NEXT				  Near	 DGROUP:01D0
+@@NEXT				  Near	 DGROUP:01FD
+@@NEXT2				  Near	 DGROUP:022C
+@@RET				  Near	 DGROUP:0235
 @CODE				  Text	 DGROUP
 @CODESIZE			  Text	 0
 @CPU				  Text	 0101H
@@ -905,23 +363,26 @@ Symbol Name			  Type	 Value
 @MODEL				  Text	 1
 @STACK				  Text	 DGROUP
 @WORDSIZE			  Text	 2
-BORDER				  Near	 DGROUP:0160
-FOUT				  Near	 DGROUP:012F
-FRAME				  Byte	 DGROUP:035D
-JOPA				  Byte	 DGROUP:0366
-MEMSET				  Near	 DGROUP:0119
-NOT_SMOL_TXT			  Near	 DGROUP:0323
-NOT_SMOL_TXT1			  Near	 DGROUP:01D3
-OUTL				  Byte	 DGROUP:036A
-SMOL_TXT			  Near	 DGROUP:0344
+ARGS				  Byte	 DGROUP:024B
+BORDER				  Near	 DGROUP:0177
+FOUT				  Near	 DGROUP:0146
+FRAME				  Byte	 DGROUP:0236
+HEIGHT				  Near	 DGROUP:01F3
+JOPA				  Byte	 DGROUP:023F
+MEMSET				  Near	 DGROUP:0130
+NOT_SMOL_TXT			  Near	 DGROUP:0205
+NOT_SMOL_TXT1			  Near	 DGROUP:01EA
+OUTL				  Byte	 DGROUP:0250
+SMOL_TXT			  Near	 DGROUP:021D
 START				  Near	 DGROUP:0100
-STRING				  Near	 DGROUP:01AF
-TEXT				  Near	 DGROUP:01C4
-ZALOOP				  Near	 DGROUP:018C
+STRING				  Near	 DGROUP:01C6
+TEXT				  Near	 DGROUP:01DB
+WRITELINE			  Near	 DGROUP:020F
+ZALOOP				  Near	 DGROUP:01A3
 
 Groups & Segments		  Bit Size Align  Combine Class
 
 DGROUP				  Group
   _DATA				  16  0000 Word	  Public  DATA
-  _TEXT				  16  0375 Word	  Public  CODE
+  _TEXT				  16  025C Word	  Public  CODE
 

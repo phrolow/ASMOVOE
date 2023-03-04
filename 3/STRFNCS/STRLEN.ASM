@@ -5,29 +5,31 @@ org 100h
 
 locals @@
 
-Start:  mov ax, offset jopa
+Start:  mov ah, 0Ah
+        mov dx, offset jopa
+        int 21h
+
+        call frm
+
+        mov ax, offset jopa
+        add ax, 2
         push ax
 
         call strlen
 
-        add bl, '0'
-        mov di, offset outl
-        inc di
-        mov [di], byte ptr bl
-
-        mov si, offset outl
+        mov ax, bx
+        mov bx, (40 * 25 - 2) * 2
         
-        call fout
+        call hexout
 
         mov ax, 04C00h
         int 21h
 
 include strlen.asi
-
-include out.asi
+include hexout.asi
+include stdfrm.asi
 
 frame   db 'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E', 'D'
-jopa    db 1, 2, 3, '$'
-outl    db 2, 0
+jopa    db 10, 0, 10 dup(0)
 
 end     Start

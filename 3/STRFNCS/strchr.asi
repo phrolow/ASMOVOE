@@ -13,7 +13,7 @@ strchr  proc
         cmp al, bl
         je to_ret
 
-        cmp al, '$'
+        cmp al, 0Dh
         jne @@Next
 
         mov si, 1

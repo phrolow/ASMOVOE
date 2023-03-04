@@ -5,10 +5,23 @@ locals @@
 
 org 100h
 
-Start:  call frm
+Start:  mov ah, 0Ah
+        mov dx, offset jopa
+        int 21h
 
-        push 2
-        push offset jopa
+        mov ah, 0Ah
+        mov dx, offset args
+        int 21h
+
+        call frm
+
+        mov bx, offset args
+        mov ax, [bx + 2]
+        push ax                                                  ; what to seek
+
+        mov ax, offset jopa
+        add ax, 2
+        push ax                                        ; where
 
         call strchr
 
@@ -16,7 +29,7 @@ Start:  call frm
         je nullptr
 
         sub si, offset jopa
-        inc si
+        dec si
 
 nullptr:
         dec si
@@ -34,7 +47,7 @@ include strchr.asi
 include stdfrm.asi
 
 frame   db 'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E', 'D'
-jopa    db 1, 2, 3, '$'
-outl    db 2, 0
+jopa    db 10, 0, 10 dup(0)
+args    db 3, 0, 0, 0, 0
 
 end     Start

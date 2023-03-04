@@ -5,13 +5,28 @@ org 100h
 
 locals @@
 
-Start:  call frm
+Start:  mov ah, 0Ah
+        mov dx, offset args
+        int 21h
 
-        push 4                              ; length
+        mov ah, 0Ah
+        mov dx, offset jopa
+        int 21h
 
-        push 1                            ; char to search
+        call frm
 
-        mov ax, offset jopa                 ; ptr to mem
+        mov bx, offset args
+        mov ax, [bx + 2]
+        xor ah, ah
+        push ax                                  ; length
+
+        mov bx, offset args
+        mov ax, [bx + 4]
+        xor ah, ah
+        push ax                                  ; char to search
+
+        mov ax, offset jopa                     ; ptr to mem
+        add ax, 2
         push ax
 
         call memchr
@@ -20,7 +35,7 @@ Start:  call frm
         je nullptr
 
         sub si, offset jopa
-        inc si
+        dec si
 
 nullptr:
         dec si
@@ -38,7 +53,7 @@ include memchr.asi
 include stdfrm.asi
 
 frame   db 'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E', 'D'
-jopa    db 1, 2, 3, '$'
-outl    db 2, 0
+jopa    db 10, 0, 15 dup(0)
+args    db 5, 0, 5 dup(0)
 
 end     Start

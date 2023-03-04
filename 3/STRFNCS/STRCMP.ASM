@@ -5,12 +5,22 @@ org 100h
 
 locals @@
 
-Start:  call frm
+Start:  mov ah, 0Ah
+        mov dx, offset str1
+        int 21h
+
+        mov ah, 0Ah
+        mov dx, offset str2
+        int 21h
+
+        call frm
 
         mov ax, offset str2                 ; str2
+        add ax, 2
         push ax
 
         mov ax, offset str1                 ; ptr to str1
+        add ax, 2
         push ax
 
         call strcmp
@@ -28,7 +38,7 @@ include strcmp.asi
 include stdfrm.asi
 
 frame   db 'D', 'E', 'D', 'E', ' ', 'E', 'D', 'E', 'D'
-str1    db 1, 2, 3, '$'
-str2    db 1, 2, 3, '$'
+str1    db 10, 0, 10 dup(0)
+str2    db 10, 0, 10 dup(0)
 
 end     Start

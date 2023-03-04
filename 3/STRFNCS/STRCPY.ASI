@@ -11,7 +11,7 @@ strcpy  proc
 @@Next: lodsb
         stosb
 
-        cmp al, '$'
+        cmp al, 0Dh
         jne @@Next
 
         mov di, [bp + 4]
