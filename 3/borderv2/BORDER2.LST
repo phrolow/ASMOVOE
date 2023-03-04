@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    03/03/23 22:07:36	    Page 1
+Turbo Assembler	 Version 4.1	    03/04/23 05:30:08	    Page 1
 border2.asm
 
 
@@ -27,7 +27,7 @@ border2.asm
      22
      23	0110  80 EB 09			     sub bl, 9			     ; length minus char of our	custom border
      24
-     25	0113  BF 0251r			     mov di, offset cbrd
+     25	0113  BF 0277r			     mov di, offset cbrd
      26
      27	0116  B9 0009			     mov cx, 9
      28
@@ -60,7 +60,7 @@ border2.asm
      55
      56	0139  33 C9			     xor cx, cx
      57	013B  8A CA			     mov cl, dl
-Turbo Assembler	 Version 4.1	    03/03/23 22:07:36	    Page 2
+Turbo Assembler	 Version 4.1	    03/04/23 05:30:08	    Page 2
 border2.asm
 
 
@@ -80,61 +80,61 @@ border2.asm
      70
      71	014A  80 C6 05			     add dh, 5
      72
-     73	014D  B4 1E			     mov ah, 01Eh		     ; 24 Feb......
+     73	014D  BE 0082			     mov si, 82h
      74
-     75	014F  BE 0082			     mov si, 82h
-     76
-     77	0152  8A 0C			     mov cl, byte ptr [si]
-     78	0154  80 E9 30			     sub cl, '0'
-     79	0157  32 ED			     xor ch, ch			     ; cl is type
+     75	0150  8A 0C			     mov cl, byte ptr [si]
+     76	0152  80 E9 30			     sub cl, '0'
+     77	0155  32 ED			     xor ch, ch			     ; cl is type
+     78
+     79	0157  BE 0277r			     mov si, offset cbrd
      80
-     81	0159  BE 0251r			     mov si, offset cbrd
-     82
-     83	015C  80 F9 00			     cmp cl, 0
-     84	015F  74 05			     je	custom
-     85
-     86	0161  83 C6 09		     @@next: add si, 9
-     87	0164  E2 FB			     loop @@next
-     88
-     89	0166			     custom:
-     90
-     91	0166  E8 002F			     call Border
-     92
-     93	0169  BB 0080			     mov bx, word ptr 80h
-     94	016C  8A 1F			     mov bl, [bx]
-     95	016E  32 FF			     xor bh, bh
-     96
-     97	0170  BE 0082			     mov si, 82h
-     98
-     99	0173  80 3C 30			     cmp byte ptr [si],	byte ptr '0'
-    100	0176  75 06			     jne not_custom
+     81	015A  80 F9 00			     cmp cl, 0
+     82	015D  74 08			     je	custom
+     83
+     84	015F  83 C6 0A		     @@next: add si, 10
+     85	0162  E2 FB			     loop @@next
+     86
+     87	0164  AC			     lodsb
+     88	0165  8A E0			     mov ah, al
+     89
+     90	0167			     custom:
+     91
+     92	0167  E8 0028			     call Border
+     93
+     94	016A  BE 0082			     mov si, 82h
+     95
+     96	016D  80 3C 30			     cmp byte ptr [si],	byte ptr '0'
+     97
+     98	0170  8A 0C			     mov cl, [si]
+     99	0172  32 ED			     xor ch, ch
+    100	0174  83 E9 30			     sub cx, '0'
     101
-    102	0178  83 C6 09			     add si, 9
-    103	017B  80 EB 09			     sub bl, 9
-    104
-    105	017E			     not_custom:
-    106
-    107	017E  83 C6 02			     add si, 2
-    108	0181  80 EB 03			     sub bl, 3
-    109
-    110	0184  32 E4			     xor ah, ah
-    111	0186  8A C3			     mov al, bl
-    112
-    113	0188  B2 0A			     mov dl, 10
-    114	018A  F6 F2			     div dl
-Turbo Assembler	 Version 4.1	    03/03/23 22:07:36	    Page 3
+    102	0177  BB 0277r			     mov bx, offset cbrd
+    103
+    104	017A			     GetStyle:
+    105
+    106	017A  83 F9 00			     cmp cx, 0
+    107	017D  74 06			     je	StyleGot
+    108
+    109	017F  83 C3 0A			     add bx, 10
+    110	0182  49			     dec cx
+    111
+    112	0183  EB F5			     jmp GetStyle
+    113
+    114	0185			     StyleGot:
+Turbo Assembler	 Version 4.1	    03/04/23 05:30:08	    Page 3
 border2.asm
 
 
 
     115
-    116	018C  8A D4			     mov dl, ah
-    117	018E  8A F0			     mov dh, al
+    116	0185  8A 27			     mov ah, [bx]
+    117	0187  83 C6 02			     add si, 2
     118
-    119	0190  E8 0063			     call Text
+    119	018A  E8 0063			     call Text
     120
-    121	0193  B8 4C00			     mov ax, 4C00h
-    122	0196  CD 21			     int 21h
+    121	018D  B8 4C00			     mov ax, 4C00h
+    122	0190  CD 21			     int 21h
     123
     124					     include bordre.asi
 1   125				     ;
@@ -147,55 +147,55 @@ border2.asm
 1   132				     ; destroys	- dohuya
 1   133				     ;
 1   134
-1   135	0198			     Border  proc
-1   136	0198  55			     push bp
+1   135	0192			     Border  proc
+1   136	0192  55			     push bp
 1   137
-1   138	0199  E8 0045			     call String
+1   138	0193  E8 0045			     call String
 1   139
-1   140	019C  81 C7 00A0		     add di, 80	* 2
+1   140	0196  81 C7 00A0		     add di, 80	* 2
 1   141
-1   142	01A0  32 FF			     xor bh, bh		     ; cringe
-1   143	01A2  8A DA			     mov bl, dl
+1   142	019A  32 FF			     xor bh, bh		     ; cringe
+1   143	019C  8A DA			     mov bl, dl
 1   144
-1   145	01A4  2B FB			     sub di, bx
-1   146	01A6  2B FB			     sub di, bx
+1   145	019E  2B FB			     sub di, bx
+1   146	01A0  2B FB			     sub di, bx
 1   147
-1   148	01A8  8B EA			     mov bp, dx
-1   149	01AA  81 E5 FF00		     and bp, 0FF00h
-1   150	01AE  D1 ED D1 ED D1 ED	D1+	     shr bp, 8
+1   148	01A2  8B EA			     mov bp, dx
+1   149	01A4  81 E5 FF00		     and bp, 0FF00h
+1   150	01A8  D1 ED D1 ED D1 ED	D1+	     shr bp, 8
     151	      ED D1 ED D1 ED D1	ED+
     152	      D1 ED
-1   153	01BE  83 ED 02			     sub bp, 2
+1   153	01B8  83 ED 02			     sub bp, 2
 1   154
-1   155	01C1  E8 001D		     zaloop: call String
+1   155	01BB  E8 001D		     zaloop: call String
 1   156
-1   157	01C4  83 EE 03			     sub si, 3
+1   157	01BE  83 EE 03			     sub si, 3
 1   158
-1   159	01C7  81 C7 00A0		     add di, 80	* 2
+1   159	01C1  81 C7 00A0		     add di, 80	* 2
 1   160
-1   161	01CB  32 FF			     xor bh, bh		     ; cringe
-1   162	01CD  8A DA			     mov bl, dl
+1   161	01C5  32 FF			     xor bh, bh		     ; cringe
+1   162	01C7  8A DA			     mov bl, dl
 1   163
-1   164	01CF  2B FB			     sub di, bx
-1   165	01D1  2B FB			     sub di, bx
+1   164	01C9  2B FB			     sub di, bx
+1   165	01CB  2B FB			     sub di, bx
 1   166
-1   167	01D3  4D			     dec bp
+1   167	01CD  4D			     dec bp
 1   168
-1   169	01D4  83 FD 00			     cmp bp, 0
-1   170	01D7  75 E8			     jne zaloop
+1   169	01CE  83 FD 00			     cmp bp, 0
+1   170	01D1  75 E8			     jne zaloop
 1   171
-Turbo Assembler	 Version 4.1	    03/03/23 22:07:36	    Page 4
+Turbo Assembler	 Version 4.1	    03/04/23 05:30:08	    Page 4
 border2.asm
 
 
 
-1   172	01D9  83 C6 03			     add si, 3
+1   172	01D3  83 C6 03			     add si, 3
 1   173
-1   174	01DC  E8 0002			     call String
+1   174	01D6  E8 0002			     call String
 1   175
-1   176	01DF  5D			     pop bp
-1   177	01E0  C3			     ret
-1   178	01E1				     endp
+1   176	01D9  5D			     pop bp
+1   177	01DA  C3			     ret
+1   178	01DB				     endp
 1   179
 1   180					     include string.asi
 2   181				     ;
@@ -206,145 +206,187 @@ border2.asm
 2   186				     ; destroys	- si, cx
 2   187				     ;
 2   188
-2   189	01E1			     String  proc
+2   189	01DB			     String  proc
 2   190
-2   191	01E1  AC			     lodsb
-2   192	01E2  AB			     stosw
+2   191	01DB  AC			     lodsb
+2   192	01DC  AB			     stosw
 2   193
-2   194	01E3  AC			     lodsb
+2   194	01DD  AC			     lodsb
 2   195
-2   196	01E4  8A CA			     mov cl, dl
-2   197	01E6  80 E9 02			     sub cl, 2
-2   198	01E9  32 ED			     xor ch, ch
+2   196	01DE  8A CA			     mov cl, dl
+2   197	01E0  80 E9 02			     sub cl, 2
+2   198	01E3  32 ED			     xor ch, ch
 2   199
-2   200	01EB  26: 89 05		     @@Next: mov es:[di], ax
+2   200	01E5  26: 89 05		     @@Next: mov es:[di], ax
 2   201
-2   202	01EE  83 C7 02			     add di, 2
+2   202	01E8  83 C7 02			     add di, 2
 2   203
-2   204	01F1  E2 F8			     loop @@Next
+2   204	01EB  E2 F8			     loop @@Next
 2   205
-2   206	01F3  AC			     lodsb
-2   207	01F4  AB			     stosw
+2   206	01ED  AC			     lodsb
+2   207	01EE  AB			     stosw
 2   208
-2   209	01F5  C3			     ret
-2   210	01F6				     endp
-    211					     include text.asi
-1   212	01F6			     Text    proc
+2   209	01EF  C3			     ret
+2   210	01F0				     endp
+    211					     include text2.asi
+1   212				     ; pls si, ah
 1   213
-1   214	01F6  BF 07D0			     mov di, 80	* 25
-1   215
-1   216	01F9  8B C2			     mov ax, dx
-1   217	01FB  32 E4			     xor ah, ah			     ; dl в общ
-1   218
-1   219	01FD  80 FE 00			     cmp dh, 0
-1   220	0200  75 03			     jne not_smol_txt1		     ; концептуально - сначала идет +
-    221				     распечатка "больших" строк, а потом маленькой; ну и    +
-    222				     здесь	джамп сразу к распечатке маленькой; важно не   +
-    223				     проебать dl
-1   224
-1   225	0202  EB 34 90			     jmp smol_txt
+1   214	01F0			     text	 proc
+1   215	01F0  50 56				 push ax si
+1   216
+1   217	01F2  8C CF				 mov di, cs
+1   218	01F4  8E C7				 mov es, di
+1   219	01F6  BF 026Dr				 mov di, offset	Lines
+1   220
+1   221				     ;NewLine:	  xor cx, cx
+1   222
+1   223				     ;Reading:	  lodsb
+1   224				     ;		  cmp al, 0Dh
+1   225				     ;		  je EndOfReading
 1   226
-1   227	0205			     not_smol_txt1:
-1   228
-Turbo Assembler	 Version 4.1	    03/03/23 22:07:36	    Page 5
+1   227				     ;		  cmp al, 2
+1   228				     ;		  je NewLine
+Turbo Assembler	 Version 4.1	    03/04/23 05:30:08	    Page 5
 border2.asm
 
 
 
-1   229	0205  32 E4			     xor ah, ah
-1   230	0207  8A C6			     mov al, dh
-1   231
-1   232	0209  8B E9			     mov bp, cx
+1   229
+1   230				     ;		  inc cx
+1   231				     ;		  cmp cx, 10
+1   232				     ;		  jne Reading
 1   233
-1   234	020B  B9 00A0			     mov cx, word ptr 80 * 2
-1   235
-1   236	020E			     Height:
+1   234				     ;AddLine:
+1   235				     ;		  mov al, cl
+1   236				     ;		  stosb
 1   237
-1   238	020E  2B F8			     sub di, ax
+1   238				     ;		  jmp NewLine
 1   239
-1   240	0210  E2 FC			     loop Height
+1   240	01F9  33 C9				 xor cx, cx
 1   241
-1   242	0212  8B CD			     mov cx, bp
+1   242	01FB  41		     NextChar:	 inc cx
 1   243
-1   244	0214  8A CE			     mov cl, dh
-1   245	0216  32 ED			     xor ch, ch
-1   246
-1   247	0218			     @@Next:
-1   248	0218  80 F9 00			     cmp cl, 0
-1   249	021B  75 03			     jne not_smol_txt
-1   250
-1   251	021D  EB 19 90			     jmp smol_txt
-1   252
-1   253	0220			     not_smol_txt:
-1   254
-1   255	0220  83 EF 0A			     sub di, 5 * 2
-1   256
-1   257	0223  B4 1E			     mov ah, 1Eh
+1   244	01FC  AC				 lodsb
+1   245
+1   246	01FD  3C 02				 cmp al, 2
+1   247	01FF  74 06				 je NewLine
+1   248
+1   249	0201  3C 0D				 cmp al, 0Dh
+1   250	0203  74 02				 je NewLine
+1   251
+1   252	0205  EB F4				 jmp NextChar
+1   253
+1   254	0207  FE C9		     NewLine:	 dec cl
+1   255	0209  88 0D				 mov [di], cl
+1   256	020B  47				 inc di
+1   257	020C  32 ED				 xor ch, ch
 1   258
-1   259	0225  8B E9			     mov bp, cx
-1   260
-1   261	0227  B9 000A			     mov cx, word ptr 10
-1   262
-1   263	022A			     WriteLine:
+1   259	020E  3C 0D				 cmp al, 0Dh
+1   260	0210  75 E9				 jne NextChar
+1   261
+1   262	0212  8A C1				 mov al, cl
+1   263	0214  AA				 stosb				 ; filled array	of lengths
 1   264
-1   265	022A  AC			     lodsb
-1   266	022B  AB			     stosw
+1   265	0215  BE 026Dr				 mov si, offset	Lines
+1   266	0218  B9 000A				 mov cx, 10
 1   267
-1   268	022C  E2 FC			     loop WriteLine
+1   268	021B  33 D2				 xor dx, dx
 1   269
-1   270	022E  8B CD			     mov cx, bp
+1   270	021D  AC		     CountLines: lodsb
 1   271
-1   272	0230  FE C9			     dec cl
-1   273	0232  81 C7 0096		     add di, (80 - 5) *	2
-1   274
-1   275	0236  EB E0			     jmp @@Next
+1   272	021E  FE C6				 inc dh
+1   273
+1   274	0220  3C 00				 cmp al, 0
+1   275	0222  E0 F9				 loopne	CountLines
 1   276
-1   277	0238			     smol_txt:
-1   278	0238  8A C2			     mov al, dl
-1   279	023A  32 E4			     xor ah, ah
-1   280
-1   281	023C  2B F8			     sub di, ax
-1   282
-1   283	023E  8B CA			     mov cx, dx
-1   284	0240  32 ED			     xor ch, ch
-1   285
-Turbo Assembler	 Version 4.1	    03/03/23 22:07:36	    Page 6
+1   277	0224  FE CE				 dec dh
+1   278
+1   279	0226  32 E4				 xor ah, ah
+1   280	0228  8A C6				 mov al, dh
+1   281
+1   282	022A  32 ED				 xor ch, ch
+1   283	022C  B1 02				 mov cl, 2
+1   284
+1   285	022E  F6 F1				 div cl
+Turbo Assembler	 Version 4.1	    03/04/23 05:30:08	    Page 6
 border2.asm
 
 
 
-1   286	0242  B4 1E			     mov ah, 1Eh
-1   287
-1   288	0244  83 E7 FE			     and di, 0FFFEh		     ; need even di
-1   289
-1   290	0247			     @@Next2:
-1   291	0247  83 F9 00			     cmp cx, 0
-1   292	024A  74 04			     je	@@ret			     ; cause loop incs cx
-1   293
-1   294	024C  AC			     lodsb
-1   295	024D  AB			     stosw
-1   296
+1   286
+1   287	0230  BF B800				 mov di, 0B800h
+1   288	0233  8E C7				 mov es, di
+1   289	0235  BF 07D0				 mov di, 80 * 25		 ; mid of screen
+1   290
+1   291	0238  8A C8				 mov cl, al
+1   292
+1   293	023A  80 F9 00				 cmp cl, 0
+1   294	023D  74 06				 je DontUp
+1   295
+1   296	023F  81 EF 00A0	     Up:	 sub di, 80 * 2
 1   297
-1   298	024E  E2 F7			     loop @@Next2
+1   298	0243  E2 FA				 loop Up
 1   299
-1   300	0250  C3		     @@ret:  ret
-1   301	0251				     endp
-    302
-    303	0251  ?? ?? ?? ?? ?? ??	??+  cbrd    db	  ?,   ?,   ?,	 ?,   ?,   ?,	?,   ?,	  ?  ; custom border
-    304	      ?? ??
-    305	025A  C9 CD BB BA 00 BA	C8+  brd1    db	0C9h, 0CDh, 0BBh, 0BAh,	00h, 0BAh, 0C8h, 0CDh, 0BCh
-    306	      CD BC
-    307	0263  80 80 80 80 00 80	80+  brd2    db	80h, 80h, 80h, 80h, 00h, 80h, 80h, 80h,	80h
-    308	      80 80
-    309	026C  1E 1E 1E 1E 00 1E	1E+  brd3    db	1Eh, 1Eh, 1Eh, 1Eh, 00h, 1Eh, 1Eh, 1Eh,	1Eh
-    310	      1E 1E
-    311	0275  40 40 40 40 00 40	40+  brd4    db	40h, 40h, 40h, 40h, 00h, 40h, 40h, 40h,	40h
-    312	      40 40
-    313	027E  40 40 40 40 00 40	40+  brd5    db	40h, 40h, 40h, 40h, 00h, 40h, 40h, 40h,	40h
-    314	      40 40
-    315
-    316				     end     Start
-Turbo Assembler	 Version 4.1	    03/03/23 22:07:36	    Page 7
+1   300	0245  8A CE		     DontUp:	 mov cl, dh
+1   301
+1   302	0247  BB 026Dr				 mov bx, offset	Lines
+1   303
+1   304	024A  5E 58				 pop si	ax
+1   305
+1   306	024C  8B 17		     WriteLine:	 mov dx, [bx]
+1   307
+1   308	024E  2B FA				 sub di, dx
+1   309	0250  83 E7 FE				 and di, 0FFFEh			 ; line	must be	in mid
+1   310
+1   311	0253  51				 push cx
+1   312
+1   313	0254  8B CA				 mov cx, dx
+1   314
+1   315	0256  AC		     WriteChar:	 lodsb
+1   316	0257  AB				 stosw
+1   317
+1   318	0258  E2 FC				 loop WriteChar
+1   319
+1   320	025A  59				 pop cx
+1   321
+1   322	025B  2B FA				 sub di, dx
+1   323
+1   324	025D  83 E2 01				 and dx, 01h
+1   325	0260  83 FA 01				 cmp dx, 1
+1   326	0263  75 05				 jne @@even
+1   327
+1   328	0265  4F				 dec di
+1   329	0266  4B				 dec bx
+1   330
+1   331	0267  83 C7 50				 add di, 80
+1   332
+1   333	026A  E2 E0		     @@even:	 loop WriteLine
+1   334
+1   335	026C  C3				 ret
+1   336	026D					 endp
+1   337
+1   338	026D  0A*(00)		     Lines	 db 10 dup(0)
+    339
+    340	0277  ?? ?? ?? ?? ?? ??	??+  cbrd    db	   ?,	 ?,    ?,    ?,	   ?,	 ?,    ?,    ?,	   ?,	 ?  ; custom border
+    341	      ?? ?? ??
+    342	0281  1F C9 CD BB BA 00	BA+  brd1    db	01Fh, 0C9h, 0CDh, 0BBh,	0BAh, 000h, 0BAh, 0C8h,	0CDh, 0BCh
+Turbo Assembler	 Version 4.1	    03/04/23 05:30:08	    Page 7
+border2.asm
+
+
+
+    343	      C8 CD BC
+    344	028B  71 80 80 80 80 00	80+  brd2    db	071h, 080h, 080h, 080h,	080h, 000h, 080h, 080h,	080h, 080h
+    345	      80 80 80
+    346	0295  22 1E 1E 1E 1E 00	1E+  brd3    db	022h, 01Eh, 01Eh, 01Eh,	01Eh, 000h, 01Eh, 01Eh,	01Eh, 01Eh
+    347	      1E 1E 1E
+    348	029F  1E 40 40 40 40 00	40+  brd4    db	01Eh, 040h, 040h, 040h,	040h, 000h, 040h, 040h,	040h, 040h
+    349	      40 40 40
+    350	02A9  CE 40 40 40 40 00	40+  brd5    db	0CEh, 040h, 040h, 040h,	040h, 000h, 040h, 040h,	040h, 040h
+    351	      40 40 40
+    352
+    353				     end     Start
+Turbo Assembler	 Version 4.1	    03/04/23 05:30:08	    Page 8
 Symbol Table
 
 
@@ -352,16 +394,14 @@ Symbol Table
 
 Symbol Name			  Type	 Value
 
-??DATE				  Text	 "03/03/23"
+??DATE				  Text	 "03/04/23"
 ??FILENAME			  Text	 "border2 "
-??TIME				  Text	 "22:07:36"
+??TIME				  Text	 "05:30:08"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
-@@NEXT				  Near	 DGROUP:0161
-@@NEXT				  Near	 DGROUP:01EB
-@@NEXT				  Near	 DGROUP:0218
-@@NEXT2				  Near	 DGROUP:0247
-@@RET				  Near	 DGROUP:0250
+@@EVEN				  Near	 DGROUP:026A
+@@NEXT				  Near	 DGROUP:015F
+@@NEXT				  Near	 DGROUP:01E5
 @CODE				  Text	 DGROUP
 @CODESIZE			  Text	 0
 @CPU				  Text	 0101H
@@ -373,31 +413,35 @@ Symbol Name			  Type	 Value
 @MODEL				  Text	 1
 @STACK				  Text	 DGROUP
 @WORDSIZE			  Text	 2
-BORDER				  Near	 DGROUP:0198
-BRD1				  Byte	 DGROUP:025A
-BRD2				  Byte	 DGROUP:0263
-BRD3				  Byte	 DGROUP:026C
-BRD4				  Byte	 DGROUP:0275
-BRD5				  Byte	 DGROUP:027E
-CBRD				  Byte	 DGROUP:0251
-CUSTOM				  Near	 DGROUP:0166
-HEIGHT				  Near	 DGROUP:020E
+BORDER				  Near	 DGROUP:0192
+BRD1				  Byte	 DGROUP:0281
+BRD2				  Byte	 DGROUP:028B
+BRD3				  Byte	 DGROUP:0295
+BRD4				  Byte	 DGROUP:029F
+BRD5				  Byte	 DGROUP:02A9
+CBRD				  Byte	 DGROUP:0277
+COUNTLINES			  Near	 DGROUP:021D
+CUSTOM				  Near	 DGROUP:0167
+DONTUP				  Near	 DGROUP:0245
+GETSTYLE			  Near	 DGROUP:017A
+LINES				  Byte	 DGROUP:026D
 LTY				  Near	 DGROUP:0146
 NCBRD				  Near	 DGROUP:011D
-NOT_CUSTOM			  Near	 DGROUP:017E
-NOT_SMOL_TXT			  Near	 DGROUP:0220
-NOT_SMOL_TXT1			  Near	 DGROUP:0205
+NEWLINE				  Near	 DGROUP:0207
+NEXTCHAR			  Near	 DGROUP:01FB
 READCUSTOM			  Near	 DGROUP:0119
-SMOL_TXT			  Near	 DGROUP:0238
 START				  Near	 DGROUP:0100
-STRING				  Near	 DGROUP:01E1
-TEXT				  Near	 DGROUP:01F6
-WRITELINE			  Near	 DGROUP:022A
-ZALOOP				  Near	 DGROUP:01C1
+STRING				  Near	 DGROUP:01DB
+STYLEGOT			  Near	 DGROUP:0185
+TEXT				  Near	 DGROUP:01F0
+UP				  Near	 DGROUP:023F
+WRITECHAR			  Near	 DGROUP:0256
+WRITELINE			  Near	 DGROUP:024C
+ZALOOP				  Near	 DGROUP:01BB
 
 Groups & Segments		  Bit Size Align  Combine Class
 
 DGROUP				  Group
   _DATA				  16  0000 Word	  Public  DATA
-  _TEXT				  16  0287 Word	  Public  CODE
+  _TEXT				  16  02B3 Word	  Public  CODE
 

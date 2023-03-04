@@ -70,8 +70,6 @@ lty:    sub di, bp                      ; y of lt
 
         add dh, 5
 
-        mov ah, 01Eh                    ; 24 Feb......
-
         mov si, 82h
 
         mov cl, byte ptr [si]
@@ -83,38 +81,40 @@ lty:    sub di, bp                      ; y of lt
         cmp cl, 0
         je custom
 
-@@next: add si, 9
+@@next: add si, 10
         loop @@next
+
+        lodsb
+        mov ah, al
 
 custom:
 
         call Border
-        
-        mov bx, word ptr 80h
-        mov bl, [bx]
-        xor bh, bh
 
         mov si, 82h
 
         cmp byte ptr [si], byte ptr '0'
-        jne not_custom
 
-        add si, 9
-        sub bl, 9
+        mov cl, [si]
+        xor ch, ch
+        sub cx, '0'
+        
+        mov bx, offset cbrd
 
-not_custom:
+GetStyle:
 
+        cmp cx, 0
+        je StyleGot
+
+        add bx, 10
+        dec cx
+
+        jmp GetStyle
+
+StyleGot:
+
+        mov ah, [bx]
         add si, 2
-        sub bl, 3
-
-        xor ah, ah
-        mov al, bl
-
-        mov dl, 10
-        div dl
-
-        mov dl, ah
-        mov dh, al
 
         call Text
 
@@ -122,14 +122,14 @@ not_custom:
         int 21h
 
         include bordre.asi
-        include text.asi
+        include text2.asi
 
-cbrd    db   ?,   ?,   ?,   ?,   ?,   ?,   ?,   ?,   ?  ; custom border
-brd1    db 0C9h, 0CDh, 0BBh, 0BAh, 00h, 0BAh, 0C8h, 0CDh, 0BCh
-brd2    db 80h, 80h, 80h, 80h, 00h, 80h, 80h, 80h, 80h
-brd3    db 1Eh, 1Eh, 1Eh, 1Eh, 00h, 1Eh, 1Eh, 1Eh, 1Eh
-brd4    db 40h, 40h, 40h, 40h, 00h, 40h, 40h, 40h, 40h
-brd5    db 40h, 40h, 40h, 40h, 00h, 40h, 40h, 40h, 40h
+cbrd    db    ?,    ?,    ?,    ?,    ?,    ?,    ?,    ?,    ?,    ?  ; custom border
+brd1    db 01Fh, 0C9h, 0CDh, 0BBh, 0BAh, 000h, 0BAh, 0C8h, 0CDh, 0BCh 
+brd2    db 071h, 080h, 080h, 080h, 080h, 000h, 080h, 080h, 080h, 080h 
+brd3    db 022h, 01Eh, 01Eh, 01Eh, 01Eh, 000h, 01Eh, 01Eh, 01Eh, 01Eh 
+brd4    db 01Eh, 040h, 040h, 040h, 040h, 000h, 040h, 040h, 040h, 040h 
+brd5    db 0CEh, 040h, 040h, 040h, 040h, 000h, 040h, 040h, 040h, 040h 
 
 end     Start
 
