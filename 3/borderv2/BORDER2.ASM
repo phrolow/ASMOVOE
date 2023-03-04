@@ -18,11 +18,13 @@ Start:  mov si, 80h
         sub al, '0'
         cmp al, 0
 
-        jne ncbrd
+        jne NotCustomBrd
 
-        sub bl, 10                       ; length minus char of our custom border
+        sub bl, 11                       ; length minus char of our custom border
 
         mov di, offset cbrd
+
+        lodsb
      
         mov cx, 10
 
@@ -33,7 +35,7 @@ ReadCustom:
 
         loop ReadCustom
 
-ncbrd:  sub bl, 1
+NotCustomBrd:  sub bl, 1
 
         xor dx, dx                      ; wanna set height and length
 
@@ -100,7 +102,7 @@ custom:
         cmp cx, 0
         jne NotCustom
 
-        add si, 10
+        add si, 11
 
 NotCustom:
         
