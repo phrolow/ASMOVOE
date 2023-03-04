@@ -8,7 +8,9 @@ org 100h
 
 Start:  jmp EOP
 
-include regs.asi
+include showregs.asi
+
+include regs2.asi
 
 EOP:    cli
 

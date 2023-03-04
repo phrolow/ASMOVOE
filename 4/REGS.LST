@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    03/04/23 22:36:02	    Page 1
+Turbo Assembler	 Version 4.1	    03/04/23 22:52:31	    Page 1
 regs.asm
 
 
@@ -11,7 +11,7 @@ regs.asm
       6
       7				     org 100h
       8
-      9	0100  E9 00B9		     Start:  jmp MakeResident
+      9	0100  E9 00B9		     Start:  jmp EOP
      10
      11				     include regs.asi
 1    12	0103  41 58 42 58 43 58	44+  RegName db	'AXBXCXDXESBP'
@@ -60,7 +60,7 @@ regs.asm
 1    55
 1    56	0151  E4 61			     in	al, 61h						     ; blinking
 1    57	0153  0C 80			     or	al, 80h
-Turbo Assembler	 Version 4.1	    03/04/23 22:36:02	    Page 2
+Turbo Assembler	 Version 4.1	    03/04/23 22:52:31	    Page 2
 regs.asm
 
 
@@ -122,7 +122,7 @@ regs.asm
 2   112	0197  D3 EB			     shr bx, cl
 2   113	0199  D3 EB			     shr bx, cl
 2   114	019B  D3 EB			     shr bx, cl
-Turbo Assembler	 Version 4.1	    03/04/23 22:36:02	    Page 3
+Turbo Assembler	 Version 4.1	    03/04/23 22:52:31	    Page 3
 regs.asm
 
 
@@ -152,34 +152,32 @@ regs.asm
 2   137	01BB  C3			     ret
 2   138	01BC				     endp
     139
-    140	01BC			     MakeResident:
+    140	01BC  FA		     EOP:    cli
     141
-    142	01BC  FA		     EOP:    cli
-    143
-    144	01BD  33 DB			     xor bx, bx
-    145	01BF  8E C3			     mov es, bx
-    146	01C1  BB 0024			     mov bx, 4 * 9				     ; 8 interruption -	keyboard
-    147
-    148	01C4  26: 8B 07			     mov ax, es:[bx]
-    149	01C7  A3 0177r			     mov Old09Ofs, ax				     ; old interrupt
-    150	01CA  26: C7 07	010Fr		     mov es:[bx], offset New09			     ; change on new version
-    151
-    152	01CF  83 C3 02			     add bx, 2
-    153	01D2  26: 8B 07			     mov ax, es:[bx]
-    154	01D5  A3 0179r			     mov Old09Seg, ax				     ; pointer on segment
-    155	01D8  8C C8			     mov ax, cs
-    156	01DA  26: 89 07			     mov es:[bx], ax				     ; NewSegment
+    142	01BD  33 DB			     xor bx, bx
+    143	01BF  8E C3			     mov es, bx
+    144	01C1  BB 0024			     mov bx, 4 * 9				     ; 8 interruption -	keyboard
+    145
+    146	01C4  26: 8B 07			     mov ax, es:[bx]
+    147	01C7  A3 0177r			     mov Old09Ofs, ax				     ; old interrupt
+    148	01CA  26: C7 07	010Fr		     mov es:[bx], offset New09			     ; change on new version
+    149
+    150	01CF  83 C3 02			     add bx, 2
+    151	01D2  26: 8B 07			     mov ax, es:[bx]
+    152	01D5  A3 0179r			     mov Old09Seg, ax				     ; pointer on segment
+    153	01D8  8C C8			     mov ax, cs
+    154	01DA  26: 89 07			     mov es:[bx], ax				     ; NewSegment
+    155
+    156	01DD  FB			     sti
     157
-    158	01DD  FB			     sti
-    159
-    160	01DE  B8 3100			     mov ax, 3100h
-    161	01E1  BA 01BCr			     mov dx, offset EOP
-    162	01E4  C1 EA 04			     shr dx, 4
-    163	01E7  83 C2 02			     add dx, 2
-    164	01EA  CD 21			     int 21h
-    165
-    166				     end     Start
-Turbo Assembler	 Version 4.1	    03/04/23 22:36:02	    Page 4
+    158	01DE  B8 3100			     mov ax, 3100h
+    159	01E1  BA 01BCr			     mov dx, offset EOP
+    160	01E4  C1 EA 04			     shr dx, 4
+    161	01E7  83 C2 02			     add dx, 2
+    162	01EA  CD 21			     int 21h
+    163
+    164				     end     Start
+Turbo Assembler	 Version 4.1	    03/04/23 22:52:31	    Page 4
 Symbol Table
 
 
@@ -189,7 +187,7 @@ Symbol Name			  Type	 Value
 
 ??DATE				  Text	 "03/04/23"
 ??FILENAME			  Text	 "regs	  "
-??TIME				  Text	 "22:36:02"
+??TIME				  Text	 "22:52:30"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
 @@DEC				  Near	 DGROUP:01AC
@@ -209,7 +207,6 @@ Symbol Name			  Type	 Value
 @WORDSIZE			  Text	 2
 EOP				  Near	 DGROUP:01BC
 HEXOUT				  Near	 DGROUP:017C
-MAKERESIDENT			  Near	 DGROUP:01BC
 NEW09				  Near	 DGROUP:010F
 OLD09OFS			  Word	 DGROUP:0177
 OLD09SEG			  Word	 DGROUP:0179

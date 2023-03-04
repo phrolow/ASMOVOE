@@ -6,11 +6,9 @@ locals @@
 
 org 100h
 
-Start:  jmp MakeResident
+Start:  jmp EOP
 
 include regs.asi
-
-MakeResident:    
 
 EOP:    cli
 
