@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    03/03/23 21:05:39	    Page 1
+Turbo Assembler	 Version 4.1	    03/04/23 14:31:53	    Page 1
 regs.asm
 
 
@@ -11,133 +11,146 @@ regs.asm
       6
       7				     org 100h
       8
-      9	0100  EB 6B 90		     Start:  jmp EOP
+      9	0100  E9 0086		     Start:  jmp EOP
      10
      11				     include regs.asi
 1    12	0103			     New09   proc
-1    13	0103  50 53 06 55		     push ax bx	es bp				     ;copy data
-1    14	0107  8B EC			     mov bp, sp
+1    13	0103  50 53 51 52 06 55		     push ax bx	cx dx es bp				   ;copy data
+1    14	0109  8B EC			     mov bp, sp
 1    15
-1    16	0109  BB B800			     mov bx, 0b800h
-1    17	010C  8E C3			     mov es, bx					     ; video mem
-1    18	010E  BB 07CC			     mov bx, 25	* 80 - 4			     ; in the middle of	screen
+1    16	010B  E4 60			     in	al, 60h					     ; 60h -> al
+1    17	010D  3C 02			     cmp al, 2
+1    18	010F  75 1D			     jne skip
 1    19
-1    20	0111  E4 60			     in	al, 60h					     ; 60h -> al
-1    21	0113  3C 02			     cmp al, 2
-1    22	0115  75 06			     jne skip
-1    23
-1    24	0117  8B 46 0A			     mov ax, [bp + 10]
-1    25
-1    26	011A  E8 0014			     call hexout
-1    27
-1    28	011D  E4 61		     skip:   in	al, 61h					     ; blinking
-1    29	011F  0C 80			     or	al, 80h
-1    30	0121  E6 61			     out 61h, al
-1    31	0123  24 7F			     and al, not 80h
-1    32	0125  E6 61			     out 61h, al
-1    33
-1    34	0127  5D 07 5B 58		     pop bp es bx ax
-1    35
-1    36	012B  EA				     db	0eah
-1    37	012C  0000		     Old09Ofs	     dw	0h
-1    38	012E  0000		     Old09Seg	     dw	0h
-1    39
-1    40	0130  CF			     iret
-1    41	0131				     endp
+1    20	0111  BA 0230			     mov dx, (80 * 3 + 40) * 2
+1    21
+1    22	0114  B9 0006			     mov cx, 6
+1    23	0117  83 C5 0E			     add bp, 14
+1    24
+1    25	011A  81 C2 0140	     @@Next: add dx, 160 * 2
+1    26	011E  8B 46 00			     mov ax, [bp]
+1    27	0121  8B DA			     mov bx, dx
+1    28
+1    29	0123  E8 0025			     call hexout
+1    30
+1    31	0126  83 ED 02			     sub bp, 2
+1    32
+1    33	0129  E2 EF			     loop @@Next
+1    34
+1    35	012B  EB 0D 90			     jmp EOI
+1    36
+1    37	012E  5D 07 5A 59 5B 58	     skip:   pop bp es dx cx bx	ax
+1    38
+1    39	0134  EA				     db	0eah
+1    40	0135  0000		     Old09Ofs	     dw	0h
+1    41	0137  0000		     Old09Seg	     dw	0h
 1    42
-1    43				     include hexout.asi
-2    44				     ;===============================================;
-2    45				     ; Uses: ax, bx				     ;
-2    46				     ; Destroys: cx, es, di			     ;
-2    47				     ; Returns:					     ;
-2    48				     ; Expects:	num in ax, start of label in bx	     ;
-2    49				     ;===============================================;
-2    50
-2    51	0131			     Hexout  proc
-2    52
-2    53	0131  BF B800			     mov di, 0B800h
-2    54	0134  8E C7			     mov es, di
-2    55	0136  8B FB			     mov di, bx		     ; set vm to line begin (dx)
-2    56
-2    57	0138  B9 0004			     mov cx, word ptr 4	     ; we output 4 chars
-Turbo Assembler	 Version 4.1	    03/03/23 21:05:39	    Page 2
+1    43	0139  CF			     iret
+1    44
+1    45	013A  E4 61		     EOI:    in	al, 61h						      ;	blinking
+1    46	013C  0C 80			     or	al, 80h
+1    47	013E  E6 61			     out 61h, al
+1    48	0140  24 7F			     and al, not 80h
+1    49	0142  E6 61			     out 61h, al
+1    50
+1    51	0144  5D 07 5A 59 5B 58		     pop bp es dx cx bx	ax
+1    52
+1    53	014A  CF			     iret
+1    54	014B				     endp
+1    55
+1    56				     include hexout.asi
+2    57				     ;===============================================;
+Turbo Assembler	 Version 4.1	    03/04/23 14:31:53	    Page 2
 regs.asm
 
 
 
-2    58
-2    59	013B  BB 000F		     @@Next: mov bx, 0Fh	     ; bit mask
-2    60
-2    61	013E  FE C9			     dec cl
-2    62
-2    63	0140  D3 E3			     shl bx, cl
-2    64	0142  D3 E3			     shl bx, cl
-2    65	0144  D3 E3			     shl bx, cl
-2    66	0146  D3 E3			     shl bx, cl
-2    67
-2    68	0148  23 D8			     and bx, ax
-2    69
-2    70	014A  D3 EB			     shr bx, cl
-2    71	014C  D3 EB			     shr bx, cl
-2    72	014E  D3 EB			     shr bx, cl
-2    73	0150  D3 EB			     shr bx, cl
+2    58				     ; Uses: ax, bx				     ;
+2    59				     ; Destroys: cx, es, di			     ;
+2    60				     ; Returns:					     ;
+2    61				     ; Expects:	num in ax, start of label in bx	     ;
+2    62				     ;===============================================;
+2    63
+2    64	014B			     Hexout  proc
+2    65	014B  51			     push cx
+2    66
+2    67	014C  BF B800			     mov di, 0B800h
+2    68	014F  8E C7			     mov es, di
+2    69	0151  8B FB			     mov di, bx		     ; set vm to line begin (dx)
+2    70
+2    71	0153  B9 0004			     mov cx, word ptr 4	     ; we output 4 chars
+2    72
+2    73	0156  BB 000F		     @@Next: mov bx, 0Fh	     ; bit mask
 2    74
-2    75	0152  FE C1			     inc cl		     ; getting the letter
+2    75	0159  FE C9			     dec cl
 2    76
-2    77	0154  83 FB 0A			     cmp bx, 0Ah	     ; is char decimal
-2    78	0157  72 06			     jb	@@Dec
-2    79
-2    80	0159  83 C3 37			     add bx, 'A' - 10d	     ; if char not decimal
+2    77	015B  D3 E3			     shl bx, cl
+2    78	015D  D3 E3			     shl bx, cl
+2    79	015F  D3 E3			     shl bx, cl
+2    80	0161  D3 E3			     shl bx, cl
 2    81
-2    82	015C  EB 04 90			     jmp @@Out
+2    82	0163  23 D8			     and bx, ax
 2    83
-2    84	015F  83 C3 30		     @@Dec:  add bx, '0'	     ; if char is decimal
-2    85
-2    86	0162  B7 4B		     @@Out:  mov bh, 4Bh
-2    87
-2    88	0164  26: 89 1D			     mov es:[di], bx	     ; output
-2    89
-2    90	0167  83 C7 02			     add di, 2
-2    91
-2    92	016A  E2 CF			     loop @@Next
+2    84	0165  D3 EB			     shr bx, cl
+2    85	0167  D3 EB			     shr bx, cl
+2    86	0169  D3 EB			     shr bx, cl
+2    87	016B  D3 EB			     shr bx, cl
+2    88
+2    89	016D  FE C1			     inc cl		     ; getting the letter
+2    90
+2    91	016F  83 FB 0A			     cmp bx, 0Ah	     ; is char decimal
+2    92	0172  72 06			     jb	@@Dec
 2    93
-2    94	016C  C3			     ret
-2    95	016D				     endp
-1    96
-     97
-     98	016D  FA		     EOP:    cli
-     99
-    100	016E  33 DB			     xor bx, bx
-    101	0170  8E C3			     mov es, bx
-    102	0172  BB 0024			     mov bx, 4 * 9				     ; 8 interruption -	keyboard
-    103
-    104	0175  26: 8B 07			     mov ax, es:[bx]
-    105	0178  A3 012Cr			     mov Old09Ofs, ax				     ; old interrupt
-    106	017B  26: C7 07	0103r		     mov es:[bx], offset New09			     ; change on new version
-    107
-    108	0180  83 C3 02			     add bx, 2
-    109	0183  26: 8B 07			     mov ax, es:[bx]
-    110	0186  A3 012Er			     mov Old09Seg, ax				     ; pointer on segment
-    111	0189  8C C8			     mov ax, cs
-    112	018B  26: 89 07			     mov es:[bx], ax				     ; NewSegment
-    113
-    114	018E  FB			     sti
-Turbo Assembler	 Version 4.1	    03/03/23 21:05:39	    Page 3
+2    94	0174  83 C3 37			     add bx, 'A' - 10d	     ; if char not decimal
+2    95
+2    96	0177  EB 04 90			     jmp @@Out
+2    97
+2    98	017A  83 C3 30		     @@Dec:  add bx, '0'	     ; if char is decimal
+2    99
+2   100	017D  B7 4B		     @@Out:  mov bh, 4Bh
+2   101
+2   102	017F  26: 89 1D			     mov es:[di], bx	     ; output
+2   103
+2   104	0182  83 C7 02			     add di, 2
+2   105
+2   106	0185  E2 CF			     loop @@Next
+2   107
+2   108	0187  59			     pop cx
+2   109	0188  C3			     ret
+2   110	0189				     endp
+1   111
+    112
+    113	0189  FA		     EOP:    cli
+    114
+Turbo Assembler	 Version 4.1	    03/04/23 14:31:53	    Page 3
 regs.asm
 
 
 
-    115
-    116	018F  E9 FF71			     jmp New09
-    117
-    118	0192  B8 3100			     mov ax, 3100h
-    119	0195  BA 016Dr			     mov dx, offset EOP
-    120	0198  C1 EA 04			     shr dx, 4
-    121	019B  42			     inc dx
-    122	019C  CD 21			     int 21h
-    123
-    124				     end     Start
-Turbo Assembler	 Version 4.1	    03/03/23 21:05:39	    Page 4
+    115	018A  33 DB			     xor bx, bx
+    116	018C  8E C3			     mov es, bx
+    117	018E  BB 0024			     mov bx, 4 * 9				     ; 8 interruption -	keyboard
+    118
+    119	0191  26: 8B 07			     mov ax, es:[bx]
+    120	0194  A3 0135r			     mov Old09Ofs, ax				     ; old interrupt
+    121	0197  26: C7 07	0103r		     mov es:[bx], offset New09			     ; change on new version
+    122
+    123	019C  83 C3 02			     add bx, 2
+    124	019F  26: 8B 07			     mov ax, es:[bx]
+    125	01A2  A3 0137r			     mov Old09Seg, ax				     ; pointer on segment
+    126	01A5  8C C8			     mov ax, cs
+    127	01A7  26: 89 07			     mov es:[bx], ax				     ; NewSegment
+    128
+    129	01AA  FB			     sti
+    130
+    131	01AB  B8 3100			     mov ax, 3100h
+    132	01AE  BA 0189r			     mov dx, offset EOP
+    133	01B1  C1 EA 04			     shr dx, 4
+    134	01B4  42			     inc dx
+    135	01B5  CD 21			     int 21h
+    136
+    137				     end     Start
+Turbo Assembler	 Version 4.1	    03/04/23 14:31:53	    Page 4
 Symbol Table
 
 
@@ -145,14 +158,15 @@ Symbol Table
 
 Symbol Name			  Type	 Value
 
-??DATE				  Text	 "03/03/23"
+??DATE				  Text	 "03/04/23"
 ??FILENAME			  Text	 "regs	  "
-??TIME				  Text	 "21:05:39"
+??TIME				  Text	 "14:31:53"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
-@@DEC				  Near	 DGROUP:015F
-@@NEXT				  Near	 DGROUP:013B
-@@OUT				  Near	 DGROUP:0162
+@@DEC				  Near	 DGROUP:017A
+@@NEXT				  Near	 DGROUP:011A
+@@NEXT				  Near	 DGROUP:0156
+@@OUT				  Near	 DGROUP:017D
 @CODE				  Text	 DGROUP
 @CODESIZE			  Text	 0
 @CPU				  Text	 0707H
@@ -164,17 +178,18 @@ Symbol Name			  Type	 Value
 @MODEL				  Text	 1
 @STACK				  Text	 DGROUP
 @WORDSIZE			  Text	 2
-EOP				  Near	 DGROUP:016D
-HEXOUT				  Near	 DGROUP:0131
+EOI				  Near	 DGROUP:013A
+EOP				  Near	 DGROUP:0189
+HEXOUT				  Near	 DGROUP:014B
 NEW09				  Near	 DGROUP:0103
-OLD09OFS			  Word	 DGROUP:012C
-OLD09SEG			  Word	 DGROUP:012E
-SKIP				  Near	 DGROUP:011D
+OLD09OFS			  Word	 DGROUP:0135
+OLD09SEG			  Word	 DGROUP:0137
+SKIP				  Near	 DGROUP:012E
 START				  Near	 DGROUP:0100
 
 Groups & Segments		  Bit Size Align  Combine Class
 
 DGROUP				  Group
   _DATA				  16  0000 Word	  Public  DATA
-  _TEXT				  16  019E Word	  Public  CODE
+  _TEXT				  16  01B7 Word	  Public  CODE
 

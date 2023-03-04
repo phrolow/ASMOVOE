@@ -13,7 +13,14 @@ NextChar:   inc cx
 
             lodsb
 
-            cmp al, 2
+            cmp al, 1
+            jne NotColor
+
+            dec cx
+            lodsb
+            jmp NextChar
+
+NotColor:   cmp al, 2
             je NewLine
 
             cmp al, 0Dh
@@ -76,14 +83,6 @@ DontUp:     mov cl, dh
 
 WriteLine:  mov dx, [bx]
 
-            mov al, [si]
-            cmp al, 2
-            jne NotSeparator
-
-            lodsb
-
-NotSeparator:
-
             xor dh, dh
             sub di, dx
             and di, 0FFFEh                  ; line must be in mid
@@ -93,6 +92,20 @@ NotSeparator:
             mov cx, dx
 
 WriteChar:  lodsb
+
+            cmp al, 1
+            jne NotChangeColor
+
+            lodsb
+            mov ah, al
+
+            jmp WriteChar
+
+NotChangeColor:
+
+            cmp al, 2
+            je WriteChar
+
             stosw
 
             loop WriteChar
