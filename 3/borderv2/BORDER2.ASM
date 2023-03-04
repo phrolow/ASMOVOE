@@ -20,11 +20,11 @@ Start:  mov si, 80h
 
         jne ncbrd
 
-        sub bl, 9                       ; length minus char of our custom border
+        sub bl, 10                       ; length minus char of our custom border
 
         mov di, offset cbrd
      
-        mov cx, 9
+        mov cx, 10
 
 ReadCustom:
 
@@ -84,20 +84,25 @@ lty:    sub di, bp                      ; y of lt
 @@next: add si, 10
         loop @@next
 
+custom:
+
         lodsb
         mov ah, al
-
-custom:
 
         call Border
 
         mov si, 82h
 
-        cmp byte ptr [si], byte ptr '0'
-
         mov cl, [si]
         xor ch, ch
         sub cx, '0'
+
+        cmp cx, 0
+        jne NotCustom
+
+        add si, 10
+
+NotCustom:
         
         mov bx, offset cbrd
 
