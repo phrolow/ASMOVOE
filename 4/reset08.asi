@@ -1,5 +1,5 @@
 Reset1C         proc
-        push ax bx es
+        push bx es
 
         cli
 
@@ -7,10 +7,13 @@ Reset1C         proc
         mov es, bx
         mov bx, 4 * 1Ch                                   ; 8 interruption - keyboard
         
-        mov es:[bx], offset Old1C
+        mov es:[bx], offset Old1C                       ; change on new version
+
+        mov ax, cs
+        mov es:[bx+2], ax                                 ; NewSegment
 
         sti
 
-        pop es bx ax
+        pop es bx
         ret
         endp

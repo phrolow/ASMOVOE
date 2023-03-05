@@ -1,4 +1,4 @@
-RegName db 'AXBXCXDXESBP'
+RegName db 'AXBXCXDX'
 
 New1C   proc
 
@@ -18,7 +18,7 @@ New1C   proc
         mov es, bx
 
 @@Next: add di, 156 * 2
-        mov ah, 3Ah
+        mov ah, 2Ah
 
         mov al, cs:[si]
         inc si

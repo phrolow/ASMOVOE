@@ -1,17 +1,49 @@
 New09   proc
-        push ax bp                                  ;copy data
+        push ax bp es ds                                 ;copy data
         mov bp, sp
 
         in al, 60h                                              ; 60h -> al
+
         cmp al, 3Bh
         jne notF1
+
         call Set1C
+
+        mov al, byte ptr 20h
+        out 20h, al
+
+        call endint
+        pop ds es bp ax
+
+        iret
 notF1:
 
         cmp al, 3Ch
         jne notF2
+
         call Reset1C
+
+        mov al, byte ptr 20h
+        out 20h, al
+
+        call endint
+        pop ds es bp ax
+
+        iret
 notF2:
+
+        call endint
+
+        pop ds es bp ax
+
+                db 0eah
+Old09Ofs        dw 0h
+Old09Seg        dw 0h
+
+        iret
+        endp
+
+endint  proc
 
         in al, 61h                                      ; blinking
         or al, 80h
@@ -19,13 +51,7 @@ notF2:
         and al, not 80h
         out 61h, al
 
-        pop bp ax
-
-                db 0eah
-Old09Ofs        dw 0h
-Old09Seg        dw 0h
-
-        iret
+        ret
         endp
 
 include hexout2.asi
