@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    03/04/23 15:13:47	    Page 1
+Turbo Assembler	 Version 4.1	    03/05/23 23:34:11	    Page 1
 border2.asm
 
 
@@ -60,7 +60,7 @@ border2.asm
      55
      56	0137  BF 07D0			     mov di, 80	* 25
      57
-Turbo Assembler	 Version 4.1	    03/04/23 15:13:47	    Page 2
+Turbo Assembler	 Version 4.1	    03/05/23 23:34:11	    Page 2
 border2.asm
 
 
@@ -122,7 +122,7 @@ border2.asm
     112
     113	0180  83 F9 00			     cmp cx, 0
     114	0183  74 06			     je	StyleGot
-Turbo Assembler	 Version 4.1	    03/04/23 15:13:47	    Page 3
+Turbo Assembler	 Version 4.1	    03/05/23 23:34:11	    Page 3
 border2.asm
 
 
@@ -184,7 +184,7 @@ border2.asm
 1   169	01CD  8A DA			     mov bl, dl
 1   170
 1   171	01CF  2B FB			     sub di, bx
-Turbo Assembler	 Version 4.1	    03/04/23 15:13:47	    Page 4
+Turbo Assembler	 Version 4.1	    03/05/23 23:34:11	    Page 4
 border2.asm
 
 
@@ -246,7 +246,7 @@ border2.asm
 1   226	01FC  BF 028Dr				 mov di, offset	Lines
 1   227
 1   228	01FF  33 C9				 xor cx, cx
-Turbo Assembler	 Version 4.1	    03/04/23 15:13:47	    Page 5
+Turbo Assembler	 Version 4.1	    03/05/23 23:34:11	    Page 5
 border2.asm
 
 
@@ -308,7 +308,7 @@ border2.asm
 1   283	0240  BF B800				 mov di, 0B800h
 1   284	0243  8E C7				 mov es, di
 1   285	0245  BF 07D0				 mov di, 80 * 25		 ; mid of screen
-Turbo Assembler	 Version 4.1	    03/04/23 15:13:47	    Page 6
+Turbo Assembler	 Version 4.1	    03/05/23 23:34:11	    Page 6
 border2.asm
 
 
@@ -370,7 +370,7 @@ border2.asm
 1   340
 1   341	0285  43		     @@odd:	 inc bx
 1   342
-Turbo Assembler	 Version 4.1	    03/04/23 15:13:47	    Page 7
+Turbo Assembler	 Version 4.1	    03/05/23 23:34:11	    Page 7
 border2.asm
 
 
@@ -398,7 +398,7 @@ border2.asm
     363	      40 40 40
     364
     365				     end     Start
-Turbo Assembler	 Version 4.1	    03/04/23 15:13:47	    Page 8
+Turbo Assembler	 Version 4.1	    03/05/23 23:34:11	    Page 8
 Symbol Table
 
 
@@ -406,9 +406,9 @@ Symbol Table
 
 Symbol Name			  Type	 Value
 
-??DATE				  Text	 "03/04/23"
+??DATE				  Text	 "03/05/23"
 ??FILENAME			  Text	 "border2 "
-??TIME				  Text	 "15:13:47"
+??TIME				  Text	 "23:34:11"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
 @@NEXT				  Near	 DGROUP:0160

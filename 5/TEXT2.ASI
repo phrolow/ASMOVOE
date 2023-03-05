@@ -1,0 +1,132 @@
+; pls si, ah
+
+text        proc
+            push ax si
+
+            mov di, cs
+            mov es, di
+            mov di, offset Lines
+
+            xor cx, cx
+
+NextChar:   inc cx
+
+            lodsb
+
+            cmp al, 1
+            jne NotColor
+
+            dec cx
+            lodsb
+            jmp NextChar
+
+NotColor:   cmp al, 2
+            je NewLine
+
+            cmp al, 0Dh
+            je NewLine
+
+            cmp cx, 20
+            je FilledLine
+
+            jmp NextChar
+
+NewLine:    dec cl
+
+FilledLine: mov [di], cl
+            inc di
+            xor cx, cx
+
+            cmp al, 0Dh
+            jne NextChar
+
+            mov si, offset Lines
+            mov cx, 10
+
+            xor dx, dx
+
+CountLines: lodsb
+
+            inc dh
+
+            cmp al, 0
+            loopne CountLines
+
+            dec dh
+
+            xor ah, ah
+            mov al, dh
+
+            xor ch, ch
+            mov cl, 2
+
+            div cl
+
+            mov di, 0B800h
+            mov es, di
+            mov di, 80 * 25                 ; mid of screen
+
+            mov cl, al
+
+            cmp cl, 0
+            je DontUp
+
+Up:         sub di, 80 * 2
+
+            loop Up
+
+DontUp:     mov cl, dh
+
+            mov bx, offset Lines
+
+            pop si ax
+
+WriteLine:  mov dx, [bx]
+
+            xor dh, dh
+            sub di, dx
+            and di, 0FFFEh                  ; line must be in mid
+
+            push cx
+
+            mov cx, dx
+
+WriteChar:  lodsb
+
+            cmp al, 1
+            jne NotChangeColor
+
+            lodsb
+            mov ah, al
+
+            jmp WriteChar
+
+NotChangeColor:
+
+            cmp al, 2
+            je WriteChar
+
+            stosw
+
+            loop WriteChar
+
+            pop cx
+
+            sub di, dx
+
+            and dx, 01h
+            cmp dx, 0
+            jne @@odd
+
+            inc di
+
+@@odd:      inc bx
+
+            add di, 80 * 2
+
+loop WriteLine
+
+            ret
+            endp
+
+Lines       db 10 dup(0)

@@ -1,0 +1,29 @@
+frameout     proc
+        push bp
+        mov bp, sp        
+        
+        mov si, 80h
+        
+        mov ah, 0Ah
+
+        mov di, 0B800h
+        mov es, di
+
+        mov di, (80 * 5 + 10) * 2
+
+        mov dh, 15
+        mov dl, 60
+
+        mov si, offset frame
+
+        call Border
+
+        mov si, [bp + 4]
+
+        mov ah, 0Ah
+
+        call text
+
+        pop bp
+        ret
+        endp
