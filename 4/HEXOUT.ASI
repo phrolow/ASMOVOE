@@ -6,8 +6,6 @@
 ;===============================================;
 
 Hexout	proc
-	push cx di
-
 	mov di, 0B800h
 	mov es, di
 	mov di, bx		; set vm to line begin (dx)
@@ -49,6 +47,5 @@ Hexout	proc
 
 	loop @@Next
 	
-	pop di cx
 	ret
 	endp

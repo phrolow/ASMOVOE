@@ -1,0 +1,44 @@
+Hexout	proc
+    push ax bx cx dx es di
+
+	mov di, 0B800h
+	mov es, di
+	mov di, bx		; set vm to line begin (dx)
+
+	mov cx, word ptr 4	; we output 4 chars
+    mov dx, 0F000h      ; bit mask
+
+@@Next: mov bx, dx
+
+        and bx, ax
+
+        dec cl
+
+        REPT 4
+        shr bx, cl
+        ENDM
+
+        inc cl
+
+        shr dx, 4
+
+        cmp bx, 0Ah		; is char decimal
+	    jb @@Dec
+
+        add bx, 'A' - 10d	; if char not decimal
+	
+	    jmp @@Out
+
+@@Dec:	add bx, '0'		; if char is decimal
+
+@@Out:	mov bh, 4Bh
+	
+        mov es:[di], bx		; output
+        
+        add di, 2
+
+        loop @@Next
+        
+        pop di es dx cx bx ax
+        ret
+        endp

@@ -8,8 +8,8 @@ org 100h
 
 Start:  jmp EOP
 
-include showreg.asi
-include hexout.asi
+include showregs.asi
+include hexout2.asi
 
 EOP:    cli
 

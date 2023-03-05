@@ -1,28 +1,32 @@
-;RegName db 'AXBXCXDXESBP'
+RegName db 'AXBXCXDXESBP'
 
 New1C   proc
-        
 
-        push ax bx cx dx es bp                                  ;copy data
+        push ax bx cx dx bp sp di si es ds ss                                  ;copy data
         
         mov bp, sp
 
+        xor bx, bx
+        mov es, bx
         mov di, (80 * 3 + 36) * 2
-;        mov si, offset RegName
+        mov si, offset RegName
 
-        mov cx, 6
-        add bp, 10
+        mov cx, 4
+        add bp, 20
+
+        mov bx, 0B800h
+        mov es, bx
 
 @@Next: add di, 156 * 2
         mov ah, 3Ah
 
-;        mov al, cs:[si]
-;        inc si
-;        stosw
+        mov al, cs:[si]
+        inc si
+        stosw
 
-;        mov al, cs:[si]
-;        inc si
-;        stosw
+        mov al, cs:[si]
+        inc si
+        stosw
 
         add di, 2 * 2
 
@@ -35,14 +39,9 @@ New1C   proc
 
         loop @@Next
 
-        add bp, 2
+        add bp, 8
 
-        pop bp es dx cx bx ax
-
-
-                db 0eah
-Old1COfs        dw 0h
-Old1CSeg        dw 0h
+        pop ss ds es si di sp bp dx cx bx ax
 
         iret
         endp

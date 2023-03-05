@@ -8,7 +8,7 @@ org 100h
 
 Start:  jmp EOP
 
-include showreg.asi
+include showregs.asi
 include set08.asi
 include reset08.asi
 include regs2.asi

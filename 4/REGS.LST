@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    03/04/23 22:52:31	    Page 1
+Turbo Assembler	 Version 4.1	    03/05/23 20:05:38	    Page 1
 regs.asm
 
 
@@ -60,7 +60,7 @@ regs.asm
 1    55
 1    56	0151  E4 61			     in	al, 61h						     ; blinking
 1    57	0153  0C 80			     or	al, 80h
-Turbo Assembler	 Version 4.1	    03/04/23 22:52:31	    Page 2
+Turbo Assembler	 Version 4.1	    03/05/23 20:05:38	    Page 2
 regs.asm
 
 
@@ -122,7 +122,7 @@ regs.asm
 2   112	0197  D3 EB			     shr bx, cl
 2   113	0199  D3 EB			     shr bx, cl
 2   114	019B  D3 EB			     shr bx, cl
-Turbo Assembler	 Version 4.1	    03/04/23 22:52:31	    Page 3
+Turbo Assembler	 Version 4.1	    03/05/23 20:05:38	    Page 3
 regs.asm
 
 
@@ -177,7 +177,7 @@ regs.asm
     162	01EA  CD 21			     int 21h
     163
     164				     end     Start
-Turbo Assembler	 Version 4.1	    03/04/23 22:52:31	    Page 4
+Turbo Assembler	 Version 4.1	    03/05/23 20:05:38	    Page 4
 Symbol Table
 
 
@@ -185,9 +185,9 @@ Symbol Table
 
 Symbol Name			  Type	 Value
 
-??DATE				  Text	 "03/04/23"
+??DATE				  Text	 "03/05/23"
 ??FILENAME			  Text	 "regs	  "
-??TIME				  Text	 "22:52:30"
+??TIME				  Text	 "20:05:38"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
 @@DEC				  Near	 DGROUP:01AC

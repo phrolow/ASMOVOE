@@ -1,4 +1,4 @@
-Turbo Assembler	 Version 4.1	    03/03/23 20:47:21	    Page 1
+Turbo Assembler	 Version 4.1	    03/05/23 19:57:24	    Page 1
 vzlomzho.asm
 
 
@@ -54,21 +54,19 @@ vzlomzho.asm
      49
      50	0149  FB			     sti
      51
-     52
-     53
-     54	014A  B8 3100			     mov ax, 3100h
-     55	014D  BA 0128r			     mov dx, offset EOP
-     56	0150  C1 EA 04			     shr dx, 4
-     57	0153  42			     inc dx
-Turbo Assembler	 Version 4.1	    03/03/23 20:47:21	    Page 2
+     52	014A  B8 3100			     mov ax, 3100h
+     53	014D  BA 0128r			     mov dx, offset EOP
+     54	0150  C1 EA 04			     shr dx, 4
+     55	0153  42			     inc dx
+     56	0154  CD 21			     int 21h
+     57
+Turbo Assembler	 Version 4.1	    03/05/23 19:57:24	    Page 2
 vzlomzho.asm
 
 
 
-     58	0154  CD 21			     int 21h
-     59
-     60				     end     Start
-Turbo Assembler	 Version 4.1	    03/03/23 20:47:21	    Page 3
+     58				     end     Start
+Turbo Assembler	 Version 4.1	    03/05/23 19:57:24	    Page 3
 Symbol Table
 
 
@@ -76,9 +74,9 @@ Symbol Table
 
 Symbol Name			  Type	 Value
 
-??DATE				  Text	 "03/03/23"
+??DATE				  Text	 "03/05/23"
 ??FILENAME			  Text	 "vzlomzho"
-??TIME				  Text	 "20:47:20"
+??TIME				  Text	 "19:57:24"
 ??VERSION			  Number 040A
 @32BIT				  Text	 0
 @CODE				  Text	 DGROUP
