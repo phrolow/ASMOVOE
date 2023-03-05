@@ -1,0 +1,17 @@
+New1C   proc
+        
+
+        push ax bx cx dx es bp                                  ;copy data
+        mov bp, sp
+
+        mov bx, 80 * 25 - 4
+        mov ax, [bp + 10]
+
+        call hexout
+
+        add bp, 2
+
+        pop bp es dx cx bx ax
+
+        iret
+        endp

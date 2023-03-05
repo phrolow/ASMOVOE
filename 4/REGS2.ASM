@@ -8,9 +8,14 @@ org 100h
 
 Start:  jmp EOP
 
-include showregs.asi
-
+include showreg.asi
+include set08.asi
+include reset08.asi
 include regs2.asi
+
+Old1C   proc
+        iret
+        endp
 
 EOP:    cli
 

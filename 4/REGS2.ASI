@@ -1,58 +1,25 @@
-RegName db 'AXBXCXDXESBP'
-
 New09   proc
-        push ax bx cx dx es bp                                  ;copy data
+        push ax bp                                  ;copy data
         mov bp, sp
 
         in al, 60h                                              ; 60h -> al
         cmp al, 3Bh
-        jne skip
+        jne notF1
+        call Set1C
+notF1:
 
-;------------------------------------------------------------------------------------------------------
+        cmp al, 3Ch
+        jne notF2
+        call Reset1C
+notF2:
 
-        push ax
-
-        in al, 61h                                              ; blinking
+        in al, 61h                                      ; blinking
         or al, 80h
         out 61h, al
         and al, not 80h
         out 61h, al
 
-        mov al, 20h
-        out 20h, al
-
-        cli
-
-        xor bx, bx
-        mov es, bx
-        mov bx, 4 * 9                                   ; 8 interruption - keyboard
-        
-        mov ax, es:[bx]
-        mov NextOfs, ax                                ; old interrupt
-        mov ax, offset ShowRegs
-        mov es:[bx], ax                       ; change on new version
-
-        add bx, 2
-        mov ax, es:[bx]
-        mov NextSeg, ax                                ; pointer on segment
-        mov ax, cs
-        mov es:[bx], ax                                 ; NewSegment
-
-        sti
-
-        pop bp es dx cx bx ax
-
-        iret
-
-;--------------------------------------------------------------------------------------
-
-skip:   in al, 61h                                      ; blinking
-        or al, 80h
-        out 61h, al
-        and al, not 80h
-        out 61h, al
-
-        pop bp es dx cx bx ax
+        pop bp ax
 
                 db 0eah
 Old09Ofs        dw 0h

@@ -1,10 +1,14 @@
-ShowRegs    proc
+;RegName db 'AXBXCXDXESBP'
+
+New1C   proc
+        
 
         push ax bx cx dx es bp                                  ;copy data
+        
         mov bp, sp
 
         mov di, (80 * 3 + 36) * 2
-        mov si, offset RegName
+;        mov si, offset RegName
 
         mov cx, 6
         add bp, 10
@@ -12,13 +16,13 @@ ShowRegs    proc
 @@Next: add di, 156 * 2
         mov ah, 3Ah
 
-        mov al, cs:[si]
-        inc si
-        stosw
+;        mov al, cs:[si]
+;        inc si
+;        stosw
 
-        mov al, cs:[si]
-        inc si
-        stosw
+;        mov al, cs:[si]
+;        inc si
+;        stosw
 
         add di, 2 * 2
 
@@ -33,32 +37,12 @@ ShowRegs    proc
 
         add bp, 2
 
-        in al, 60h                                              ; 60h -> al
-        cmp al, 3Bh
-        jne Stay
+        pop bp es dx cx bx ax
 
-        cli
-
-        xor bx, bx
-        mov es, bx
-        mov bx, 4 * 9                                   ; 8 interruption - keyboard
-        
-        mov es:[bx], offset NextOfs
-        mov es:[bx + 2], offset NextSeg                 ; return old int handler
-
-        sti
-
-Stay:   in al, 61h                                      ; blinking
-        or al, 80h
-        out 61h, al
-        and al, not 80h
-        out 61h, al
 
                 db 0eah
-NextOfs         dw 0h
-NextSeg         dw 0h
-
-        pop bp es dx cx bx ax
+Old1COfs        dw 0h
+Old1CSeg        dw 0h
 
         iret
         endp

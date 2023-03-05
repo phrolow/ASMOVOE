@@ -1,0 +1,16 @@
+Reset1C         proc
+        push ax bx es
+
+        cli
+
+        xor bx, bx
+        mov es, bx
+        mov bx, 4 * 1Ch                                   ; 8 interruption - keyboard
+        
+        mov es:[bx], offset Old1C
+
+        sti
+
+        pop es bx ax
+        ret
+        endp

@@ -1,0 +1,21 @@
+Set1C   proc
+
+        push ax bx es
+
+        cli
+
+        xor bx, bx
+        mov es, bx
+        mov bx, 4 * 1Ch                                   ; 1Ch interruption - keyboard
+        
+        mov es:[bx], offset New1C                       ; change on new version
+
+        mov ax, cs
+        mov es:[bx+2], ax                                 ; NewSegment
+
+        sti
+
+        pop es bx ax
+
+        ret
+        endp
