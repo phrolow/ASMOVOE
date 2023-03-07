@@ -39,7 +39,7 @@ Hexout	proc
 
 @@Dec:	add bx, '0'		; if char is decimal
 
-@@Out:	mov bh, 4Bh
+@@Out:	mov bh, 0Ah
 	
 	mov es:[di], bx		; output
 	

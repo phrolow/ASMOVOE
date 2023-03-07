@@ -16,6 +16,7 @@ include showregs.asi
 include set08.asi
 include reset08.asi
 include regs2.asi
+include bordre.asi
 
 EOP:    cli
 

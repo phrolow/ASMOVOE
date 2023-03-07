@@ -1,0 +1,60 @@
+;
+; args - ah, di, dl, si
+; ah - attribute
+; di - start
+; dl - width
+; si - border source
+; dh - height
+; destroys - dohuya
+;
+
+Border  proc
+        push ds
+
+        mov bx, cs
+        mov ds, bx
+
+        push bp
+
+        call String
+
+        add di, 80 * 2
+
+        xor bh, bh              
+        mov bl, dl
+
+        sub di, bx
+        sub di, bx
+
+        mov bp, dx
+        and bp, 0FF00h
+        shr bp, 8
+        sub bp, 2
+
+zaloop: call String
+
+        sub si, 3
+
+        add di, 80 * 2
+
+        xor bh, bh              
+        mov bl, dl
+
+        sub di, bx
+        sub di, bx
+
+        dec bp
+
+        cmp bp, 0
+        jne zaloop
+
+        add si, 3
+        
+        call String
+
+        pop bp
+        pop ds
+        ret
+        endp
+
+        include string.asi

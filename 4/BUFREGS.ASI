@@ -48,6 +48,8 @@ New1C   proc
 
         add bp, 8
 
+        
+
         mov al, 20h
         out 20h, al
 
@@ -56,6 +58,7 @@ New1C   proc
         iret
         endp
 
-buf     dw 90 dup(0)
-SaveBuf dw 90 dup(0)
 frame   db 0C9h, 0CDh, 0BBh, 0BAh, 000h, 0BAh, 0C8h, 0CDh, 0BCh 
+
+SaveBuf dw 10 * 9 dup(0)
+DrawBuf dw 10 * 9 dup(0)

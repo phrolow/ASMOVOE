@@ -10,6 +10,7 @@ Start:  jmp EOP
 
 include showregs.asi
 include hexout2.asi
+include bordre.asi
 
 EOP:    cli
 

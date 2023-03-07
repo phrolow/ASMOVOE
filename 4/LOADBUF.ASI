@@ -1,0 +1,43 @@
+; require si, di
+
+loadbuf proc
+
+        mov dx, 0B800h
+        mov es, dx
+
+        mov dx, cs
+        mov ds, dx
+
+        mov cx, 9
+
+LoadLine: 
+
+        mov dx, cx          ; save cx for outer loop
+
+        mov cx, 10
+
+LoadChar:
+        lodsw
+        
+        cmp ax, [di]
+        je DontChange
+
+        mov bx, es:[di]
+        mov ds:[offset SaveBuf + si - offset buf], bx
+        
+        mov es:[di], ax
+
+DontChange:
+
+        add di, 2
+
+        loop LoadChar
+
+        add di, (80 - 10) * 2
+
+        mov cx, dx          ; load cx for outer loop
+
+        loop LoadLine
+
+        ret
+        endp
