@@ -17,19 +17,9 @@ LoadLine:
         mov cx, 10
 
 LoadChar:
+
         lodsw
-        
-        cmp ax, [di]
-        je DontChange
-
-        mov bx, es:[di]
-        mov ds:[offset SaveBuf + si - offset buf], bx
-        
-        mov es:[di], ax
-
-DontChange:
-
-        add di, 2
+        stosw
 
         loop LoadChar
 

@@ -4,41 +4,44 @@ New1C   proc
 
         push ax bx cx dx bp sp di si es ds ss                                  ;copy data
 
+        xor di, di
+        lea si, DrawBuf
+
+        call RefreshBuf
+
         mov bx, 0B800h
         mov es, bx
 
-        mov ah, 0Fh
-        mov di, 0
-        mov dl, 10
-        mov dh, 9
-        mov si, offset frame
-
-        call border
-        
-        mov bp, sp
-
-        xor di, di
-        sub di, (160 - 4 - 81) * 2
+        xor bx, bx
+        sub bx, (160 - 4 - 81) * 2
         mov si, offset RegName
 
         mov cx, 4
         add bp, 20
 
-@@Next: add di, 156 * 2
+        mov di, (10 + 1) * 2 + offset DrawBuf
+
+@@Next: add bx, 157 * 2
         mov ah, 0Ah
 
         mov al, cs:[si]
         inc si
-        stosw
+        mov cs:[di], ax
+        add di, 2
+        mov es:[bx], ax
+        add bx, 2
 
         mov al, cs:[si]
         inc si
-        stosw
+        mov cs:[di], ax
+        add di, 2
+        mov es:[bx], ax
 
-        add di, 2 * 2
+        add di, (10 * 2 - 2) * 2
+
+        add bx, 2 * 2
 
         mov ax, [bp]
-        mov bx, di
 
         sub bp, 2
 
@@ -47,8 +50,6 @@ New1C   proc
         loop @@Next
 
         add bp, 8
-
-        
 
         mov al, 20h
         out 20h, al

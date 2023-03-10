@@ -1,0 +1,42 @@
+; require si, di
+
+RefreshBuf  proc
+
+            mov dx, 0B800h
+            mov es, dx
+
+            mov dx, cs
+            mov ds, dx
+
+            mov cx, 9
+
+RefreshLine:   
+
+            mov dx, cx              ; save cx for outer loop
+
+            mov cx, 10
+
+RefreshChar:   
+
+            lodsw
+        
+            cmp ax, [di]
+            je DontChange
+
+            mov bx, es:[di]
+            mov ds:[offset SaveBuf + si - offset DrawBuf], bx
+            
+            mov es:[di], ax
+
+DontChange: add di, 2
+
+            loop RefreshChar
+
+            add di, (80 - 10) * 2
+
+            mov cx, dx              ; load cx for outer loop
+
+            loop RefreshLine
+
+            ret
+            endp

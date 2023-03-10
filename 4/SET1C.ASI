@@ -1,0 +1,40 @@
+Set1C   proc
+
+        xor si, si
+        lea di, SaveBuf
+        call FillBuf
+
+        mov bx, 0B800h
+        mov es, bx
+
+        mov bx, cs
+        mov ds, bx
+
+        xor di, di
+        mov ah, 0Fh
+        xor bx, bx
+        mov dl, 10
+        mov dh, 9
+        lea si, frame
+
+        call border
+
+        xor si, si
+        lea di, DrawBuf
+        call FillBuf
+
+        cli
+
+        xor bx, bx
+        mov es, bx
+        mov bx, 4 * 1Ch                                   ; 1Ch interruption - keyboard
+        
+        mov es:[bx], offset New1C                       ; change on new version
+
+        mov ax, cs
+        mov es:[bx+2], ax                                 ; NewSegment
+
+        sti
+
+        ret
+        endp

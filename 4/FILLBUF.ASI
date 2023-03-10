@@ -12,11 +12,12 @@ fillbuf proc
 
 FillLine: 
 
-        mov dx, cx          ; save cx for outer loop
+        mov dx, cx              ; save cx for outer loop
 
         mov cx, 10
 
 FillChar:
+
         lodsw
         stosw
 
@@ -24,7 +25,7 @@ FillChar:
 
         add si, (80 - 10) * 2
 
-        mov cx, dx          ; load cx for outer loop
+        mov cx, dx              ; load cx for outer loop
 
         loop FillLine
 

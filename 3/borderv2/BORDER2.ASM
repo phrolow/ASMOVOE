@@ -7,26 +7,26 @@ org 100h
 
 Start:  mov si, 80h
         
-        lodsb
+        lodsb                           ; 80h (length)
 
         xor bh, bh
         mov bl, al                      ; bl is length of our string
 
-        inc si
-        lodsb
+        inc si                          ; skip 81h (there is nothing useful)
+        lodsb                           ; read style
 
-        sub al, '0'
+        sub al, '0'                     ; char to num
+
         cmp al, 0
+        jne NotCustomBorder
 
-        jne NotCustomBrd
+        sub bl, 11                      ; only length of text (instead of command length)
 
-        sub bl, 11                       ; length minus char of our custom border
+        mov di, offset CustomFrame
 
-        mov di, offset cbrd
-
-        lodsb
+        lodsb                           ; skip space
      
-        mov cx, 10
+        mov cx, 10                      ; wanna load and store 10 characters (args of custom frame)
 
 ReadCustom:
 
@@ -35,7 +35,9 @@ ReadCustom:
 
         loop ReadCustom
 
-NotCustomBrd:  sub bl, 1
+NotCustomBorder: 
+        
+        sub bl, 1                       ; length minus terminator (0Dh)
 
         xor dx, dx                      ; wanna set height and length
 
@@ -46,12 +48,12 @@ NotCustomBrd:  sub bl, 1
         mov dl, 30
 
         mov dh, al
-        add dl, dl                      ; convert to vm px (2 bytes)
+        add dl, dl                      ; convert to video memory px (2 bytes)
         
-        add dh, 5
+        add dh, 5                       ; kinda alignment
 
         mov di, 0B800h
-        mov es, di
+        mov es, di                      ; to video memory
 
         mov di, 80 * 25
         
@@ -78,7 +80,7 @@ lty:    sub di, bp                      ; y of lt
         sub cl, '0'
         xor ch, ch                      ; cl is type
 
-        mov si, offset cbrd
+        mov si, offset CustomFrame
 
         cmp cl, 0
         je custom
@@ -106,7 +108,7 @@ custom:
 
 NotCustom:
         
-        mov bx, offset cbrd
+        mov bx, offset CustomFrame
 
 GetStyle:
 
@@ -131,12 +133,12 @@ StyleGot:
         include bordre.asi
         include text2.asi
 
-cbrd    db    ?,    ?,    ?,    ?,    ?,    ?,    ?,    ?,    ?,    ?  ; custom border
-brd1    db 01Fh, 0C9h, 0CDh, 0BBh, 0BAh, 000h, 0BAh, 0C8h, 0CDh, 0BCh 
-brd2    db 071h, 080h, 080h, 080h, 080h, 000h, 080h, 080h, 080h, 080h 
-brd3    db 022h, 01Eh, 01Eh, 01Eh, 01Eh, 000h, 01Eh, 01Eh, 01Eh, 01Eh 
-brd4    db 01Eh, 040h, 040h, 040h, 040h, 000h, 040h, 040h, 040h, 040h 
-brd5    db 0CEh, 040h, 040h, 040h, 040h, 000h, 040h, 040h, 040h, 040h 
+CustomFrame     db    ?,    ?,    ?,    ?,    ?,    ?,    ?,    ?,    ?,    ?
+brd1            db 01Fh, 0C9h, 0CDh, 0BBh, 0BAh, 000h, 0BAh, 0C8h, 0CDh, 0BCh 
+brd2            db 071h, 080h, 080h, 080h, 080h, 000h, 080h, 080h, 080h, 080h 
+brd3            db 022h, 01Eh, 01Eh, 01Eh, 01Eh, 000h, 01Eh, 01Eh, 01Eh, 01Eh 
+brd4            db 01Eh, 040h, 040h, 040h, 040h, 000h, 040h, 040h, 040h, 040h 
+brd5            db 0CEh, 040h, 040h, 040h, 040h, 000h, 040h, 040h, 040h, 040h 
 
 end     Start
 
