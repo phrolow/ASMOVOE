@@ -5,15 +5,15 @@ org 100h
 
 locals @@
 
-Start:  mov ah, 0Ah
-        mov dx, offset args
-        int 21h
+Start:  call frm
 
         mov ah, 0Ah
         mov dx, offset jopa
         int 21h
 
-        call frm
+        mov ah, 0Ah
+        mov dx, offset args
+        int 21h
 
         mov bx, offset args
         mov ax, [bx + 2]
