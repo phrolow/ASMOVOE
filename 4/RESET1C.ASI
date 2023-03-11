@@ -12,6 +12,11 @@ Reset1C proc
         mov es:[bx+2], ax                                 ; NewSegment
 
         sti
+        
+        lea si, SaveBuf
+        mov di, 0
+
+        call loadbuf
 
         ret
         endp
