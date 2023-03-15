@@ -1,11 +1,13 @@
 New09   proc
-        push ax bx cx dx si di bp sp ss es ds    ; fix                             ;copy data
+        push ax bx cx dx si di bp sp ss es ds    ; fix                                  ;copy data
         mov bp, sp
 
-        in al, 60h                                              ; 60h -> al
+        in al, 60h                                                                      ; 60h -> al
 
-        cmp al, 3Bh             ; F1
+        cmp al, 3Bh                                                                     ; if we pressed F1
         jne notF1
+
+        mov ax, offset New1C                                                            ; store offset of new 1C
 
         call Set1C
 
@@ -16,21 +18,8 @@ New09   proc
         pop ds es ss sp bp di si dx cx bx ax
 
         iret
+        
 notF1:
-
-        cmp al, 3Ch                             ; if F2
-        jne notF2
-
-        call Reset1C
-
-        mov al, byte ptr 20h
-        out 20h, al
-
-        call endint
-        pop ds es ss sp bp di si dx cx bx ax
-
-        iret
-notF2:
 
         call endint
 

@@ -1,5 +1,21 @@
 Set1C   proc
 
+        cli
+
+        xor bx, bx
+        mov es, bx
+        mov bx, 4 * 1Ch                                   ; 1Ch interruption - keyboard
+        
+        cmp es:[bx], ax                                         ; if 1C already intercepted
+        je Reset
+        
+        mov es:[bx], offset New1C                       ; change on new version
+
+        mov ax, cs
+        mov es:[bx+2], ax                                 ; NewSegment
+
+        sti
+
         xor si, si
         lea di, SaveBuf
         call FillBuf              ; store old data to savebuf
@@ -23,18 +39,9 @@ Set1C   proc
         lea di, DrawBuf
         call FillBuf              ; store new data to drawbuf
 
-        cli
+        ret
 
-        xor bx, bx
-        mov es, bx
-        mov bx, 4 * 1Ch                                   ; 1Ch interruption - keyboard
-        
-        mov es:[bx], offset New1C                       ; change on new version
-
-        mov ax, cs
-        mov es:[bx+2], ax                                 ; NewSegment
-
-        sti
-
+Reset:
+        call Reset1C
         ret
         endp
