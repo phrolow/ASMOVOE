@@ -2,7 +2,7 @@ Set1C   proc
 
         xor si, si
         lea di, SaveBuf
-        call FillBuf
+        call FillBuf              ; store old data to savebuf
 
         mov bx, 0B800h
         mov es, bx
@@ -15,13 +15,13 @@ Set1C   proc
         xor bx, bx
         mov dl, 10
         mov dh, 9
-        lea si, frame
+        lea si, frame            
 
-        call border
+        call border               ; make frame
 
         xor si, si
         lea di, DrawBuf
-        call FillBuf
+        call FillBuf              ; store new data to drawbuf
 
         cli
 

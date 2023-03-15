@@ -16,7 +16,7 @@ Reset1C proc
         lea si, SaveBuf
         mov di, 0
 
-        call loadbuf
+        call loadbuf                                            ; load savebuf at end
 
         ret
         endp

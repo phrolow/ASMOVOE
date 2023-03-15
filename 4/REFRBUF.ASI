@@ -1,40 +1,43 @@
-; require si, di
+; si - DrawBuf
+; di - VideoMem
+;
+; Actually, function isn't universal, cause we use offsets of SaveBuf and DrawBuf
 
 RefreshBuf  proc
 
             mov dx, 0B800h
-            mov es, dx
+            mov es, dx                                          ; es <- B800
 
             mov dx, cs
-            mov ds, dx
+            mov ds, dx                                          ; ds <- cs
 
-            mov cx, 9
+            mov cx, 9                                           ; outer loop for 9 times
 
 RefreshLine:   
 
-            mov dx, cx              ; save cx for outer loop
+            mov dx, cx                                          ; save cx for outer loop
 
-            mov cx, 10
+            mov cx, 10                                          ; inner loop for 10 times
 
 RefreshChar:   
 
-            lodsw
+            lodsw                                               ; ax <- DrawBuf
         
-            cmp ax, [di]
-            je DontChange
+            cmp ax, es:[di]                                        ; compare current pixel with pixel from DrawBuf
+            je DontChange                                       ; If equals, skip
 
-            mov bx, es:[di]
-            mov ds:[offset SaveBuf + si - offset DrawBuf], bx
+            mov bx, es:[di]                                     ; if not equals, mov it to SaveBuf[i]
+            mov ds:[offset SaveBuf + si - 2 - offset DrawBuf], bx
             
-            mov es:[di], ax
+DontChange: mov es:[di], ax                                     ; then mov it to VideoMem
 
-DontChange: add di, 2
+            add di, 2                                           ; next pixel
 
             loop RefreshChar
 
             add di, (80 - 10) * 2
 
-            mov cx, dx              ; load cx for outer loop
+            mov cx, dx                                          ; load cx for outer loop
 
             loop RefreshLine
 

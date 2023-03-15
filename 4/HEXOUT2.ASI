@@ -1,5 +1,12 @@
+;===============================================;
+; Uses: ax, bx					;
+; Destroys: cx, es, di				;
+; Returns:					;
+; Expects: num in ax, start of label in bx	;
+;===============================================;
+
 Hexout	proc
-    push ax bx cx dx es di
+    push ax bx cx dx es si di
 
 	mov di, 0B800h
 	mov es, di
@@ -12,15 +19,15 @@ Hexout	proc
 
         and bx, ax
 
-        dec cl
+        dec cl          ; counting bit shift
 
         REPT 4
-        shr bx, cl
+        shr bx, cl      ; to numeral
         ENDM
 
         inc cl
 
-        shr dx, 4
+        shr dx, 4       ; cause we need next char in next step
 
         cmp bx, 0Ah		; is char decimal
 	    jb @@Dec
@@ -31,14 +38,21 @@ Hexout	proc
 
 @@Dec:	add bx, '0'		; if char is decimal
 
-@@Out:	mov bh, 0Ah
+@@Out:	mov bh, 0Ah         ; style
 	
         mov es:[di], bx		; output
         
-        add di, 2
+        add di, 2           ; next char
+
+        pop si
+
+        mov cs:[si], bx
+        add si, 2
+
+        push si             ; store char to DrawBuf
 
         loop @@Next
         
-        pop di es dx cx bx ax
+        pop di si es dx cx bx ax
         ret
         endp

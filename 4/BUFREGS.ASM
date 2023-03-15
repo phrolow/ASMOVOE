@@ -26,7 +26,7 @@ EOP:    cli
 
         xor bx, bx
         mov es, bx
-        mov bx, 4 * 9                                   ; 8 interruption - keyboard
+        mov bx, 4 * 9                                   ; 9 interruption - keyboard
         
         mov ax, es:[bx]
         mov Old09Ofs, ax                                ; old interrupt

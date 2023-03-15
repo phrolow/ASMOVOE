@@ -37,15 +37,16 @@ ProgEnd:
 
         mov ax, 4C00h
         int 21h
+        
+frame   db 0C9h, 0CDh, 0BBh, 0BAh, 000h, 0BAh, 0C8h, 0CDh, 0BCh
+password db 'SHXTHVPP3N5', 0Dh
+buf     db 0FFh, 0, 12 dup(0)
 
+        include strcmp.asi
         include out.asi
         include bordre.asi
         include text2.asi
-        include strcmp.asi
 
-frame   db 0C9h, 0CDh, 0BBh, 0BAh, 000h, 0BAh, 0C8h, 0CDh, 0BCh
-buf     db 0FFh, 0, 255 dup(0)
-password db 'Yasin xyi', 0Dh
 
 ask     db 'Input password',    0Dh
 deny    db 'Access denied',     0Dh
