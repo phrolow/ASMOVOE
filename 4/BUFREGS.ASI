@@ -2,43 +2,36 @@ RegName db 'AXBXCXDX'
 
 New1C   proc
 
-        push ax bx cx dx bp sp di si es ds ss                                   ;copy data
+        push ax bx cx dx bp sp di si es ds ss                                   ; copy data
+        mov bp, sp
 
         xor di, di
         lea si, DrawBuf
 
         call RefreshBuf                                                         ; refresh videomem and savebuf
 
-        mov bx, 0B800h
+        mov bx, cs
         mov es, bx
+        mov ds, bx
 
-        mov bx, (- 156) * 2 + (80 + 1) * 2
         mov si, offset RegName                                                  ; ptr to regs names array
 
         mov cx, 4                                                               ; loop with 4 steps
         add bp, 20                                                              ; we will take regs from stack
 
-        mov di, (10 + 1) * 2 + offset DrawBuf                                   ; to point (1; 1) of drawbuf
+        mov di, (10 + 1) * 2 + offset DrawBuf - 16 * 2                                  ; to point (1; 1) of drawbuf
 
-@@Next: add bx, 156 * 2                                                         ; next step - two lines down
+@@Next: add di, 16 * 2                                                          ; next step - two lines down
         mov ah, 0Ah                                                             ; style
 
-        mov al, cs:[si]                                                         ; instead of lodsb
-        inc si                                                                  ; we wanna load from reg names array
-        mov cs:[di], ax
-        add di, 2                                                               ; store reg name to drawbuf
-        mov es:[bx], ax
-        add bx, 2                                                               ; store reg name to videomem
+        lodsb                                                                   ; load from regs name array
+        stosw                                                                   ; move letter to DrawBuf
 
-        mov al, cs:[si]
-        inc si
-        mov cs:[di], ax
-        add di, 2
-        mov es:[bx], ax                                                         ; once again
+        lodsb
+        stosw                                                                   ; once again
 
         add di, 2 * 2                                                           ; next 2 chars in DrawBuf
-        add bx, 3 * 2                                                           ; next 2 chars in videomem
-
+        
         mov ax, [bp]                                                            ; value of reg
 
         sub bp, 2                                                               ; next reg
@@ -47,11 +40,14 @@ New1C   proc
                                                                                 ; args are ax (num)
                                                                                 ; bx (coords)
 
-        add di, (10 * 2 - 8) * 2                                                ; next line in DrawBuf
+        loop @@next
 
-        loop @@Next
+        lea si, DrawBuf
+        mov di, 0
 
-        add bp, 8                                                               ; restore bp
+        call loadbuf                                                            ; load new drawbuf
+
+        add bp, 8   
 
         mov al, 20h                                                             ; end of int
         out 20h, al

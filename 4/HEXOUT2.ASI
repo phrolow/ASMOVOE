@@ -6,53 +6,41 @@
 ;===============================================;
 
 Hexout	proc
-    push ax bx cx dx es si di
+        push cx dx es si di
 
-	mov di, 0B800h
-	mov es, di
-	mov di, bx		; set vm to line begin (dx)
-
-	mov cx, word ptr 4	; we output 4 chars
-    mov dx, 0F000h      ; bit mask
+        mov cx, word ptr 4	            ; we output 4 chars
+        mov dx, 0F000h                  ; bit mask
 
 @@Next: mov bx, dx
 
         and bx, ax
 
-        dec cl          ; counting bit shift
+        dec cl                      ; counting bit shift
 
         REPT 4
-        shr bx, cl      ; to numeral
+        shr bx, cl                  ; to numeral
         ENDM
 
         inc cl
 
-        shr dx, 4       ; cause we need next char in next step
+        shr dx, 4                   ; cause we need next char in next step
 
-        cmp bx, 0Ah		; is char decimal
+        cmp bx, 0Ah		            ; is char decimal
 	    jb @@Dec
 
-        add bx, 'A' - 10d	; if char not decimal
+        add bx, 'A' - 10d	        ; if char not decimal
 	
 	    jmp @@Out
 
-@@Dec:	add bx, '0'		; if char is decimal
+@@Dec:	add bx, '0'		            ; if char is decimal
 
-@@Out:	mov bh, 0Ah         ; style
-	
-        mov es:[di], bx		; output
-        
-        add di, 2           ; next char
+@@Out:	mov bh, 0Ah                 ; style
 
-        pop si
-
-        mov cs:[si], bx
-        add si, 2
-
-        push si             ; store char to DrawBuf
+        mov es:[di], bx
+        add di, 2                   ; store char to DrawBuf
 
         loop @@Next
         
-        pop di si es dx cx bx ax
+        pop di si es dx cx
         ret
         endp

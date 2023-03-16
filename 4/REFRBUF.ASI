@@ -6,38 +6,38 @@
 RefreshBuf  proc
 
             mov dx, 0B800h
-            mov es, dx                                          ; es <- B800
+            mov es, dx                                              ; es <- B800
 
             mov dx, cs
-            mov ds, dx                                          ; ds <- cs
+            mov ds, dx                                              ; ds <- cs
 
-            mov cx, 9                                           ; outer loop for 9 times
+            mov cx, 9                                               ; outer loop for 9 times
 
 RefreshLine:   
 
-            mov dx, cx                                          ; save cx for outer loop
+            mov dx, cx                                              ; save cx for outer loop
 
-            mov cx, 10                                          ; inner loop for 10 times
+            mov cx, 10                                              ; inner loop for 10 times
 
 RefreshChar:   
 
-            lodsw                                               ; ax <- DrawBuf
+            lodsw                                                   ; ax <- DrawBuf
         
-            cmp ax, es:[di]                                        ; compare current pixel with pixel from DrawBuf
-            je DontChange                                       ; If equals, skip
+            cmp ax, es:[di]                                         ; compare current pixel with pixel from DrawBuf
+            je DontChange                                           ; If equals, skip
 
-            mov bx, es:[di]                                     ; if not equals, mov it to SaveBuf[i]
+            mov bx, es:[di]                                         ; if not equals, mov it to SaveBuf[i]
             mov ds:[offset SaveBuf + si - 2 - offset DrawBuf], bx
             
-DontChange: mov es:[di], ax                                     ; then mov it to VideoMem
+DontChange: mov es:[di], ax                                         ; then mov it to VideoMem
 
-            add di, 2                                           ; next pixel
+            add di, 2                                               ; next pixel
 
             loop RefreshChar
 
             add di, (80 - 10) * 2
 
-            mov cx, dx                                          ; load cx for outer loop
+            mov cx, dx                                              ; load cx for outer loop
 
             loop RefreshLine
 
