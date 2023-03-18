@@ -1,7 +1,12 @@
-; si - DrawBuf
-; di - VideoMem
+; si - first pixel in DrawBuf
+; di - first pixel in VideoMem
 ;
 ; Actually, function isn't universal, cause we use offsets of SaveBuf and DrawBuf
+;=================================================================================
+; This function refreshes buffer
+; Pixels, that don't equal pixels from DrawBuf, are sent to SaveBuf
+; DrawBuf is sent to VideoMem
+;=================================================================================
 
 RefreshBuf  proc
 
@@ -26,16 +31,16 @@ RefreshChar:
             cmp ax, es:[di]                                         ; compare current pixel with pixel from DrawBuf
             je DontChange                                           ; If equals, skip
 
-            mov bx, es:[di]                                         ; if not equals, mov it to SaveBuf[i]
-            mov ds:[offset SaveBuf + si - 2 - offset DrawBuf], bx
+            mov bx, es:[di]                                         ; if not equals, mov out pixel to bx
+            mov ds:[offset SaveBuf + si - 2 - offset DrawBuf], bx   ; then store pixel to SaveBuf
             
-DontChange: mov es:[di], ax                                         ; then mov it to VideoMem
+DontChange: mov es:[di], ax                                         ; then store pixel from DrawBuf to VideoMem
 
             add di, 2                                               ; next pixel
 
             loop RefreshChar
 
-            add di, (80 - 10) * 2
+            add di, (80 - 10) * 2                                   ; next line in VideoMem
 
             mov cx, dx                                              ; load cx for outer loop
 

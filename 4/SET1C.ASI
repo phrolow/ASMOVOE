@@ -1,47 +1,50 @@
+; args: ax - new 1C offset
+; destroys: all regs
+;===============================================================
+
 Set1C   proc
 
         cli
 
         xor bx, bx
-        mov es, bx
-        mov bx, 4 * 1Ch                                   ; 1Ch interruption - keyboard
+        mov es, bx                      ; 0 to es
+        mov bx, 4 * 1Ch                 ; 1Ch interruption - timer
         
-        cmp es:[bx], ax                                         ; if 1C already intercepted
-        je Reset
+        cmp es:[bx], ax                 ; if 1C already intercepted
+        je Reset                        ; go to reset function (it sets handler similar to old handler)
         
-        mov es:[bx], offset New1C                       ; change on new version
+        mov es:[bx], offset New1C       ; change on new version
 
         mov ax, cs
-        mov es:[bx+2], ax                                 ; NewSegment
+        mov es:[bx+2], ax               ; NewSegment
 
         sti
 
-        xor si, si
-        lea di, SaveBuf
-        call FillBuf              ; store old data to savebuf
+        xor si, si                      ; si to (0; 0) of VideoMem
+        lea di, SaveBuf                 ; di to (0; 0) of SaveBuf
+        call FillBuf                    ; store old data to savebuf
 
-        mov bx, 0B800h
-        mov es, bx
+        mov bx, 0B800h                                          
+        mov es, bx                      ; es to VideoMem segment
 
         mov bx, cs
-        mov ds, bx
+        mov ds, bx                      ; ds -< cs
+                                        ; preparings to frame
+        xor di, di                      ; left top is (0, 0)
+        mov ah, 0Fh                     ; style
+        mov dl, 10                      ; length
+        mov dh, 9                       ; height
+        lea si, frame                   ; frame source
 
-        xor di, di
-        mov ah, 0Fh
-        xor bx, bx
-        mov dl, 10
-        mov dh, 9
-        lea si, frame            
+        call border                     ; make frame
 
-        call border               ; make frame
-
-        xor si, si
-        lea di, DrawBuf
-        call FillBuf              ; store new data to drawbuf
+        xor si, si                      ; si <- (0, 0) of VideoMem
+        lea di, DrawBuf                 ; di <- (0, 0) of DrawBuf
+        call FillBuf                    ; store new data to drawbuf
 
         ret
 
-Reset:
+Reset:  
         call Reset1C
         ret
         endp

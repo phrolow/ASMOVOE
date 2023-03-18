@@ -1,31 +1,35 @@
 ; require si, di
+; si is address of 1st pixel in buffer
+; di is address of 1st pixel in VideoMem
+;====================================================================
+; Function stores rectangle 9x10 from 
 
 loadbuf proc
 
         mov dx, 0B800h
-        mov es, dx
+        mov es, dx      ; es <- VideoMem
 
         mov dx, cs
-        mov ds, dx
+        mov ds, dx      ; ds <- cs
 
-        mov cx, 9
+        mov cx, 9       ; outer loop for 9 steps (there are 9 lines in our frame)
 
 LoadLine: 
 
-        mov dx, cx          ; save cx for outer loop
+        mov dx, cx      ; save cx for outer loop
 
-        mov cx, 10
+        mov cx, 10      ; inner loop for 10 steps (there are 10 chars in line)
 
 LoadChar:
 
-        lodsw
-        stosw
+        lodsw           ; load ax from buf
+        stosw           ; store ax to VideoMem
 
-        loop LoadChar
+        loop LoadChar   
 
-        add di, (80 - 10) * 2
+        add di, (80 - 10) * 2   ; next line in VideoMem
 
-        mov cx, dx          ; load cx for outer loop
+        mov cx, dx              ; load cx for outer loop
 
         loop LoadLine
 

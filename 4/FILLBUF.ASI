@@ -1,29 +1,34 @@
 ; require si, di
+; si - 1st pixel in VideoMem
+; di - 1st pixel in buffer
+;==================================================
+; This function fills buffer 9x10 with contents of rectangle 9x10 in VideoMem
+;=========================================================
 
 fillbuf proc
 
         mov dx, 0B800h
-        mov ds, dx
+        mov ds, dx              ; ds <- VideoMem
 
         mov dx, cs
-        mov es, dx
+        mov es, dx              ; es <- cs
 
-        mov cx, 9
+        mov cx, 9               ; loop for 9 times (there are 9 lines)
 
 FillLine: 
 
         mov dx, cx              ; save cx for outer loop
 
-        mov cx, 10
+        mov cx, 10              ; loop to fill line (10 chars in line)
 
 FillChar:
 
-        lodsw
-        stosw
+        lodsw                   
+        stosw                   ; copy pixel from VideoMem to buf
 
         loop FillChar
 
-        add si, (80 - 10) * 2
+        add si, (80 - 10) * 2   ; next line in VideoMem
 
         mov cx, dx              ; load cx for outer loop
 

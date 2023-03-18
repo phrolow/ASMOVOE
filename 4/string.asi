@@ -8,22 +8,20 @@
 
 String  proc
 
-        lodsb
+        lodsb              ; 1st char
         stosw
 
-        lodsb
+        lodsb                   ; middle char
 
-        mov cl, dl
+        mov cl, dl              ; loop with (length of string - 2) steps
         sub cl, 2
         xor ch, ch
 
-@@Next: mov es:[di], ax
-
-        add di, 2
+@@Next: stosw
 
         loop @@Next
 
-        lodsb
+        lodsb                   ; last char
         stosw
 
         ret

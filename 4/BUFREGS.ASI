@@ -2,62 +2,62 @@ RegName db 'AXBXCXDX'
 
 New1C   proc
 
-        push ax bx cx dx bp sp di si es ds ss                                   ; copy data
-        mov bp, sp
+        push ax bx cx dx bp sp di si es ds      ; it destroys all of regs, yes
+        mov bp, sp 
 
-        xor di, di
-        lea si, DrawBuf
+        xor di, di                              ; di <- (0, 0) in VideoMem
+        lea si, DrawBuf                         ; si <- (0, 0) in DrawBuf
 
-        call RefreshBuf                                                         ; refresh videomem and savebuf
+        call RefreshBuf                         ; refresh videomem and savebuf
 
         mov bx, cs
         mov es, bx
-        mov ds, bx
+        mov ds, bx                              ; store cs to es and ds
 
-        mov si, offset RegName                                                  ; ptr to regs names array
+        lea si, RegName                         ; RegName is array with names of regs
 
-        mov cx, 4                                                               ; loop with 4 steps
-        add bp, 20                                                              ; we will take regs from stack
+        mov cx, 4                               ; loop with 4 steps
+        add bp, 18                              ; we will take regs from stack
 
-        mov di, (10 + 1) * 2 + offset DrawBuf - 16 * 2                                  ; to point (1; 1) of drawbuf
+        mov di, (10 + 1) * 2 + offset DrawBuf - 16 * 2          ; to point (1; 1) of drawbuf ( - 16 * 2 will be compensated at 1st step)
 
-@@Next: add di, 16 * 2                                                          ; next step - two lines down
-        mov ah, 0Ah                                                             ; style
+@@Next: add di, 16 * 2                          ; next step - two lines down
+        mov ah, 0Ah                             ; style
 
-        lodsb                                                                   ; load from regs name array
-        stosw                                                                   ; move letter to DrawBuf
+        lodsb                                   ; load from regs name array
+        stosw                                   ; move letter to DrawBuf
 
         lodsb
-        stosw                                                                   ; once again
+        stosw                                   ; once again
 
-        add di, 2 * 2                                                           ; next 2 chars in DrawBuf
+        add di, 2 * 2                           ; next 2 chars in DrawBuf
         
-        mov ax, [bp]                                                            ; value of reg
+        mov ax, [bp]                            ; value of reg
 
-        sub bp, 2                                                               ; next reg
+        sub bp, 2                               ; next reg
 
-        call hexout                                                             ; out in hex format
-                                                                                ; args are ax (num)
-                                                                                ; bx (coords)
+        call hexout                             ; out to DrawBuf in hex format
+                                                ; args are ax (num)
+                                                ; bx (coords)
 
         loop @@next
 
-        lea si, DrawBuf
-        mov di, 0
+        lea si, DrawBuf         ; (0, 0) of DrawBuf
+        mov di, 0               ; (0, 0) of VideoMem
 
-        call loadbuf                                                            ; load new drawbuf
+        call loadbuf            ; new DrawBuf -> VideoMem
 
-        add bp, 8   
+        add bp, 8               ; restore bp
 
-        mov al, 20h                                                             ; end of int
+        mov al, 20h             ; end of int
         out 20h, al
 
-        pop ss ds es si di sp bp dx cx bx ax
+        pop ds es si di sp bp dx cx bx ax
 
         iret
         endp
 
-frame   db 0C9h, 0CDh, 0BBh, 0BAh, 000h, 0BAh, 0C8h, 0CDh, 0BCh 
+frame   db 0C9h, 0CDh, 0BBh, 0BAh, 000h, 0BAh, 0C8h, 0CDh, 0BCh ; frame chars
 
 SaveBuf dw 10 * 9 dup(0)
 DrawBuf dw 10 * 9 dup(0)

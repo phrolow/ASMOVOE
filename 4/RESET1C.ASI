@@ -3,20 +3,17 @@ Reset1C proc
         cli
 
         xor bx, bx
-        mov es, bx
-        mov bx, 4 * 1Ch                                   ; 8 interruption - keyboard
+        mov es, bx                      ; es <- 0
+        mov bx, 4 * 1Ch                 ; 1C interruption - timer
         
-        mov es:[bx], offset Old1C                       ; change on new version
-
-        mov ax, cs
-        mov es:[bx+2], ax                                 ; NewSegment
+        mov es:[bx], offset Old1C       ; change to version similar to old
 
         sti
         
-        lea si, SaveBuf
-        mov di, 0
+        lea si, SaveBuf                 ; si -< (0, 0) of SaveBuf
+        mov di, 0                       ; di <- (0, 0) of VideoMem
 
-        call loadbuf                                            ; load savebuf at end
+        call loadbuf                    ; load savebuf at end
 
         ret
         endp

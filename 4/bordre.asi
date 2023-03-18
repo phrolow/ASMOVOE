@@ -5,54 +5,57 @@
 ; dl - width
 ; si - border source
 ; dh - height
-; destroys - dohuya
+; destroys - all except ss
 ;
 
 Border  proc
-        push ds
+        push ds                 ; save ds
 
-        mov bx, cs
-        mov ds, bx
+        mov bx, cs              
+        mov ds, bx              ; ds <- cs
 
-        push bp
+        push bp                 ; save bp
 
-        call String
+        call String             ; store top line to VideoMem
 
-        add di, 80 * 2
+        add di, 80 * 2          ; next line
+
+        xor bh, bh              ; 
+        mov bl, dl              ; length of frame to bx
+
+        sub di, bx
+        sub di, bx              ; di minus {length} pixels
+                                ; now di is in the start of line
+
+        mov bp, dx              ; 
+        and bp, 0FF00h          ; 
+        shr bp, 8               ; bp <- dh (height)
+        sub bp, 2               ; bp is counter, we wanna print (height - 2) common strings
+
+CommonLines: 
+
+        call String             ; store line
+                                ; si is counter in frame array
+        sub si, 3               ; back to common line chars
+
+        add di, 80 * 2          ; next line in VideoMem
 
         xor bh, bh              
-        mov bl, dl
+        mov bl, dl              ; bx <- length
 
         sub di, bx
-        sub di, bx
+        sub di, bx              ; di minus {length} pixels
 
-        mov bp, dx
-        and bp, 0FF00h
-        shr bp, 8
-        sub bp, 2
+        dec bp                  ; decrease counter
 
-zaloop: call String
+        cmp bp, 0               ; if counter is zero
+        jne CommonLines         ; next step
 
-        sub si, 3
-
-        add di, 80 * 2
-
-        xor bh, bh              
-        mov bl, dl
-
-        sub di, bx
-        sub di, bx
-
-        dec bp
-
-        cmp bp, 0
-        jne zaloop
-
-        add si, 3
+        add si, 3               ; to bottom line chars
         
-        call String
+        call String             ; print bottom line
 
-        pop bp
+        pop bp                  ; restore regs
         pop ds
         ret
         endp

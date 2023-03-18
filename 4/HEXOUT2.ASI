@@ -11,9 +11,9 @@ Hexout	proc
         mov cx, word ptr 4	            ; we output 4 chars
         mov dx, 0F000h                  ; bit mask
 
-@@Next: mov bx, dx
+@@Next: mov bx, dx                      ; copy bit mask
 
-        and bx, ax
+        and bx, ax                      ; bx now is shifted char
 
         dec cl                      ; counting bit shift
 
@@ -21,22 +21,21 @@ Hexout	proc
         shr bx, cl                  ; to numeral
         ENDM
 
-        inc cl
+        inc cl                  ; restore cx
 
-        shr dx, 4                   ; cause we need next char in next step
+        shr dx, 4               ; bit mask for next step
 
-        cmp bx, 0Ah		            ; is char decimal
-	    jb @@Dec
+        cmp bx, 0Ah		; is char decimal
+	jb @@Dec
 
-        add bx, 'A' - 10d	        ; if char not decimal
-	
-	    jmp @@Out
+                add bx, 'A' - 10d	; if char not decimal
+	        jmp @@Out
 
 @@Dec:	add bx, '0'		            ; if char is decimal
 
 @@Out:	mov bh, 0Ah                 ; style
 
-        mov es:[di], bx
+        mov es:[di], bx              
         add di, 2                   ; store char to DrawBuf
 
         loop @@Next
